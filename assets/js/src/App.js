@@ -35,7 +35,6 @@ Kanboard.App.prototype.execute = function() {
     this.keyboardShortcuts();
     this.datePicker();
     this.autoComplete();
-    this.tagAutoComplete();
 };
 
 Kanboard.App.prototype.keyboardShortcuts = function() {
@@ -108,34 +107,25 @@ Kanboard.App.prototype.chosen = function() {
 };
 
 Kanboard.App.prototype.datePicker = function() {
-    var bodyElement = $("body");
-    var dateFormat = bodyElement.data("js-date-format");
-    var timeFormat = bodyElement.data("js-time-format");
-    var lang = bodyElement.data("js-lang");
-
-    $.datepicker.setDefaults($.datepicker.regional[lang]);
-    $.timepicker.setDefaults($.timepicker.regional[lang]);
+    // Datepicker translation
+    $.datepicker.setDefaults($.datepicker.regional[$("body").data("js-lang")]);
 
     // Datepicker
     $(".form-date").datepicker({
         showOtherMonths: true,
         selectOtherMonths: true,
-        dateFormat: dateFormat,
+        dateFormat: 'yy-mm-dd',
         constrainInput: false
     });
 
     // Datetime picker
     $(".form-datetime").datetimepicker({
-        dateFormat: dateFormat,
-        timeFormat: timeFormat,
+        controlType: 'select',
+        oneLine: true,
+        dateFormat: 'yy-mm-dd',
+        // timeFormat: 'h:mm tt',
         constrainInput: false
     });
-};
-
-Kanboard.App.prototype.tagAutoComplete = function() {
-    $(".tag-autocomplete").select2({
-        tags: true
-    })
 };
 
 Kanboard.App.prototype.autoComplete = function() {

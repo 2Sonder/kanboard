@@ -7,8 +7,6 @@ API Project Procedures
 - Parameters:
     - **name** (string, required)
     - **description** (string, optional)
-    - **owner_id** (integer, optional)
-    - **identifier** (string, optional)
 - Result on success: **project_id**
 - Result on failure: **false**
 
@@ -133,55 +131,6 @@ Response example:
 }
 ```
 
-## getProjectByIdentifier
-
-- Purpose: **Get project information**
-- Parameters:
-    - **identifier** (string, required)
-- Result on success: **project properties**
-- Result on failure: **null**
-
-Request example:
-
-```json
-{
-    "jsonrpc": "2.0",
-    "method": "getProjectByIdentifier",
-    "id": 1620253806,
-    "params": {
-        "identifier": "TEST"
-    }
-}
-```
-
-Response example:
-
-```json
-{
-    "jsonrpc": "2.0",
-    "id": 1620253806,
-    "result": {
-        "id": "1",
-        "name": "Test",
-        "is_active": "1",
-        "token": "",
-        "last_modified": "1436119135",
-        "is_public": "0",
-        "is_private": "0",
-        "is_everybody_allowed": "0",
-        "default_swimlane": "Default swimlane",
-        "show_default_swimlane": "1",
-        "description": "test",
-        "identifier": "TEST",
-        "url": {
-            "board": "http:\/\/127.0.0.1:8000\/?controller=board&action=show&project_id=1",
-            "calendar": "http:\/\/127.0.0.1:8000\/?controller=calendar&action=show&project_id=1",
-            "list": "http:\/\/127.0.0.1:8000\/?controller=listing&action=show&project_id=1"
-        }
-    }
-}
-```
-
 ## getAllProjects
 
 - Purpose: **Get all available projects**
@@ -234,11 +183,9 @@ Response example:
 
 - Purpose: **Update a project**
 - Parameters:
-    - **project_id** (integer, required)
-    - **name** (string, optional)
+    - **id** (integer, required)
+    - **name** (string, required)
     - **description** (string, optional)
-    - **owner_id** (integer, optional)
-    - **identifier** (string, optional)
 - Result on success: **true**
 - Result on failure: **false**
 
@@ -250,7 +197,7 @@ Request example:
     "method": "updateProject",
     "id": 1853996288,
     "params": {
-        "project_id": 1,
+        "id": 1,
         "name": "PHP client update"
     }
 }

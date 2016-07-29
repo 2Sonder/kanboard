@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Assign a color to a specific user
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskAssignColorUser extends Base
@@ -32,8 +32,8 @@ class TaskAssignColorUser extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_CREATE,
-            TaskModel::EVENT_ASSIGNEE_CHANGE,
+            Task::EVENT_CREATE,
+            Task::EVENT_ASSIGNEE_CHANGE,
         );
     }
 
@@ -61,10 +61,7 @@ class TaskAssignColorUser extends Base
     {
         return array(
             'task_id',
-            'task' => array(
-                'project_id',
-                'owner_id',
-            ),
+            'owner_id',
         );
     }
 
@@ -82,7 +79,7 @@ class TaskAssignColorUser extends Base
             'color_id' => $this->getParam('color_id'),
         );
 
-        return $this->taskModificationModel->update($values, false);
+        return $this->taskModification->update($values, false);
     }
 
     /**
@@ -94,6 +91,6 @@ class TaskAssignColorUser extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task']['owner_id'] == $this->getParam('user_id');
+        return $data['owner_id'] == $this->getParam('user_id');
     }
 }

@@ -32,7 +32,7 @@ class Mail extends Base implements ClientInterface
         try {
             $message = Swift_Message::newInstance()
                 ->setSubject($subject)
-                ->setFrom(array($this->helper->mail->getMailSenderAddress() => $author))
+                ->setFrom(array(MAIL_FROM => $author))
                 ->setBody($html, 'text/html')
                 ->setTo(array($email => $name));
 

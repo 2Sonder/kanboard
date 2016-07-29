@@ -50,7 +50,7 @@ class AvatarHelper extends Base
      */
     public function small($user_id, $username, $name, $email, $avatar_path, $css = '')
     {
-        return $this->render($user_id, $username, $name, $email, $avatar_path, $css, 20);
+        return $this->render($user_id, $username, $name, $email, $avatar_path, $css, 40);
     }
 
     /**

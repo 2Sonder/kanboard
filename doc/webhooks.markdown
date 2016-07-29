@@ -1,5 +1,5 @@
-Webhooks
-========
+Web Hooks
+=========
 
 Webhooks are useful to perform actions with external applications.
 
@@ -21,7 +21,6 @@ All internal events of Kanboard can be sent to an external URL.
 
 - comment.create
 - comment.update
-- comment.delete
 - file.create
 - task.move.project
 - task.move.column
@@ -34,9 +33,6 @@ All internal events of Kanboard can be sent to an external URL.
 - task.assignee_change
 - subtask.update
 - subtask.create
-- subtask.delete
-- task_internal_link.create_update
-- task_internal_link.delete
 
 ### Example of HTTP request
 
@@ -47,65 +43,19 @@ Content-Type: application/json
 Connection: close
 
 {
-    "event_name": "task.move.column",
-    "event_data": {
-        "task_id": "4",
-        "task": {
-            "id": "4",
-            "reference": "",
-            "title": "My task",
-            "description": "",
-            "date_creation": "1469314356",
-            "date_completed": null,
-            "date_modification": "1469315422",
-            "date_due": "1469491200",
-            "date_started": "0",
-            "time_estimated": "0",
-            "time_spent": "0",
-            "color_id": "green",
-            "project_id": "1",
-            "column_id": "1",
-            "owner_id": "1",
-            "creator_id": "1",
-            "position": "1",
-            "is_active": "1",
-            "score": "0",
-            "category_id": "0",
-            "priority": "0",
-            "swimlane_id": "0",
-            "date_moved": "1469315422",
-            "recurrence_status": "0",
-            "recurrence_trigger": "0",
-            "recurrence_factor": "0",
-            "recurrence_timeframe": "0",
-            "recurrence_basedate": "0",
-            "recurrence_parent": null,
-            "recurrence_child": null,
-            "category_name": null,
-            "swimlane_name": null,
-            "project_name": "Demo Project",
-            "default_swimlane": "Default swimlane",
-            "column_title": "Backlog",
-            "assignee_username": "admin",
-            "assignee_name": null,
-            "creator_username": "admin",
-            "creator_name": null
-        },
-        "changes": {
-            "src_column_id": "2",
-            "dst_column_id": "1",
-            "date_moved": "1469315398"
-        },
-        "project_id": "1",
-        "position": 1,
-        "column_id": "1",
-        "swimlane_id": "0",
-        "src_column_id": "2",
-        "dst_column_id": "1",
-        "date_moved": "1469315398",
-        "recurrence_status": "0",
-        "recurrence_trigger": "0"
-    }
+  "event_name": "task.move.column",
+  "event_data": {
+    "task_id": "1",
+    "project_id": "1",
+    "position": 1,
+    "column_id": "1",
+    "swimlane_id": "0",
+    "src_column_id": "2",
+    "dst_column_id": "1",
+    "date_moved": "1431991532",
+    "recurrence_status": "0",
+    "recurrence_trigger": "0"
+  }
 }
 ```
 
@@ -130,51 +80,26 @@ Task creation:
 
 ```json
 {
-    "event_name": "task.create",
-    "event_data": {
-        "task_id": 5,
-        "task": {
-            "id": "5",
-            "reference": "",
-            "title": "My new task",
-            "description": "",
-            "date_creation": "1469315481",
-            "date_completed": null,
-            "date_modification": "1469315481",
-            "date_due": "0",
-            "date_started": "0",
-            "time_estimated": "0",
-            "time_spent": "0",
-            "color_id": "orange",
-            "project_id": "1",
-            "column_id": "2",
-            "owner_id": "1",
-            "creator_id": "1",
-            "position": "1",
-            "is_active": "1",
-            "score": "3",
-            "category_id": "0",
-            "priority": "2",
-            "swimlane_id": "0",
-            "date_moved": "1469315481",
-            "recurrence_status": "0",
-            "recurrence_trigger": "0",
-            "recurrence_factor": "0",
-            "recurrence_timeframe": "0",
-            "recurrence_basedate": "0",
-            "recurrence_parent": null,
-            "recurrence_child": null,
-            "category_name": null,
-            "swimlane_name": null,
-            "project_name": "Demo Project",
-            "default_swimlane": "Default swimlane",
-            "column_title": "Ready",
-            "assignee_username": "admin",
-            "assignee_name": null,
-            "creator_username": "admin",
-            "creator_name": null
-        }
-    }
+  "event_name": "task.create",
+  "event_data": {
+    "title": "Demo",
+    "description": "",
+    "project_id": "1",
+    "owner_id": "1",
+    "category_id": 0,
+    "swimlane_id": 0,
+    "column_id": "2",
+    "color_id": "yellow",
+    "score": 0,
+    "time_estimated": 0,
+    "date_due": 0,
+    "creator_id": 1,
+    "date_creation": 1431991532,
+    "date_modification": 1431991532,
+    "date_moved": 1431991532,
+    "position": 1,
+    "task_id": 1
+  }
 }
 ```
 
@@ -182,121 +107,113 @@ Task modification:
 
 ```json
 {
-    "event_name": "task.update",
-    "event_data": {
-        "task_id": "5",
-        "task": {
-            "id": "5",
-            "reference": "",
-            "title": "My new task",
-            "description": "New description",
-            "date_creation": "1469315481",
-            "date_completed": null,
-            "date_modification": "1469315531",
-            "date_due": "1469836800",
-            "date_started": "0",
-            "time_estimated": "0",
-            "time_spent": "0",
-            "color_id": "purple",
-            "project_id": "1",
-            "column_id": "2",
-            "owner_id": "1",
-            "creator_id": "1",
-            "position": "1",
-            "is_active": "1",
-            "score": "3",
-            "category_id": "0",
-            "priority": "2",
-            "swimlane_id": "0",
-            "date_moved": "1469315481",
-            "recurrence_status": "0",
-            "recurrence_trigger": "0",
-            "recurrence_factor": "0",
-            "recurrence_timeframe": "0",
-            "recurrence_basedate": "0",
-            "recurrence_parent": null,
-            "recurrence_child": null,
-            "category_name": null,
-            "swimlane_name": null,
-            "project_name": "Demo Project",
-            "default_swimlane": "Default swimlane",
-            "column_title": "Ready",
-            "assignee_username": "admin",
-            "assignee_name": null,
-            "creator_username": "admin",
-            "creator_name": null
-        },
-        "changes": {
-            "description": "New description",
-            "color_id": "purple",
-            "date_due": 1469836800
-        }
+  "event_name": "task.update",
+  "event_data": {
+    "id": "1",
+    "title": "Demo",
+    "description": "",
+    "date_creation": "1431991532",
+    "color_id": "yellow",
+    "project_id": "1",
+    "column_id": "1",
+    "owner_id": "1",
+    "position": "1",
+    "is_active": "1",
+    "date_completed": null,
+    "score": "0",
+    "date_due": "0",
+    "category_id": "2",
+    "creator_id": "1",
+    "date_modification": 1431991603,
+    "reference": "",
+    "date_started": 1431993600,
+    "time_spent": 0,
+    "time_estimated": 0,
+    "swimlane_id": "0",
+    "date_moved": "1431991572",
+    "recurrence_status": "0",
+    "recurrence_trigger": "0",
+    "recurrence_factor": "0",
+    "recurrence_timeframe": "0",
+    "recurrence_basedate": "0",
+    "recurrence_parent": null,
+    "recurrence_child": null,
+    "task_id": "1",
+    "changes": {
+      "category_id": "2"
     }
+  }
 }
 ```
 
 Task update events have a field called `changes` that contains updated values.
 
+Move a task to another column:
+
+```json
+{
+  "event_name": "task.move.column",
+  "event_data": {
+    "task_id": "1",
+    "project_id": "1",
+    "position": 1,
+    "column_id": "1",
+    "swimlane_id": "0",
+    "src_column_id": "2",
+    "dst_column_id": "1",
+    "date_moved": "1431991532",
+    "recurrence_status": "0",
+    "recurrence_trigger": "0"
+  }
+}
+```
+
+Move a task to another position:
+
+```json
+{
+  "event_name": "task.move.position",
+  "event_data": {
+    "task_id": "2",
+    "project_id": "1",
+    "position": 1,
+    "column_id": "1",
+    "swimlane_id": "0",
+    "src_column_id": "1",
+    "dst_column_id": "1",
+    "date_moved": "1431996905",
+    "recurrence_status": "0",
+    "recurrence_trigger": "0"
+  }
+}
+```
+
 Comment creation:
 
 ```json
 {
-    "event_name": "comment.create",
-    "event_data": {
-        "comment": {
-            "id": "1",
-            "task_id": "5",
-            "user_id": "1",
-            "date_creation": "1469315727",
-            "comment": "My comment.",
-            "reference": null,
-            "username": "admin",
-            "name": null,
-            "email": null,
-            "avatar_path": null
-        },
-        "task": {
-            "id": "5",
-            "reference": "",
-            "title": "My new task",
-            "description": "New description",
-            "date_creation": "1469315481",
-            "date_completed": null,
-            "date_modification": "1469315531",
-            "date_due": "1469836800",
-            "date_started": "0",
-            "time_estimated": "0",
-            "time_spent": "0",
-            "color_id": "purple",
-            "project_id": "1",
-            "column_id": "2",
-            "owner_id": "1",
-            "creator_id": "1",
-            "position": "1",
-            "is_active": "1",
-            "score": "3",
-            "category_id": "0",
-            "priority": "2",
-            "swimlane_id": "0",
-            "date_moved": "1469315481",
-            "recurrence_status": "0",
-            "recurrence_trigger": "0",
-            "recurrence_factor": "0",
-            "recurrence_timeframe": "0",
-            "recurrence_basedate": "0",
-            "recurrence_parent": null,
-            "recurrence_child": null,
-            "category_name": null,
-            "swimlane_name": null,
-            "project_name": "Demo Project",
-            "default_swimlane": "Default swimlane",
-            "column_title": "Ready",
-            "assignee_username": "admin",
-            "assignee_name": null,
-            "creator_username": "admin",
-            "creator_name": null
-        }
-    }
+  "event_name": "comment.create",
+  "event_data": {
+    "id": 1,
+    "task_id": "1",
+    "user_id": "1",
+    "comment": "test",
+    "date_creation": 1431991615
+  }
+}
+```
+
+Comment modification:
+
+```
+{
+  "event_name": "comment.update",
+  "event_data": {
+    "id": "1",
+    "task_id": "1",
+    "user_id": "1",
+    "comment": "test edit"
+  }
 }
 ```
 
@@ -304,65 +221,28 @@ Subtask creation:
 
 ```json
 {
-    "event_name": "subtask.create",
-    "event_data": {
-        "subtask": {
-            "id": "1",
-            "title": "My subtask",
-            "status": "0",
-            "time_estimated": "0",
-            "time_spent": "0",
-            "task_id": "5",
-            "user_id": "1",
-            "position": "1",
-            "username": "admin",
-            "name": null,
-            "timer_start_date": 0,
-            "status_name": "Todo",
-            "is_timer_started": false
-        },
-        "task": {
-            "id": "5",
-            "reference": "",
-            "title": "My new task",
-            "description": "New description",
-            "date_creation": "1469315481",
-            "date_completed": null,
-            "date_modification": "1469315531",
-            "date_due": "1469836800",
-            "date_started": "0",
-            "time_estimated": "0",
-            "time_spent": "0",
-            "color_id": "purple",
-            "project_id": "1",
-            "column_id": "2",
-            "owner_id": "1",
-            "creator_id": "1",
-            "position": "1",
-            "is_active": "1",
-            "score": "3",
-            "category_id": "0",
-            "priority": "2",
-            "swimlane_id": "0",
-            "date_moved": "1469315481",
-            "recurrence_status": "0",
-            "recurrence_trigger": "0",
-            "recurrence_factor": "0",
-            "recurrence_timeframe": "0",
-            "recurrence_basedate": "0",
-            "recurrence_parent": null,
-            "recurrence_child": null,
-            "category_name": null,
-            "swimlane_name": null,
-            "project_name": "Demo Project",
-            "default_swimlane": "Default swimlane",
-            "column_title": "Ready",
-            "assignee_username": "admin",
-            "assignee_name": null,
-            "creator_username": "admin",
-            "creator_name": null
-        }
-    }
+  "event_name": "subtask.create",
+  "event_data": {
+    "id": 3,
+    "task_id": "1",
+    "title": "Test",
+    "user_id": "1",
+    "time_estimated": "2",
+    "position": 3
+  }
+}
+```
+
+Subtask modification:
+
+```json
+{
+  "event_name": "subtask.update",
+  "event_data": {
+    "id": "1",
+    "status": 1,
+    "task_id": "1"
+  }
 }
 ```
 
@@ -370,118 +250,55 @@ File upload:
 
 ```json
 {
-    "event_name": "task.file.create",
-    "event_data": {
-        "file": {
-            "id": "1",
-            "name": "kanboard-latest.zip",
-            "path": "tasks/5/6f32893e467e76671965b1ec58c06a2440823752",
-            "is_image": "0",
-            "task_id": "5",
-            "date": "1469315613",
-            "user_id": "1",
-            "size": "4907308"
-        },
-        "task": {
-            "id": "5",
-            "reference": "",
-            "title": "My new task",
-            "description": "New description",
-            "date_creation": "1469315481",
-            "date_completed": null,
-            "date_modification": "1469315531",
-            "date_due": "1469836800",
-            "date_started": "0",
-            "time_estimated": "0",
-            "time_spent": "0",
-            "color_id": "purple",
-            "project_id": "1",
-            "column_id": "2",
-            "owner_id": "1",
-            "creator_id": "1",
-            "position": "1",
-            "is_active": "1",
-            "score": "3",
-            "category_id": "0",
-            "priority": "2",
-            "swimlane_id": "0",
-            "date_moved": "1469315481",
-            "recurrence_status": "0",
-            "recurrence_trigger": "0",
-            "recurrence_factor": "0",
-            "recurrence_timeframe": "0",
-            "recurrence_basedate": "0",
-            "recurrence_parent": null,
-            "recurrence_child": null,
-            "category_name": null,
-            "swimlane_name": null,
-            "project_name": "Demo Project",
-            "default_swimlane": "Default swimlane",
-            "column_title": "Ready",
-            "assignee_username": "admin",
-            "assignee_name": null,
-            "creator_username": "admin",
-            "creator_name": null
-        }
-    }
+  "event_name": "file.create",
+  "event_data": {
+    "task_id": "1",
+    "name": "test.png"
+  }
 }
 ```
 
-Task link creation:
+Screenshot created:
 
 ```json
 {
-    "event_name": "task_internal_link.create_update",
-    "event_data": {
-        "task_link": {
-            "id": "2",
-            "opposite_task_id": "5",
-            "task_id": "4",
-            "link_id": "3",
-            "label": "is blocked by",
-            "opposite_link_id": "2"
-        },
-        "task": {
-            "id": "4",
-            "reference": "",
-            "title": "My task",
-            "description": "",
-            "date_creation": "1469314356",
-            "date_completed": null,
-            "date_modification": "1469315422",
-            "date_due": "1469491200",
-            "date_started": "0",
-            "time_estimated": "0",
-            "time_spent": "0",
-            "color_id": "green",
-            "project_id": "1",
-            "column_id": "1",
-            "owner_id": "1",
-            "creator_id": "1",
-            "position": "1",
-            "is_active": "1",
-            "score": "0",
-            "category_id": "0",
-            "priority": "0",
-            "swimlane_id": "0",
-            "date_moved": "1469315422",
-            "recurrence_status": "0",
-            "recurrence_trigger": "0",
-            "recurrence_factor": "0",
-            "recurrence_timeframe": "0",
-            "recurrence_basedate": "0",
-            "recurrence_parent": null,
-            "recurrence_child": null,
-            "category_name": null,
-            "swimlane_name": null,
-            "project_name": "Demo Project",
-            "default_swimlane": "Default swimlane",
-            "column_title": "Backlog",
-            "assignee_username": "admin",
-            "assignee_name": null,
-            "creator_username": "admin",
-            "creator_name": null
-        }
-    }
+  "event_name": "file.create",
+  "event_data": {
+    "task_id": "2",
+    "name": "Screenshot taken May 19, 2015 at 10:56 AM"
+  }
 }
 ```
+
+How to create a task with a web hook?
+-------------------------------------
+
+Firstly, you have to get the token from the settings page. After that, just call this url from anywhere:
+
+```bash
+# Create a task for the default project inside the first column
+curl "http://myserver/?controller=webhook&action=task&token=superSecretToken&title=mySuperTask"
+
+# Create a task to another project inside a specific column with the color red
+curl "http://myserver/?controller=webhook&action=task&token=superSecretToken&title=task123&project_id=3&column_id=7&color_id=red"
+```
+
+### Available responses
+
+- When a task is created successfully, Kanboard return the message "OK" in plain text.
+- However if the task creation fail, you will get a "FAILED" message.
+- If the token is wrong, you got a "Not Authorized" message and a HTTP status code 401.
+
+### Available parameters
+
+Base URL: `http://YOUR_SERVER_HOSTNAME/?controller=webhook&action=task`
+
+- `token`: Token displayed on the settings page (required)
+- `title`: Task title (required)
+- `description`: Task description
+- `color_id`: Supported colors are yellow, blue, green, purple, red, orange and gray
+- `project_id`: Project id (Get the id from the project page)
+- `owner_id`: Assignee (Get the user id from the user's page)
+- `column_id`: Column on the board (Get the column id from the projects page, mouse over on the column name)
+
+Only the token and the title parameters are mandatory. The different id can also be found in the database.

@@ -27,7 +27,6 @@ use Pimple\Container;
  * @property \Kanboard\Helper\LayoutHelper            $layout
  * @property \Kanboard\Helper\ProjectHeaderHelper     $projectHeader
  * @property \Kanboard\Helper\ProjectActivityHelper   $projectActivity
- * @property \Kanboard\Helper\MailHelper              $mail
  */
 class Helper
 {
@@ -95,7 +94,7 @@ class Helper
     {
         $container = $this->container;
 
-        $this->helpers[$property] = function() use ($className, $container) {
+        $this->helpers[$property] = function() use($className, $container) {
             return new $className($container);
         };
 

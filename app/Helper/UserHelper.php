@@ -21,7 +21,7 @@ class UserHelper extends Base
      */
     public function hasNotifications()
     {
-        return $this->userUnreadNotificationModel->hasNotifications($this->userSession->getId());
+        return $this->userUnreadNotification->hasNotifications($this->userSession->getId());
     }
 
     /**
@@ -36,10 +36,10 @@ class UserHelper extends Base
         $initials = '';
 
         foreach (explode(' ', $name, 2) as $string) {
-            $initials .= mb_substr($string, 0, 1, 'UTF-8');
+            $initials .= mb_substr($string, 0, 1);
         }
 
-        return mb_strtoupper($initials, 'UTF-8');
+        return mb_strtoupper($initials);
     }
 
     /**
@@ -50,8 +50,7 @@ class UserHelper extends Base
      */
     public function getFullname(array $user = array())
     {
-        $user = empty($user) ? $this->userSession->getAll() : $user;
-        return $user['name'] ?: $user['username'];
+        return $this->user->getFullname(empty($user) ? $this->userSession->getAll() : $user);
     }
 
     /**
@@ -108,10 +107,6 @@ class UserHelper extends Base
      */
     public function hasAccess($controller, $action)
     {
-        if (! $this->userSession->isLogged()) {
-            return false;
-        }
-
         $key = 'app_access:'.$controller.$action;
         $result = $this->memoryCache->get($key);
 
@@ -133,10 +128,6 @@ class UserHelper extends Base
      */
     public function hasProjectAccess($controller, $action, $project_id)
     {
-        if (! $this->userSession->isLogged()) {
-            return false;
-        }
-
         if ($this->userSession->isAdmin()) {
             return true;
         }
@@ -166,7 +157,7 @@ class UserHelper extends Base
      */
     public function getProjectUserRole($project_id)
     {
-        return $this->memoryCache->proxy($this->projectUserRoleModel, 'getUserRole', $project_id, $this->userSession->getId());
+        return $this->memoryCache->proxy($this->projectUserRole, 'getUserRole', $project_id, $this->userSession->getId());
     }
 
     /**
@@ -183,7 +174,7 @@ class UserHelper extends Base
         if (isset($task['creator_id']) && $task['creator_id'] == $this->userSession->getId()) {
             return true;
         }
-
+        
         if ($this->userSession->isAdmin() || $this->getProjectUserRole($task['project_id']) === Role::PROJECT_MANAGER) {
             return true;
         }

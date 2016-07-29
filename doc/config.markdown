@@ -15,19 +15,12 @@ define('LOG_DRIVER', 'file'); // Other drivers are: syslog, stdout, stderr or fi
 The log driver must be defined if you enable the debug mode.
 The debug mode logs all SQL queries and the time taken to generate pages.
 
-Plugins
--------
-
-Plugin folder:
+Plugins folder
+--------------
 
 ```php
+// Plugin directory
 define('PLUGINS_DIR', 'data/plugins');
-```
-
-Enable/disable plugin installation from the user interface:
-
-```php
-define('PLUGIN_INSTALLER', true); // Default is true
 ```
 
 Folder for uploaded files
@@ -267,8 +260,8 @@ Session
 define('SESSION_DURATION', 0);
 ```
 
-HTTP Client
------------
+HTTP client proxy
+-----------------
 
 If external HTTP requests need to be sent through a proxy:
 
@@ -277,13 +270,6 @@ define('HTTP_PROXY_HOSTNAME', '');
 define('HTTP_PROXY_PORT', '3128');
 define('HTTP_PROXY_USERNAME', '');
 define('HTTP_PROXY_PASSWORD', '');
-```
-
-To allow self-signed certificates:
-
-```php
-// Set to false to allow self-signed certificates
-define('HTTP_VERIFY_SSL_CERTIFICATE', true);
 ```
 
 Various settings

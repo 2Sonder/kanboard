@@ -41,7 +41,7 @@ class SessionManager extends Base
         $this->configure();
 
         if (ini_get('session.auto_start') == 1) {
-            session_destroy();
+          //  session_destroy();
         }
 
         session_name('KB_SID');
@@ -72,8 +72,8 @@ class SessionManager extends Base
             $params['httponly']
         );
 
-        session_unset();
-        session_destroy();
+    //    session_unset();
+    //    session_destroy();
     }
 
     /**

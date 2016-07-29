@@ -18,16 +18,16 @@ class Loader extends \Kanboard\Core\Base
     /**
      * Plugin instances
      *
-     * @access protected
+     * @access public
      * @var array
      */
-    protected $plugins = array();
+    public $plugins = array();
 
     /**
      * Get list of loaded plugins
      *
      * @access public
-     * @return Base[]
+     * @return array
      */
     public function getPlugins()
     {
@@ -52,7 +52,7 @@ class Loader extends \Kanboard\Core\Base
                 if ($fileInfo->isDir() && substr($fileInfo->getFilename(), 0, 1) !== '.') {
                     $pluginName = $fileInfo->getFilename();
                     $this->loadSchema($pluginName);
-                    $this->initializePlugin($pluginName, $this->loadPlugin($pluginName));
+                    $this->initializePlugin($this->loadPlugin($pluginName));
                 }
             }
         }
@@ -95,10 +95,9 @@ class Loader extends \Kanboard\Core\Base
      * Initialize plugin
      *
      * @access public
-     * @param  string $pluginName
-     * @param  Base   $plugin
+     * @param  Base $plugin
      */
-    public function initializePlugin($pluginName, Base $plugin)
+    public function initializePlugin(Base $plugin)
     {
         if (method_exists($plugin, 'onStartup')) {
             $this->dispatcher->addListener('app.bootstrap', array($plugin, 'onStartup'));
@@ -108,6 +107,6 @@ class Loader extends \Kanboard\Core\Base
         Tool::buildDICHelpers($this->container, $plugin->getHelpers());
 
         $plugin->initialize();
-        $this->plugins[$pluginName] = $plugin;
+        $this->plugins[] = $plugin;
     }
 }

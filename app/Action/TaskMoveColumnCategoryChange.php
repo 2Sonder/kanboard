@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Move a task to another column when the category is changed
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Francois Ferrand
  */
 class TaskMoveColumnCategoryChange extends Base
@@ -32,7 +32,7 @@ class TaskMoveColumnCategoryChange extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_UPDATE,
+            Task::EVENT_UPDATE,
         );
     }
 
@@ -60,13 +60,8 @@ class TaskMoveColumnCategoryChange extends Base
     {
         return array(
             'task_id',
-            'task' => array(
-                'project_id',
-                'column_id',
-                'category_id',
-                'position',
-                'swimlane_id',
-            )
+            'column_id',
+            'category_id',
         );
     }
 
@@ -79,12 +74,14 @@ class TaskMoveColumnCategoryChange extends Base
      */
     public function doAction(array $data)
     {
-        return $this->taskPositionModel->movePosition(
-            $data['task']['project_id'],
+        $original_task = $this->taskFinder->getById($data['task_id']);
+
+        return $this->taskPosition->movePosition(
+            $data['project_id'],
             $data['task_id'],
             $this->getParam('dest_column_id'),
-            $data['task']['position'],
-            $data['task']['swimlane_id'],
+            $original_task['position'],
+            $original_task['swimlane_id'],
             false
         );
     }
@@ -98,6 +95,6 @@ class TaskMoveColumnCategoryChange extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task']['column_id'] != $this->getParam('dest_column_id') && $data['task']['category_id'] == $this->getParam('category_id');
+        return $data['column_id'] != $this->getParam('dest_column_id') && $data['category_id'] == $this->getParam('category_id');
     }
 }

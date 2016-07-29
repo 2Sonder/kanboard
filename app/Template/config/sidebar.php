@@ -1,40 +1,38 @@
 <div class="sidebar">
+    <h2><?= t('Actions') ?></h2>
     <ul>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'index') ?>>
-            <?= $this->url->link(t('About'), 'ConfigController', 'index') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'index') ?>>
+            <?= $this->url->link(t('About'), 'config', 'index') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'application') ?>>
-            <?= $this->url->link(t('Application settings'), 'ConfigController', 'application') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'plugins') ?>>
+            <?= $this->url->link(t('Plugins'), 'config', 'plugins') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'email') ?>>
-            <?= $this->url->link(t('Email settings'), 'ConfigController', 'email') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'application') ?>>
+            <?= $this->url->link(t('Application settings'), 'config', 'application') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'project') ?>>
-            <?= $this->url->link(t('Project settings'), 'ConfigController', 'project') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'project') ?>>
+            <?= $this->url->link(t('Project settings'), 'config', 'project') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'board') ?>>
-            <?= $this->url->link(t('Board settings'), 'ConfigController', 'board') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'board') ?>>
+            <?= $this->url->link(t('Board settings'), 'config', 'board') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'calendar') ?>>
-            <?= $this->url->link(t('Calendar settings'), 'ConfigController', 'calendar') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'calendar') ?>>
+            <?= $this->url->link(t('Calendar settings'), 'config', 'calendar') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('TagController', 'index') ?>>
-            <?= $this->url->link(t('Tags management'), 'TagController', 'index') ?>
+        <li <?= $this->app->checkMenuSelection('link') ?>>
+            <?= $this->url->link(t('Link settings'), 'link', 'index') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('LinkController') ?>>
-            <?= $this->url->link(t('Link settings'), 'LinkController', 'index') ?>
+        <li <?= $this->app->checkMenuSelection('currency', 'index') ?>>
+            <?= $this->url->link(t('Currency rates'), 'currency', 'index') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('CurrencyController', 'index') ?>>
-            <?= $this->url->link(t('Currency rates'), 'CurrencyController', 'index') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'integrations') ?>>
+            <?= $this->url->link(t('Integrations'), 'config', 'integrations') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'integrations') ?>>
-            <?= $this->url->link(t('Integrations'), 'ConfigController', 'integrations') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'webhook') ?>>
+            <?= $this->url->link(t('Webhooks'), 'config', 'webhook') ?>
         </li>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'webhook') ?>>
-            <?= $this->url->link(t('Webhooks'), 'ConfigController', 'webhook') ?>
-        </li>
-        <li <?= $this->app->checkMenuSelection('ConfigController', 'api') ?>>
-            <?= $this->url->link(t('API'), 'ConfigController', 'api') ?>
+        <li <?= $this->app->checkMenuSelection('config', 'api') ?>>
+            <?= $this->url->link(t('API'), 'config', 'api') ?>
         </li>
         <?= $this->hook->render('template:config:sidebar') ?>
     </ul>

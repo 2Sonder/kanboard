@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Assign a color to a specific category
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskAssignColorCategory extends Base
@@ -32,7 +32,7 @@ class TaskAssignColorCategory extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_CREATE_UPDATE,
+            Task::EVENT_CREATE_UPDATE,
         );
     }
 
@@ -60,10 +60,7 @@ class TaskAssignColorCategory extends Base
     {
         return array(
             'task_id',
-            'task' => array(
-                'project_id',
-                'category_id',
-            ),
+            'category_id',
         );
     }
 
@@ -81,7 +78,7 @@ class TaskAssignColorCategory extends Base
             'color_id' => $this->getParam('color_id'),
         );
 
-        return $this->taskModificationModel->update($values, false);
+        return $this->taskModification->update($values, false);
     }
 
     /**
@@ -93,6 +90,6 @@ class TaskAssignColorCategory extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task']['category_id'] == $this->getParam('category_id');
+        return $data['category_id'] == $this->getParam('category_id');
     }
 }

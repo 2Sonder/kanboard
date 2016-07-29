@@ -11,12 +11,6 @@ use SimpleLogger\Stdout;
 use SimpleLogger\Syslog;
 use SimpleLogger\File;
 
-/**
- * Class LoggingProvider
- *
- * @package Kanboard\ServiceProvider
- * @author  Frederic Guillot
- */
 class LoggingProvider implements ServiceProviderInterface
 {
     public function register(Container $container)

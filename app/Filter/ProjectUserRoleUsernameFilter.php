@@ -3,7 +3,7 @@
 namespace Kanboard\Filter;
 
 use Kanboard\Core\Filter\FilterInterface;
-use Kanboard\Model\UserModel;
+use Kanboard\Model\User;
 
 /**
  * Filter ProjectUserRole users by username
@@ -33,8 +33,8 @@ class ProjectUserRoleUsernameFilter extends BaseFilter implements FilterInterfac
     public function apply()
     {
         $this->query
-            ->join(UserModel::TABLE, 'id', 'user_id')
-            ->ilike(UserModel::TABLE.'.username', $this->value.'%');
+            ->join(User::TABLE, 'id', 'user_id')
+            ->ilike(User::TABLE.'.username', $this->value.'%');
 
         return $this;
     }

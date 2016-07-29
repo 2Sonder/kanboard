@@ -4,15 +4,15 @@ namespace Kanboard\Validator;
 
 use SimpleValidator\Validator;
 use SimpleValidator\Validators;
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Task Link Validator
  *
- * @package  Kanboard\Validator
+ * @package  validator
  * @author   Frederic Guillot
  */
-class TaskLinkValidator extends BaseValidator
+class TaskLinkValidator extends Base
 {
     /**
      * Common validation rules
@@ -27,7 +27,7 @@ class TaskLinkValidator extends BaseValidator
             new Validators\Required('opposite_task_id', t('Field required')),
             new Validators\Required('link_id', t('Field required')),
             new Validators\NotEquals('opposite_task_id', 'task_id', t('A task cannot be linked to itself')),
-            new Validators\Exists('opposite_task_id', t('This linked task id doesn\'t exists'), $this->db->getConnection(), TaskModel::TABLE, 'id')
+            new Validators\Exists('opposite_task_id', t('This linked task id doesn\'t exists'), $this->db->getConnection(), Task::TABLE, 'id')
         );
     }
 

@@ -1,12 +1,10 @@
 <?php
-
-use Kanboard\Core\Controller\Runner;
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 try {
     require __DIR__.'/app/common.php';
     $container['router']->dispatch();
-    $runner = new Runner($container);
-    $runner->execute();
 } catch (Exception $e) {
     echo 'Internal Error: '.$e->getMessage();
 }

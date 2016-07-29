@@ -87,10 +87,10 @@ class Markdown extends Parsedown
     protected function inlineUserLink(array $Excerpt)
     {
         if (! $this->isPublicLink && preg_match('/^@([^\s]+)/', $Excerpt['text'], $matches)) {
-            $user_id = $this->container['userModel']->getIdByUsername($matches[1]);
+            $user_id = $this->container['user']->getIdByUsername($matches[1]);
 
             if (! empty($user_id)) {
-                $url = $this->container['helper']->url->href('UserViewController', 'profile', array('user_id' => $user_id));
+                $url = $this->container['helper']->url->href('user', 'profile', array('user_id' => $user_id));
 
                 return array(
                     'extent' => strlen($matches[0]),
@@ -116,11 +116,11 @@ class Markdown extends Parsedown
     private function buildTaskLink($task_id)
     {
         if ($this->isPublicLink) {
-            $token = $this->container['memoryCache']->proxy($this->container['taskFinderModel'], 'getProjectToken', $task_id);
+            $token = $this->container['memoryCache']->proxy($this->container['taskFinder'], 'getProjectToken', $task_id);
 
             if (! empty($token)) {
                 return $this->container['helper']->url->href(
-                    'TaskViewController',
+                    'task',
                     'readonly',
                     array(
                         'token' => $token,
@@ -133,7 +133,7 @@ class Markdown extends Parsedown
         }
 
         return $this->container['helper']->url->href(
-            'TaskViewController',
+            'task',
             'show',
             array('task_id' => $task_id)
         );

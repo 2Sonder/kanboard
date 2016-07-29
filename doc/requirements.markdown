@@ -51,7 +51,7 @@ Kanboard is pre-configured to work with Apache (URL rewriting).
 
 | PHP Version    |
 |----------------|
-| PHP >= 5.3.9   |
+| PHP >= 5.3.3   |
 | PHP 5.4        |
 | PHP 5.5        |
 | PHP 5.6        |
@@ -73,12 +73,6 @@ Kanboard is pre-configured to work with Apache (URL rewriting).
 | session                    |                               |
 | ldap                       | Only for LDAP authentication  |
 | Zend OPcache               | Recommended                   |
-
-### Optional PHP extensions
-
-| PHP Extensions required    | Note                                       |
-|----------------------------|--------------------------------------------|
-| zip                        | Used to install plugins from Kanboard      |
 
 ### Recommendations
 

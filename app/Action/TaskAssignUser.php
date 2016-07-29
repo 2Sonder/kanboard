@@ -5,7 +5,7 @@ namespace Kanboard\Action;
 /**
  * Assign a task to someone
  *
- * @package Kanboard\Actionv
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskAssignUser extends Base
@@ -71,7 +71,7 @@ class TaskAssignUser extends Base
             'owner_id' => $data['owner_id'],
         );
 
-        return $this->taskModificationModel->update($values);
+        return $this->taskModification->update($values);
     }
 
     /**
@@ -83,6 +83,6 @@ class TaskAssignUser extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $this->projectPermissionModel->isAssignable($this->getProjectId(), $data['owner_id']);
+        return $this->projectPermission->isAssignable($this->getProjectId(), $data['owner_id']);
     }
 }

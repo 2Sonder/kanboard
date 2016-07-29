@@ -8,10 +8,10 @@ use SimpleValidator\Validators;
 /**
  * Swimlane Validator
  *
- * @package  Kanboard\Validator
+ * @package  validator
  * @author   Frederic Guillot
  */
-class SwimlaneValidator extends BaseValidator
+class SwimlaneValidator extends Base
 {
     /**
      * Validate creation

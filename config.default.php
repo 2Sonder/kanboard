@@ -11,16 +11,16 @@ define('DEBUG', false);
 define('LOG_DRIVER', '');
 
 // Log filename if the log driver is "file"
-define('LOG_FILE', DATA_DIR.DIRECTORY_SEPARATOR.'debug.log');
+define('LOG_FILE', __DIR__.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'debug.log');
 
 // Plugins directory
-define('PLUGINS_DIR', ROOT_DIR.DIRECTORY_SEPARATOR.'plugins');
+define('PLUGINS_DIR', 'plugins');
 
 // Folder for uploaded files
-define('FILES_DIR', DATA_DIR.DIRECTORY_SEPARATOR.'files');
+define('FILES_DIR', 'data'.DIRECTORY_SEPARATOR.'files');
 
 // E-mail address for the "From" header (notifications)
-define('MAIL_FROM', 'replace-me@kanboard.local');
+define('MAIL_FROM', 'notifications@kanboard.local');
 
 // Mail transport available: "smtp", "sendmail", "mail" (PHP mail function), "postmark", "mailgun", "sendgrid"
 define('MAIL_TRANSPORT', 'mail');
@@ -208,6 +208,3 @@ define('HTTP_PROXY_HOSTNAME', '');
 define('HTTP_PROXY_PORT', '3128');
 define('HTTP_PROXY_USERNAME', '');
 define('HTTP_PROXY_PASSWORD', '');
-
-// Set to false to allow self-signed certificates
-define('HTTP_VERIFY_SSL_CERTIFICATE', true);

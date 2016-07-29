@@ -123,8 +123,7 @@ class TotpAuth extends Base implements PostAuthenticationProviderInterface
             return '';
         }
 
-        $options = array('issuer' => TOTP_ISSUER);
-        return GoogleAuthenticator::getQrCodeUrl('totp', $label, $this->secret, null, $options);
+        return GoogleAuthenticator::getQrCodeUrl('totp', $label, $this->secret);
     }
 
     /**
@@ -140,7 +139,6 @@ class TotpAuth extends Base implements PostAuthenticationProviderInterface
             return '';
         }
 
-        $options = array('issuer' => TOTP_ISSUER);
-        return GoogleAuthenticator::getKeyUri('totp', $label, $this->secret, null, $options);
+        return GoogleAuthenticator::getKeyUri('totp', $label, $this->secret);
     }
 }

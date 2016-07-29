@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Close automatically a task after when inactive
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskCloseNoActivity extends Base
@@ -31,7 +31,7 @@ class TaskCloseNoActivity extends Base
      */
     public function getCompatibleEvents()
     {
-        return array(TaskModel::EVENT_DAILY_CRONJOB);
+        return array(Task::EVENT_DAILY_CRONJOB);
     }
 
     /**
@@ -74,7 +74,7 @@ class TaskCloseNoActivity extends Base
             $duration = time() - $task['date_modification'];
 
             if ($duration > $max) {
-                $results[] = $this->taskStatusModel->close($task['id']);
+                $results[] = $this->taskStatus->close($task['id']);
             }
         }
 

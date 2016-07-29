@@ -3,7 +3,7 @@
 namespace Kanboard\Filter;
 
 use Kanboard\Core\Filter\FilterInterface;
-use Kanboard\Model\ProjectActivityModel;
+use Kanboard\Model\ProjectActivity;
 
 /**
  * Filter activity events by taskId
@@ -32,7 +32,7 @@ class ProjectActivityTaskIdFilter extends BaseFilter implements FilterInterface
      */
     public function apply()
     {
-        $this->query->eq(ProjectActivityModel::TABLE.'.task_id', $this->value);
+        $this->query->eq(ProjectActivity::TABLE.'.task_id', $this->value);
         return $this;
     }
 }

@@ -7,7 +7,7 @@ use Kanboard\Event\GenericEvent;
 /**
  * Base class for automatic actions
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 abstract class Base extends \Kanboard\Core\Base
@@ -216,8 +216,7 @@ abstract class Base extends \Kanboard\Core\Base
      */
     public function hasRequiredProject(array $data)
     {
-        return (isset($data['project_id']) && $data['project_id'] == $this->getProjectId()) ||
-            (isset($data['task']['project_id']) && $data['task']['project_id'] == $this->getProjectId());
+        return isset($data['project_id']) && $data['project_id'] == $this->getProjectId();
     }
 
     /**
@@ -227,14 +226,10 @@ abstract class Base extends \Kanboard\Core\Base
      * @param  array   $data   Event data dictionary
      * @return bool            True if all keys are there
      */
-    public function hasRequiredParameters(array $data, array $parameters = array())
+    public function hasRequiredParameters(array $data)
     {
-        $parameters = $parameters ?: $this->getEventRequiredParameters();
-
-        foreach ($parameters as $key => $value) {
-            if (is_array($value)) {
-                return isset($data[$key]) && $this->hasRequiredParameters($data[$key], $value);
-            } else if (! isset($data[$value])) {
+        foreach ($this->getEventRequiredParameters() as $parameter) {
+            if (! isset($data[$parameter])) {
                 return false;
             }
         }

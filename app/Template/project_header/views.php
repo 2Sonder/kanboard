@@ -1,24 +1,24 @@
 <ul class="views">
-    <li <?= $this->app->checkMenuSelection('ProjectOverviewController') ?>>
+    <li <?= $this->app->getRouterController() === 'ProjectOverview' ? 'class="active"' : '' ?>>
         <i class="fa fa-eye fa-fw"></i>
-        <?= $this->url->link(t('Overview'), 'ProjectOverviewController', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-overview', t('Keyboard shortcut: "%s"', 'v o')) ?>
+        <?= $this->url->link(t('Overview'), 'ProjectOverview', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-overview', t('Keyboard shortcut: "%s"', 'v o')) ?>
     </li>
-    <li <?= $this->app->checkMenuSelection('BoardViewController') ?>>
+    <li <?= $this->app->getRouterController() === 'Board' ? 'class="active"' : '' ?>>
         <i class="fa fa-th fa-fw"></i>
-        <?= $this->url->link(t('Board'), 'BoardViewController', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-board', t('Keyboard shortcut: "%s"', 'v b')) ?>
+        <?= $this->url->link(t('Board'), 'board', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-board', t('Keyboard shortcut: "%s"', 'v b')) ?>
     </li>
-    <li <?= $this->app->checkMenuSelection('Calendar') ?>>
+    <li <?= $this->app->getRouterController() === 'Calendar' ? 'class="active"' : '' ?>>
         <i class="fa fa-calendar fa-fw"></i>
-        <?= $this->url->link(t('Calendar'), 'CalendarController', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-calendar', t('Keyboard shortcut: "%s"', 'v c')) ?>
+        <?= $this->url->link(t('Calendar'), 'calendar', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-calendar', t('Keyboard shortcut: "%s"', 'v c')) ?>
     </li>
-    <li <?= $this->app->checkMenuSelection('TaskListController') ?>>
+    <li <?= $this->app->getRouterController() === 'Listing' ? 'class="active"' : '' ?>>
         <i class="fa fa-list fa-fw"></i>
-        <?= $this->url->link(t('List'), 'TaskListController', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-listing', t('Keyboard shortcut: "%s"', 'v l')) ?>
+        <?= $this->url->link(t('List'), 'listing', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-listing', t('Keyboard shortcut: "%s"', 'v l')) ?>
     </li>
-    <?php if ($this->user->hasProjectAccess('TaskGanttController', 'show', $project['id'])): ?>
-    <li <?= $this->app->checkMenuSelection('TaskGanttController') ?>>
+    <?php if ($this->user->hasProjectAccess('gantt', 'project', $project['id'])): ?>
+    <li <?= $this->app->getRouterController() === 'Gantt' ? 'class="active"' : '' ?>>
         <i class="fa fa-sliders fa-fw"></i>
-        <?= $this->url->link(t('Gantt'), 'TaskGanttController', 'show', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-gantt', t('Keyboard shortcut: "%s"', 'v g')) ?>
+        <?= $this->url->link(t('Gantt'), 'gantt', 'project', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-gantt', t('Keyboard shortcut: "%s"', 'v g')) ?>
     </li>
     <?php endif ?>
 </ul>

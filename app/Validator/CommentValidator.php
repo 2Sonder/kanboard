@@ -8,10 +8,10 @@ use SimpleValidator\Validators;
 /**
  * Comment Validator
  *
- * @package  Kanboard\Validator
+ * @package  validator
  * @author   Frederic Guillot
  */
-class CommentValidator extends BaseValidator
+class CommentValidator extends Base
 {
     /**
      * Validate comment creation

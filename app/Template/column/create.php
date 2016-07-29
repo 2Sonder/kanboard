@@ -1,7 +1,7 @@
 <div class="page-header">
     <h2><?= t('Add a new column') ?></h2>
 </div>
-<form class="popover-form" method="post" action="<?= $this->url->href('ColumnController', 'save', array('project_id' => $project['id'])) ?>" autocomplete="off">
+<form class="popover-form" method="post" action="<?= $this->url->href('Column', 'save', array('project_id' => $project['id'])) ?>" autocomplete="off">
 
     <?= $this->form->csrf() ?>
 
@@ -12,8 +12,6 @@
 
     <?= $this->form->label(t('Task limit'), 'task_limit') ?>
     <?= $this->form->number('task_limit', $values, $errors) ?>
-
-    <?= $this->form->checkbox('hide_in_dashboard', t('Hide tasks in this column in the dashboard'), 1) ?>
 
     <?= $this->form->label(t('Description'), 'description') ?>
     <?= $this->form->textarea('description', $values, $errors, array(), 'markdown-editor') ?>

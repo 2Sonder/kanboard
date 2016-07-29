@@ -3,7 +3,7 @@
 namespace Kanboard\User;
 
 use Kanboard\Core\User\UserProviderInterface;
-use Kanboard\Model\LanguageModel;
+use Kanboard\Model\Language;
 
 /**
  * LDAP User Provider
@@ -88,7 +88,6 @@ class LdapUserProvider implements UserProviderInterface
      * @param  string   $role
      * @param  string[] $groupIds
      * @param  string   $photo
-     * @param  string   $language
      */
     public function __construct($dn, $username, $name, $email, $role, array $groupIds, $photo = '', $language = '')
     {
@@ -212,7 +211,7 @@ class LdapUserProvider implements UserProviderInterface
         $attributes = array('is_ldap_user' => 1);
 
         if (! empty($this->language)) {
-            $attributes['language'] = LanguageModel::findCode($this->language);
+            $attributes['language'] = Language::findCode($this->language);
         }
 
         return $attributes;

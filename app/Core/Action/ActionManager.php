@@ -121,9 +121,9 @@ class ActionManager extends Base
     public function attachEvents()
     {
         if ($this->userSession->isLogged()) {
-            $actions = $this->actionModel->getAllByUser($this->userSession->getId());
+            $actions = $this->action->getAllByUser($this->userSession->getId());
         } else {
-            $actions = $this->actionModel->getAll();
+            $actions = $this->action->getAll();
         }
 
         foreach ($actions as $action) {

@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Assign a task to a specific user
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskAssignSpecificUser extends Base
@@ -32,8 +32,8 @@ class TaskAssignSpecificUser extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_CREATE_UPDATE,
-            TaskModel::EVENT_MOVE_COLUMN,
+            Task::EVENT_CREATE_UPDATE,
+            Task::EVENT_MOVE_COLUMN,
         );
     }
 
@@ -61,10 +61,7 @@ class TaskAssignSpecificUser extends Base
     {
         return array(
             'task_id',
-            'task' => array(
-                'project_id',
-                'column_id',
-            ),
+            'column_id',
         );
     }
 
@@ -82,7 +79,7 @@ class TaskAssignSpecificUser extends Base
             'owner_id' => $this->getParam('user_id'),
         );
 
-        return $this->taskModificationModel->update($values);
+        return $this->taskModification->update($values);
     }
 
     /**
@@ -94,6 +91,6 @@ class TaskAssignSpecificUser extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task']['column_id'] == $this->getParam('column_id');
+        return $data['column_id'] == $this->getParam('column_id');
     }
 }

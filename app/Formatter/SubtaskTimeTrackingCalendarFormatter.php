@@ -25,10 +25,10 @@ class SubtaskTimeTrackingCalendarFormatter extends BaseFormatter implements Form
                 'title' => t('#%d', $row['task_id']).' '.$row['subtask_title'].$user,
                 'start' => date('Y-m-d\TH:i:s', $row['start']),
                 'end' => date('Y-m-d\TH:i:s', $row['end'] ?: time()),
-                'backgroundColor' => $this->colorModel->getBackgroundColor($row['color_id']),
-                'borderColor' => $this->colorModel->getBorderColor($row['color_id']),
+                'backgroundColor' => $this->color->getBackgroundColor($row['color_id']),
+                'borderColor' => $this->color->getBorderColor($row['color_id']),
                 'textColor' => 'black',
-                'url' => $this->helper->url->to('TaskViewController', 'show', array('task_id' => $row['task_id'], 'project_id' => $row['project_id'])),
+                'url' => $this->helper->url->to('task', 'show', array('task_id' => $row['task_id'], 'project_id' => $row['project_id'])),
                 'editable' => false,
             );
         }

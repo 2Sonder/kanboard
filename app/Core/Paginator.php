@@ -282,6 +282,17 @@ class Paginator
     }
 
     /**
+     * Return true if the collection is empty
+     *
+     * @access public
+     * @return boolean
+     */
+    public function setEmpty()
+    {
+        return $this->total = 0;
+    }
+
+    /**
      * Execute the offset calculation only if the $condition is true
      *
      * @access public

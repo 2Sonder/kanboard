@@ -126,6 +126,7 @@ a.board-swimlane-toggle:focus {
 
 /* board task list */
 .board-task-list {
+    overflow: auto;
     min-height: 60px;
 }
 
@@ -155,4 +156,17 @@ div.draggable-item-selected {
 .task-board-sort-handle {
     float: left;
     padding-right: 5px;
+}
+
+/* board saving state */
+.task-board-saving-state {
+    opacity: 0.3;
+}
+
+.task-board-saving-icon {
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    color: #000;
 }

@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Add a comment of the triggering event to the task description.
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Oren Ben-Kiki
  */
 class CommentCreationMoveTaskColumn extends Base
@@ -32,7 +32,7 @@ class CommentCreationMoveTaskColumn extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_MOVE_COLUMN,
+            Task::EVENT_MOVE_COLUMN,
         );
     }
 
@@ -55,13 +55,7 @@ class CommentCreationMoveTaskColumn extends Base
      */
     public function getEventRequiredParameters()
     {
-        return array(
-            'task_id',
-            'task' => array(
-                'column_id',
-                'project_id',
-            ),
-        );
+        return array('task_id', 'column_id');
     }
 
     /**
@@ -77,9 +71,9 @@ class CommentCreationMoveTaskColumn extends Base
             return false;
         }
 
-        $column = $this->columnModel->getById($data['task']['column_id']);
+        $column = $this->column->getById($data['column_id']);
 
-        return (bool) $this->commentModel->create(array(
+        return (bool) $this->comment->create(array(
             'comment' => t('Moved to column %s', $column['title']),
             'task_id' => $data['task_id'],
             'user_id' => $this->userSession->getId(),
@@ -95,6 +89,6 @@ class CommentCreationMoveTaskColumn extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task']['column_id'] == $this->getParam('column_id');
+        return $data['column_id'] == $this->getParam('column_id');
     }
 }

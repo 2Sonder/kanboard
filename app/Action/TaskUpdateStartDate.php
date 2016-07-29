@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Set the start date of task
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskUpdateStartDate extends Base
@@ -32,7 +32,7 @@ class TaskUpdateStartDate extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_MOVE_COLUMN,
+            Task::EVENT_MOVE_COLUMN,
         );
     }
 
@@ -59,10 +59,7 @@ class TaskUpdateStartDate extends Base
     {
         return array(
             'task_id',
-            'task' => array(
-                'project_id',
-                'column_id',
-            ),
+            'column_id',
         );
     }
 
@@ -80,7 +77,7 @@ class TaskUpdateStartDate extends Base
             'date_started' => time(),
         );
 
-        return $this->taskModificationModel->update($values, false);
+        return $this->taskModification->update($values, false);
     }
 
     /**
@@ -92,6 +89,6 @@ class TaskUpdateStartDate extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task']['column_id'] == $this->getParam('column_id');
+        return $data['column_id'] == $this->getParam('column_id');
     }
 }

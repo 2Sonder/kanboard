@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Assign a task to the logged user on column change
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskAssignCurrentUserColumn extends Base
@@ -32,7 +32,7 @@ class TaskAssignCurrentUserColumn extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_MOVE_COLUMN,
+            Task::EVENT_MOVE_COLUMN,
         );
     }
 
@@ -59,10 +59,7 @@ class TaskAssignCurrentUserColumn extends Base
     {
         return array(
             'task_id',
-            'task' => array(
-                'project_id',
-                'column_id',
-            ),
+            'column_id',
         );
     }
 
@@ -84,7 +81,7 @@ class TaskAssignCurrentUserColumn extends Base
             'owner_id' => $this->userSession->getId(),
         );
 
-        return $this->taskModificationModel->update($values);
+        return $this->taskModification->update($values);
     }
 
     /**
@@ -96,6 +93,6 @@ class TaskAssignCurrentUserColumn extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task']['column_id'] == $this->getParam('column_id');
+        return $data['column_id'] == $this->getParam('column_id');
     }
 }

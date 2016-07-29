@@ -4,18 +4,13 @@ namespace Kanboard\ServiceProvider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Kanboard\Core\Mail\Client as EmailClient;
 use Kanboard\Core\ObjectStorage\FileStorage;
 use Kanboard\Core\Paginator;
 use Kanboard\Core\Http\OAuth2;
 use Kanboard\Core\Tool;
 use Kanboard\Core\Http\Client as HttpClient;
 
-/**
- * Class ClassProvider
- *
- * @package Kanboard\ServiceProvider
- * @author  Frederic Guillot
- */
 class ClassProvider implements ServiceProviderInterface
 {
     private $classes = array(
@@ -27,71 +22,77 @@ class ClassProvider implements ServiceProviderInterface
             'AverageTimeSpentColumnAnalytic',
         ),
         'Model' => array(
-            'ActionModel',
-            'ActionParameterModel',
-            'AvatarFileModel',
-            'BoardModel',
-            'CategoryModel',
-            'ColorModel',
-            'ColumnModel',
-            'CommentModel',
-            'ConfigModel',
-            'CurrencyModel',
-            'CustomFilterModel',
-            'GroupModel',
-            'GroupMemberModel',
-            'LanguageModel',
-            'LastLoginModel',
-            'LinkModel',
-            'NotificationModel',
-            'PasswordResetModel',
-            'ProjectModel',
-            'ProjectFileModel',
-            'ProjectActivityModel',
-            'ProjectDuplicationModel',
-            'ProjectDailyColumnStatsModel',
-            'ProjectDailyStatsModel',
-            'ProjectPermissionModel',
-            'ProjectNotificationModel',
-            'ProjectMetadataModel',
-            'ProjectGroupRoleModel',
-            'ProjectTaskDuplicationModel',
-            'ProjectTaskPriorityModel',
-            'ProjectUserRoleModel',
-            'RememberMeSessionModel',
-            'SubtaskModel',
-            'SubtaskPositionModel',
-            'SubtaskStatusModel',
-            'SubtaskTaskConversionModel',
-            'SubtaskTimeTrackingModel',
-            'SwimlaneModel',
-            'TagDuplicationModel',
-            'TagModel',
-            'TaskModel',
-            'TaskAnalyticModel',
-            'TaskCreationModel',
-            'TaskDuplicationModel',
-            'TaskProjectDuplicationModel',
-            'TaskProjectMoveModel',
-            'TaskRecurrenceModel',
-            'TaskExternalLinkModel',
-            'TaskFinderModel',
-            'TaskFileModel',
-            'TaskLinkModel',
-            'TaskModificationModel',
-            'TaskPositionModel',
-            'TaskStatusModel',
-            'TaskTagModel',
-            'TaskMetadataModel',
-            'TimezoneModel',
-            'TransitionModel',
-            'UserModel',
-            'UserLockingModel',
-            'UserMentionModel',
-            'UserNotificationModel',
-            'UserNotificationFilterModel',
-            'UserUnreadNotificationModel',
-            'UserMetadataModel',
+            'Action',
+            'ActionParameter',
+            'AvatarFile',
+            'Board',
+            'Category',
+            'Color',
+            'Column',
+            'Comment',
+            'Config',
+            'Currency',
+            'CustomFilter',
+            'Group',
+            'GroupMember',
+            'Language',
+            'LastLogin',
+            'Link',
+            'Notification',
+            'PasswordReset',
+            'Project',
+            'ProjectFile',
+            'ProjectActivity',
+            'ProjectDuplication',
+            'ProjectDailyColumnStats',
+            'ProjectDailyStats',
+            'ProjectPermission',
+            'ProjectNotification',
+            'ProjectMetadata',
+            'ProjectGroupRole',
+            'ProjectUserRole',
+            'RememberMeSession',
+            'Subtask',
+            'SubtaskTimeTracking',
+            'Swimlane',
+            'Task',
+            'TaskAnalytic',
+            'TaskCreation',
+            'TaskDuplication',
+            'TaskExternalLink',
+            'TaskFinder',
+            'TaskFile',
+            'TaskLink',
+            'TaskModification',
+            'TaskPosition',
+            'TaskStatus',
+            'TaskMetadata',
+            'Timezone',
+            'Transition',
+            'User',
+            'UserLocking',
+            'UserMention',
+            'UserNotification',
+            'UserNotificationFilter',
+            'UserUnreadNotification',
+            'UserMetadata',
+            'Client',
+            
+            'SonderClient',
+            'SonderAsset',
+            'SonderAssetType',
+            'SonderBase',
+            'SonderCredentials',
+            'SonderDomain',
+            'SonderServer',
+            'SonderService',
+            'SonderDebitcredit', 
+            'SonderLedger', 
+            'SonderInvoice',
+            'SonderInvoiceLine',
+            'SonderSettings',
+            'SonderProduct',
+            'SonderClientUserPermissions',
         ),
         'Validator' => array(
             'ActionValidator',
@@ -108,9 +109,8 @@ class ClassProvider implements ServiceProviderInterface
             'ProjectValidator',
             'SubtaskValidator',
             'SwimlaneValidator',
-            'TagValidator',
-            'TaskLinkValidator',
             'TaskValidator',
+            'TaskLinkValidator',
             'UserValidator',
         ),
         'Import' => array(
@@ -121,12 +121,6 @@ class ClassProvider implements ServiceProviderInterface
             'SubtaskExport',
             'TaskExport',
             'TransitionExport',
-        ),
-        'Pagination' => array(
-            'TaskPagination',
-            'SubtaskPagination',
-            'ProjectPagination',
-            'UserPagination',
         ),
         'Core' => array(
             'DateParser',
@@ -176,6 +170,14 @@ class ClassProvider implements ServiceProviderInterface
 
         $container['objectStorage'] = function () {
             return new FileStorage(FILES_DIR);
+        };
+
+        $container['emailClient'] = function ($container) {
+            $mailer = new EmailClient($container);
+            $mailer->setTransport('smtp', '\Kanboard\Core\Mail\Transport\Smtp');
+            $mailer->setTransport('sendmail', '\Kanboard\Core\Mail\Transport\Sendmail');
+            $mailer->setTransport('mail', '\Kanboard\Core\Mail\Transport\Mail');
+            return $mailer;
         };
 
         $container['cspRules'] = array(

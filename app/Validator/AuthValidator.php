@@ -9,10 +9,10 @@ use Gregwar\Captcha\CaptchaBuilder;
 /**
  * Authentication Validator
  *
- * @package  Kanboard\Validator
+ * @package  validator
  * @author   Frederic Guillot
  */
-class AuthValidator extends BaseValidator
+class AuthValidator extends Base
 {
     /**
      * Validate user login form
@@ -59,7 +59,7 @@ class AuthValidator extends BaseValidator
         $result = true;
         $errors = array();
 
-        if ($this->userLockingModel->isLocked($values['username'])) {
+        if ($this->userLocking->isLocked($values['username'])) {
             $result = false;
             $errors['login'] = t('Your account is locked for %d minutes', BRUTEFORCE_LOCKDOWN_DURATION);
             $this->logger->error('Account locked: '.$values['username']);
@@ -100,7 +100,7 @@ class AuthValidator extends BaseValidator
         $result = true;
         $errors = array();
 
-        if ($this->userLockingModel->hasCaptcha($values['username'])) {
+        if ($this->userLocking->hasCaptcha($values['username'])) {
             if (! isset($this->sessionStorage->captcha)) {
                 $result = false;
             } else {

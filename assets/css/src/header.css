@@ -26,12 +26,8 @@ header li {
 }
 
 header a {
-    color: #333;
+    color: #777;
     text-decoration: none;
-}
-
-header a:hover {
-    color: #666;
 }
 
 nav .active a {

@@ -7,12 +7,6 @@ use Kanboard\Core\Template;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-/**
- * Class HelperProvider
- *
- * @package Kanboard\ServiceProvider
- * @author  Frederic Guillot
- */
 class HelperProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
@@ -37,7 +31,6 @@ class HelperProvider implements ServiceProviderInterface
         $container['helper']->register('avatar', '\Kanboard\Helper\AvatarHelper');
         $container['helper']->register('projectHeader', '\Kanboard\Helper\ProjectHeaderHelper');
         $container['helper']->register('projectActivity', '\Kanboard\Helper\ProjectActivityHelper');
-        $container['helper']->register('mail', '\Kanboard\Helper\MailHelper');
 
         $container['template'] = new Template($container['helper']);
 

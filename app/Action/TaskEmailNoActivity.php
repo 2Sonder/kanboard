@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Email a task with no activity
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskEmailNoActivity extends Base
@@ -32,7 +32,7 @@ class TaskEmailNoActivity extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_DAILY_CRONJOB,
+            Task::EVENT_DAILY_CRONJOB,
         );
     }
 
@@ -85,7 +85,7 @@ class TaskEmailNoActivity extends Base
     {
         $results = array();
         $max = $this->getParam('duration') * 86400;
-        $user = $this->userModel->getById($this->getParam('user_id'));
+        $user = $this->user->getById($this->getParam('user_id'));
 
         if (! empty($user['email'])) {
             foreach ($data['tasks'] as $task) {
@@ -110,13 +110,13 @@ class TaskEmailNoActivity extends Base
      */
     private function sendEmail($task_id, array $user)
     {
-        $task = $this->taskFinderModel->getDetails($task_id);
+        $task = $this->taskFinder->getDetails($task_id);
 
         $this->emailClient->send(
             $user['email'],
             $user['name'] ?: $user['username'],
             $this->getParam('subject'),
-            $this->template->render('notification/task_create', array('task' => $task, 'application_url' => $this->configModel->get('application_url')))
+            $this->template->render('notification/task_create', array('task' => $task, 'application_url' => $this->config->get('application_url')))
         );
 
         return true;

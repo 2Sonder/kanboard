@@ -14,7 +14,7 @@
             <td style="border: 1px solid #eee;">#<?= $task['id'] ?></td>
             <td style="border: 1px solid #eee;">
                 <?php if ($application_url): ?>
-                    <a href="<?= $this->url->href('TaskViewController', 'show', array('task_id' => $task['id'], 'project_id' => $task['project_id']), false, '', true) ?>"><?= $this->text->e($task['title']) ?></a>
+                    <a href="<?= $this->url->href('task', 'show', array('task_id' => $task['id'], 'project_id' => $task['project_id']), false, '', true) ?>"><?= $this->text->e($task['title']) ?></a>
                 <?php else: ?>
                     <?= $this->text->e($task['title']) ?>
                 <?php endif ?>
@@ -23,7 +23,7 @@
             <td style="border: 1px solid #eee;"><?= $task['project_name'] ?></td>
             <td style="border: 1px solid #eee;">
                 <?php if ($task['assignee_username']): ?>
-                    <?= $this->text->e($task['assignee_name'] ?: $task['assignee_username']) ?>
+                    <?= $this->e($task['assignee_name'] ?: $task['assignee_username']) ?>
                 <?php endif ?>
             </td>
         </tr>

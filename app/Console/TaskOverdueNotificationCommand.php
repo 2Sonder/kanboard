@@ -2,7 +2,7 @@
 
 namespace Kanboard\Console;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 use Kanboard\Core\Security\Role;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,10 +65,10 @@ class TaskOverdueNotificationCommand extends BaseCommand
      */
     public function sendGroupOverdueTaskNotifications()
     {
-        $tasks = $this->taskFinderModel->getOverdueTasks();
+        $tasks = $this->taskFinder->getOverdueTasks();
 
         foreach ($this->groupByColumn($tasks, 'owner_id') as $user_tasks) {
-            $users = $this->userNotificationModel->getUsersWithNotificationEnabled($user_tasks[0]['project_id']);
+            $users = $this->userNotification->getUsersWithNotificationEnabled($user_tasks[0]['project_id']);
 
             foreach ($users as $user) {
                 $this->sendUserOverdueTaskNotifications($user, $user_tasks);
@@ -85,14 +85,14 @@ class TaskOverdueNotificationCommand extends BaseCommand
      */
     public function sendOverdueTaskNotificationsToManagers()
     {
-        $tasks = $this->taskFinderModel->getOverdueTasks();
+        $tasks = $this->taskFinder->getOverdueTasks();
 
         foreach ($this->groupByColumn($tasks, 'project_id') as $project_id => $project_tasks) {
-            $users = $this->userNotificationModel->getUsersWithNotificationEnabled($project_id);
+            $users = $this->userNotification->getUsersWithNotificationEnabled($project_id);
             $managers = array();
 
             foreach ($users as $user) {
-                $role = $this->projectUserRoleModel->getUserRole($project_id, $user['id']);
+                $role = $this->projectUserRole->getUserRole($project_id, $user['id']);
                 if($role == Role::PROJECT_MANAGER) {
                     $managers[] = $user;
                 }
@@ -113,10 +113,10 @@ class TaskOverdueNotificationCommand extends BaseCommand
      */
     public function sendOverdueTaskNotifications()
     {
-        $tasks = $this->taskFinderModel->getOverdueTasks();
+        $tasks = $this->taskFinder->getOverdueTasks();
 
         foreach ($this->groupByColumn($tasks, 'project_id') as $project_id => $project_tasks) {
-            $users = $this->userNotificationModel->getUsersWithNotificationEnabled($project_id);
+            $users = $this->userNotification->getUsersWithNotificationEnabled($project_id);
 
             foreach ($users as $user) {
                 $this->sendUserOverdueTaskNotifications($user, $project_tasks);
@@ -139,17 +139,17 @@ class TaskOverdueNotificationCommand extends BaseCommand
         $project_names = array();
 
         foreach ($tasks as $task) {
-            if ($this->userNotificationFilterModel->shouldReceiveNotification($user, array('task' => $task))) {
+            if ($this->userNotificationFilter->shouldReceiveNotification($user, array('task' => $task))) {
                 $user_tasks[] = $task;
                 $project_names[$task['project_id']] = $task['project_name'];
             }
         }
 
         if (! empty($user_tasks)) {
-            $this->userNotificationModel->sendUserNotification(
+            $this->userNotification->sendUserNotification(
                 $user,
-                TaskModel::EVENT_OVERDUE,
-                array('tasks' => $user_tasks, 'project_name' => implode(', ', $project_names))
+                Task::EVENT_OVERDUE,
+                array('tasks' => $user_tasks, 'project_name' => implode(", ", $project_names))
             );
         }
     }
@@ -163,9 +163,9 @@ class TaskOverdueNotificationCommand extends BaseCommand
      */
     public function sendUserOverdueTaskNotificationsToManagers(array $manager, array $tasks)
     {
-        $this->userNotificationModel->sendUserNotification(
+        $this->userNotification->sendUserNotification(
             $manager,
-            TaskModel::EVENT_OVERDUE,
+            Task::EVENT_OVERDUE,
             array('tasks' => $tasks, 'project_name' => $tasks[0]['project_name'])
         );
     }

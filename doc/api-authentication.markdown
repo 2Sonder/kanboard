@@ -1,26 +1,48 @@
 API Authentication
 ==================
 
-API endpoint
-------------
-
-URL: `https://YOUR_SERVER/jsonrpc.php`
-
-
 Default method (HTTP Basic)
 ---------------------------
 
-### Application credentials
+The API credentials are available on the settings page.
+
+- API end-point: `https://YOUR_SERVER/jsonrpc.php`
+
+If you want to use the "application api":
 
 - Username: `jsonrpc`
 - Password: API token on the settings page
 
-### User credentials
-
-- Use the real username and password
+Otherwise for the "user api", just use the real username/passsword.
 
 The API use the [HTTP Basic Authentication Scheme described in the RFC2617](http://www.ietf.org/rfc/rfc2617.txt).
+If there is an authentication error, you will receive the HTTP status code `401 Not Authorized`.
 
+### Authorized User API procedures
+
+- getMe
+- getMyDashboard
+- getMyActivityStream
+- createMyPrivateProject
+- getMyProjectsList
+- getMyProjects
+- getTimezone
+- getVersion
+- getDefaultTaskColor
+- getDefaultTaskColors
+- getColorList
+- getProjectById
+- getTask
+- getTaskByReference
+- getAllTasks
+- openTask
+- closeTask
+- moveTaskPosition
+- createTask
+- updateTask
+- getBoard
+- getProjectActivity
+- getMyOverdueTasks
 
 Custom HTTP header
 ------------------
@@ -42,14 +64,3 @@ curl \
 -d '{"jsonrpc": "2.0", "method": "getAllProjects", "id": 1}' \
 http://localhost/kanboard/jsonrpc.php
 ```
-
-Authentication error
---------------------
-
-If the credentials are wrong, you will receive a `401 Not Authorized` and the corresponding JSON response.
-
-
-Authorization error
--------------------
-
-If the connected user is not allowed to access to the resource, you will receive a `403 Forbidden`.

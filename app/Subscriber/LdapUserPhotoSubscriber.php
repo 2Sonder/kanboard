@@ -42,7 +42,7 @@ class LdapUserPhotoSubscriber extends BaseSubscriber implements EventSubscriberI
 
             if (empty($profile['avatar_path']) && ! empty($photo)) {
                 $this->logger->info('Saving user photo from LDAP profile');
-                $this->avatarFileModel->uploadImageContent($profile['id'], $photo);
+                $this->avatarFile->uploadImageContent($profile['id'], $photo);
             }
         }
     }

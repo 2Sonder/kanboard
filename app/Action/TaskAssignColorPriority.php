@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Assign a color to a priority
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskAssignColorPriority extends Base
@@ -32,7 +32,7 @@ class TaskAssignColorPriority extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskModel::EVENT_CREATE_UPDATE,
+            Task::EVENT_CREATE_UPDATE,
         );
     }
 
@@ -60,10 +60,7 @@ class TaskAssignColorPriority extends Base
     {
         return array(
             'task_id',
-            'task' => array(
-                'project_id',
-                'priority',
-            ),
+            'priority',
         );
     }
 
@@ -81,7 +78,7 @@ class TaskAssignColorPriority extends Base
             'color_id' => $this->getParam('color_id'),
         );
 
-        return $this->taskModificationModel->update($values, false);
+        return $this->taskModification->update($values, false);
     }
 
     /**
@@ -93,6 +90,6 @@ class TaskAssignColorPriority extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task']['priority'] == $this->getParam('priority');
+        return $data['priority'] == $this->getParam('priority');
     }
 }

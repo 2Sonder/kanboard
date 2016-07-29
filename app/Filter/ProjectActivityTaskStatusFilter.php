@@ -3,7 +3,7 @@
 namespace Kanboard\Filter;
 
 use Kanboard\Core\Filter\FilterInterface;
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Filter activity events by task status
@@ -33,9 +33,9 @@ class ProjectActivityTaskStatusFilter extends BaseFilter implements FilterInterf
     public function apply()
     {
         if ($this->value === 'open') {
-            $this->query->eq(TaskModel::TABLE.'.is_active', TaskModel::STATUS_OPEN);
+            $this->query->eq(Task::TABLE.'.is_active', Task::STATUS_OPEN);
         } elseif ($this->value === 'closed') {
-            $this->query->eq(TaskModel::TABLE.'.is_active', TaskModel::STATUS_CLOSED);
+            $this->query->eq(Task::TABLE.'.is_active', Task::STATUS_CLOSED);
         }
 
         return $this;

@@ -3,8 +3,8 @@
 namespace Kanboard\Filter;
 
 use Kanboard\Core\Filter\FilterInterface;
-use Kanboard\Model\ColorModel;
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Color;
+use Kanboard\Model\Task;
 
 /**
  * Filter tasks by color
@@ -18,7 +18,7 @@ class TaskColorFilter extends BaseFilter implements FilterInterface
      * Color object
      *
      * @access private
-     * @var    ColorModel
+     * @var    Color
      */
     private $colorModel;
 
@@ -26,10 +26,10 @@ class TaskColorFilter extends BaseFilter implements FilterInterface
      * Set color model object
      *
      * @access public
-     * @param  ColorModel $colorModel
+     * @param  Color $colorModel
      * @return TaskColorFilter
      */
-    public function setColorModel(ColorModel $colorModel)
+    public function setColorModel(Color $colorModel)
     {
         $this->colorModel = $colorModel;
         return $this;
@@ -54,7 +54,7 @@ class TaskColorFilter extends BaseFilter implements FilterInterface
      */
     public function apply()
     {
-        $this->query->eq(TaskModel::TABLE.'.color_id', $this->colorModel->find($this->value));
+        $this->query->eq(Task::TABLE.'.color_id', $this->colorModel->find($this->value));
         return $this;
     }
 }

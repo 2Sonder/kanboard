@@ -3,7 +3,7 @@
 namespace Kanboard\Filter;
 
 use Kanboard\Core\Filter\FilterInterface;
-use Kanboard\Model\ProjectModel;
+use Kanboard\Model\Project;
 
 /**
  * Filter activity events by project name
@@ -32,7 +32,7 @@ class ProjectActivityProjectNameFilter extends BaseFilter implements FilterInter
      */
     public function apply()
     {
-        $this->query->ilike(ProjectModel::TABLE.'.name', '%'.$this->value.'%');
+        $this->query->ilike(Project::TABLE.'.name', '%'.$this->value.'%');
         return $this;
     }
 }

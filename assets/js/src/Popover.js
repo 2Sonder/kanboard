@@ -67,13 +67,10 @@ Kanboard.Popover.prototype.close = function(e) {
 Kanboard.Popover.prototype.ajaxReload = function(data, request, self) {
     var redirect = request.getResponseHeader("X-Ajax-Redirect");
 
-    if (redirect === 'self') {
-        window.location.reload();
-    } else if (redirect && redirect.indexOf('#') > -1) {
-        window.location = redirect.split('#')[0];
-    } else if (redirect) {
-        window.location = redirect;
-    } else {
+    if (redirect) {
+        window.location = redirect === 'self' ? window.location.href.split("#")[0] : redirect;
+    }
+    else {
         $("#popover-content").html(data);
         $("#popover-content input[autofocus]").focus();
         self.executeOnOpenedListeners();
@@ -147,5 +144,4 @@ Kanboard.Popover.prototype.afterOpen = function() {
 
     this.app.datePicker();
     this.app.autoComplete();
-    this.app.tagAutoComplete();
 };

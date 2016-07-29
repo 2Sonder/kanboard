@@ -5,7 +5,7 @@ namespace Kanboard\Action;
 /**
  * Open automatically a task
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskOpen extends Base
@@ -63,7 +63,7 @@ class TaskOpen extends Base
      */
     public function doAction(array $data)
     {
-        return $this->taskStatusModel->open($data['task_id']);
+        return $this->taskStatus->open($data['task_id']);
     }
 
     /**

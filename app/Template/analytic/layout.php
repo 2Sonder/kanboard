@@ -1,5 +1,5 @@
 <section id="main">
-    <?= $this->projectHeader->render($project, 'TaskListController', 'show') ?>
+    <?= $this->projectHeader->render($project, 'Listing', 'show') ?>
     <section class="sidebar-container">
         <?= $this->render($sidebar_template, array('project' => $project)) ?>
 
@@ -8,3 +8,6 @@
         </div>
     </section>
 </section>
+
+<?= $this->asset->js('assets/js/vendor/d3.v3.min.js') ?>
+<?= $this->asset->js('assets/js/vendor/c3.min.js') ?>

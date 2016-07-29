@@ -11,6 +11,10 @@ Kanboard.Task.prototype.keyboardShortcuts = function() {
             self.app.get("Popover").open(taskView.data("edit-url"));
         });
 
+        Mousetrap.bind("d", function() {
+            self.app.get("Popover").open(taskView.data("description-url"));
+        });
+
         Mousetrap.bind("c", function() {
             self.app.get("Popover").open(taskView.data("comment-url"));
         });
@@ -29,7 +33,12 @@ Kanboard.Task.prototype.onPopoverOpened = function() {
     var self = this;
     var reloadingProjectId = 0;
 
-    self.renderColorPicker();
+    // Change color
+    $(document).on("click", ".color-square", function() {
+        $(".color-square-selected").removeClass("color-square-selected");
+        $(this).addClass("color-square-selected");
+        $("#form-color_id").val($(this).data("color-id"));
+    });
 
     // Assign to me
     $(document).on("click", ".assign-me", function(e) {
@@ -64,22 +73,5 @@ Kanboard.Task.prototype.onPopoverOpened = function() {
                 }
             });
         }
-    });
-};
-
-Kanboard.Task.prototype.renderColorPicker = function() {
-    function renderColorOption(color) {
-        return $(
-            '<div class="color-picker-option">' +
-            '<div class="color-picker-square color-' + color.id + '"></div>' +
-            '<div class="color-picker-label">' + color.text + '</div>' +
-            '</div>'
-        );
-    }
-
-    $(".color-picker").select2({
-        minimumResultsForSearch: Infinity,
-        templateResult: renderColorOption,
-        templateSelection: renderColorOption
     });
 };

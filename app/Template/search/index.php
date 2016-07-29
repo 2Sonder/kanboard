@@ -3,19 +3,11 @@
         <ul>
             <li>
                 <i class="fa fa-search fa-fw"></i>
-                <?= $this->url->link(t('Activity stream search'), 'SearchController', 'activity') ?>
+                <?= $this->url->link(t('Activity stream search'), 'search', 'activity') ?>
             </li>
         </ul>
     </div>
 
-    <div class="filter-box">
-        <form method="get" action="<?= $this->url->dir() ?>" class="search">
-            <?= $this->form->hidden('controller', $values) ?>
-            <?= $this->form->hidden('action', $values) ?>
-            <?= $this->form->text('search', $values, array(), array(empty($values['search']) ? 'autofocus' : '', 'placeholder="'.t('Search').'"'), 'form-input-large') ?>
-            <?= $this->render('app/filters_helper') ?>
-        </form>
-    </div>
 
     <?php if (empty($values['search'])): ?>
         <div class="listing">

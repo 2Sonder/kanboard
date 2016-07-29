@@ -14,40 +14,6 @@ class DateParser extends Base
 {
     const DATE_FORMAT = 'm/d/Y';
     const DATE_TIME_FORMAT = 'm/d/Y H:i';
-    const TIME_FORMAT = 'H:i';
-
-    /**
-     * Get date format from settings
-     *
-     * @access public
-     * @return string
-     */
-    public function getUserDateFormat()
-    {
-        return $this->configModel->get('application_date_format', DateParser::DATE_FORMAT);
-    }
-
-    /**
-     * Get date time format from settings
-     *
-     * @access public
-     * @return string
-     */
-    public function getUserDateTimeFormat()
-    {
-        return $this->configModel->get('application_datetime_format', DateParser::DATE_TIME_FORMAT);
-    }
-
-    /**
-     * Get time format from settings
-     *
-     * @access public
-     * @return string
-     */
-    public function getUserTimeFormat()
-    {
-        return $this->configModel->get('application_time_format', DateParser::TIME_FORMAT);
-    }
 
     /**
      * List of time formats
@@ -72,29 +38,19 @@ class DateParser extends Base
      */
     public function getDateFormats($iso = false)
     {
-        $formats = array(
-            $this->getUserDateFormat(),
-        );
-
-        $isoFormats = array(
+        $iso_formats = array(
             'Y-m-d',
             'Y_m_d',
         );
 
-        $userFormats = array(
+        $user_formats = array(
             'm/d/Y',
             'd/m/Y',
             'Y/m/d',
             'd.m.Y',
         );
 
-        if ($iso) {
-            $formats = array_merge($formats, $isoFormats, $userFormats);
-        } else {
-            $formats = array_merge($formats, $userFormats);
-        }
-
-        return array_unique($formats);
+        return $iso ? array_merge($iso_formats, $user_formats) : $user_formats;
     }
 
     /**
@@ -106,9 +62,7 @@ class DateParser extends Base
      */
     public function getDateTimeFormats($iso = false)
     {
-        $formats = array(
-            $this->getUserDateTimeFormat(),
-        );
+        $formats = array();
 
         foreach ($this->getDateFormats($iso) as $date) {
             foreach ($this->getTimeFormats() as $time) {
@@ -116,7 +70,7 @@ class DateParser extends Base
             }
         }
 
-        return array_unique($formats);
+        return $formats;
     }
 
     /**
@@ -143,28 +97,10 @@ class DateParser extends Base
         $values = array();
 
         foreach ($formats as $format) {
-            $values[$format] = date($format).' ('.$format.')';
+            $values[$format] = date($format);
         }
 
         return $values;
-    }
-
-    /**
-     * Get formats for date parsing
-     *
-     * @access public
-     * @return array
-     */
-    public function getParserFormats()
-    {
-        return array(
-            $this->getUserDateFormat(),
-            'Y-m-d',
-            'Y_m_d',
-            $this->getUserDateTimeFormat(),
-            'Y-m-d H:i',
-            'Y_m_d H:i',
-        );
     }
 
     /**
@@ -180,7 +116,7 @@ class DateParser extends Base
             return (int) $value;
         }
 
-        foreach ($this->getParserFormats() as $format) {
+        foreach ($this->getAllDateFormats(true) as $format) {
             $timestamp = $this->getValidDate($value, $format);
 
             if ($timestamp !== 0) {

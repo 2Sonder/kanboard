@@ -3,7 +3,7 @@
 namespace Kanboard\Filter;
 
 use Kanboard\Core\Filter\FilterInterface;
-use Kanboard\Model\TaskModel;
+use Kanboard\Model\Task;
 
 /**
  * Filter tasks by creation date
@@ -32,7 +32,7 @@ class TaskCreationDateFilter extends BaseDateFilter implements FilterInterface
      */
     public function apply()
     {
-        $this->applyDateFilter(TaskModel::TABLE.'.date_creation');
+        $this->applyDateFilter(Task::TABLE.'.date_creation');
         return $this;
     }
 }

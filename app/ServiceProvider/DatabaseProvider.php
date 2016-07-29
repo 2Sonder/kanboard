@@ -8,12 +8,6 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use PicoDb\Database;
 
-/**
- * Class DatabaseProvider
- *
- * @package Kanboard\ServiceProvider
- * @author  Frederic Guillot
- */
 class DatabaseProvider implements ServiceProviderInterface
 {
     /**
@@ -26,13 +20,8 @@ class DatabaseProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['db'] = $this->getInstance();
-
-        if (DEBUG) {
-            $container['db']->getStatementHandler()
-                ->withLogging()
-                ->withStopWatch()
-            ;
-        }
+        $container['db']->stopwatch = DEBUG;
+        $container['db']->logQueries = DEBUG;
 
         return $container;
     }

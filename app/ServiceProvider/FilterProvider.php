@@ -21,25 +21,23 @@ use Kanboard\Filter\TaskDueDateFilter;
 use Kanboard\Filter\TaskIdFilter;
 use Kanboard\Filter\TaskLinkFilter;
 use Kanboard\Filter\TaskModificationDateFilter;
-use Kanboard\Filter\TaskPriorityFilter;
 use Kanboard\Filter\TaskProjectFilter;
 use Kanboard\Filter\TaskReferenceFilter;
 use Kanboard\Filter\TaskStatusFilter;
 use Kanboard\Filter\TaskSubtaskAssigneeFilter;
 use Kanboard\Filter\TaskSwimlaneFilter;
-use Kanboard\Filter\TaskTagFilter;
 use Kanboard\Filter\TaskTitleFilter;
-use Kanboard\Model\ProjectModel;
-use Kanboard\Model\ProjectGroupRoleModel;
-use Kanboard\Model\ProjectUserRoleModel;
-use Kanboard\Model\UserModel;
+use Kanboard\Model\Project;
+use Kanboard\Model\ProjectGroupRole;
+use Kanboard\Model\ProjectUserRole;
+use Kanboard\Model\User;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
  * Filter Provider
  *
- * @package Kanboard\ServiceProvider
+ * @package serviceProvider
  * @author  Frederic Guillot
  */
 class FilterProvider implements ServiceProviderInterface
@@ -63,7 +61,7 @@ class FilterProvider implements ServiceProviderInterface
     {
         $container['userQuery'] = $container->factory(function ($c) {
             $builder = new QueryBuilder();
-            $builder->withQuery($c['db']->table(UserModel::TABLE));
+            $builder->withQuery($c['db']->table(User::TABLE));
             return $builder;
         });
 
@@ -74,26 +72,26 @@ class FilterProvider implements ServiceProviderInterface
     {
         $container['projectGroupRoleQuery'] = $container->factory(function ($c) {
             $builder = new QueryBuilder();
-            $builder->withQuery($c['db']->table(ProjectGroupRoleModel::TABLE));
+            $builder->withQuery($c['db']->table(ProjectGroupRole::TABLE));
             return $builder;
         });
 
         $container['projectUserRoleQuery'] = $container->factory(function ($c) {
             $builder = new QueryBuilder();
-            $builder->withQuery($c['db']->table(ProjectUserRoleModel::TABLE));
+            $builder->withQuery($c['db']->table(ProjectUserRole::TABLE));
             return $builder;
         });
 
         $container['projectQuery'] = $container->factory(function ($c) {
             $builder = new QueryBuilder();
-            $builder->withQuery($c['db']->table(ProjectModel::TABLE));
+            $builder->withQuery($c['db']->table(Project::TABLE));
             return $builder;
         });
 
         $container['projectActivityLexer'] = $container->factory(function ($c) {
             $builder = new LexerBuilder();
             $builder
-                ->withQuery($c['projectActivityModel']->getQuery())
+                ->withQuery($c['projectActivity']->getQuery())
                 ->withFilter(new ProjectActivityTaskTitleFilter(), true)
                 ->withFilter(new ProjectActivityTaskStatusFilter())
                 ->withFilter(new ProjectActivityProjectNameFilter())
@@ -110,7 +108,7 @@ class FilterProvider implements ServiceProviderInterface
 
         $container['projectActivityQuery'] = $container->factory(function ($c) {
             $builder = new QueryBuilder();
-            $builder->withQuery($c['projectActivityModel']->getQuery());
+            $builder->withQuery($c['projectActivity']->getQuery());
 
             return $builder;
         });
@@ -122,7 +120,7 @@ class FilterProvider implements ServiceProviderInterface
     {
         $container['taskQuery'] = $container->factory(function ($c) {
             $builder = new QueryBuilder();
-            $builder->withQuery($c['taskFinderModel']->getExtendedQuery());
+            $builder->withQuery($c['taskFinder']->getExtendedQuery());
             return $builder;
         });
 
@@ -130,15 +128,14 @@ class FilterProvider implements ServiceProviderInterface
             $builder = new LexerBuilder();
 
             $builder
-                ->withQuery($c['taskFinderModel']->getExtendedQuery())
+                ->withQuery($c['taskFinder']->getExtendedQuery())
                 ->withFilter(TaskAssigneeFilter::getInstance()
                     ->setCurrentUserId($c['userSession']->getId())
                 )
                 ->withFilter(new TaskCategoryFilter())
                 ->withFilter(TaskColorFilter::getInstance()
-                    ->setColorModel($c['colorModel'])
+                    ->setColorModel($c['color'])
                 )
-                ->withFilter(new TaskPriorityFilter())
                 ->withFilter(new TaskColumnFilter())
                 ->withFilter(new TaskCommentFilter())
                 ->withFilter(TaskCreationDateFilter::getInstance()
@@ -166,9 +163,6 @@ class FilterProvider implements ServiceProviderInterface
                     ->setDatabase($c['db'])
                 )
                 ->withFilter(new TaskSwimlaneFilter())
-                ->withFilter(TaskTagFilter::getInstance()
-                    ->setDatabase($c['db'])
-                )
                 ->withFilter(new TaskTitleFilter(), true)
             ;
 

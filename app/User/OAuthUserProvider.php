@@ -13,6 +13,14 @@ use Kanboard\Core\User\UserProviderInterface;
 abstract class OAuthUserProvider implements UserProviderInterface
 {
     /**
+     * Get external id column name
+     *
+     * @access public
+     * @return string
+     */
+    abstract public function getExternalIdColumn();
+
+    /**
      * User properties
      *
      * @access protected
@@ -61,7 +69,7 @@ abstract class OAuthUserProvider implements UserProviderInterface
      */
     public function getExternalId()
     {
-        return isset($this->user['id']) ? $this->user['id'] : '';
+        return $this->user['id'];
     }
 
     /**
@@ -94,7 +102,7 @@ abstract class OAuthUserProvider implements UserProviderInterface
      */
     public function getName()
     {
-        return isset($this->user['name']) ? $this->user['name'] : '';
+        return $this->user['name'];
     }
 
     /**
@@ -105,7 +113,7 @@ abstract class OAuthUserProvider implements UserProviderInterface
      */
     public function getEmail()
     {
-        return isset($this->user['email']) ? $this->user['email'] : '';
+        return $this->user['email'];
     }
 
     /**

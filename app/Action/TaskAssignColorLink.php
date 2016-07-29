@@ -2,12 +2,12 @@
 
 namespace Kanboard\Action;
 
-use Kanboard\Model\TaskLinkModel;
+use Kanboard\Model\TaskLink;
 
 /**
  * Assign a color to a specific task link
  *
- * @package Kanboard\Action
+ * @package action
  * @author  Frederic Guillot
  */
 class TaskAssignColorLink extends Base
@@ -32,7 +32,7 @@ class TaskAssignColorLink extends Base
     public function getCompatibleEvents()
     {
         return array(
-            TaskLinkModel::EVENT_CREATE_UPDATE,
+            TaskLink::EVENT_CREATE_UPDATE,
         );
     }
 
@@ -59,10 +59,8 @@ class TaskAssignColorLink extends Base
     public function getEventRequiredParameters()
     {
         return array(
-            'task_link' => array(
-                'task_id',
-                'link_id',
-            )
+            'task_id',
+            'link_id',
         );
     }
 
@@ -76,11 +74,11 @@ class TaskAssignColorLink extends Base
     public function doAction(array $data)
     {
         $values = array(
-            'id' => $data['task_link']['task_id'],
+            'id' => $data['task_id'],
             'color_id' => $this->getParam('color_id'),
         );
 
-        return $this->taskModificationModel->update($values, false);
+        return $this->taskModification->update($values, false);
     }
 
     /**
@@ -92,6 +90,6 @@ class TaskAssignColorLink extends Base
      */
     public function hasRequiredCondition(array $data)
     {
-        return $data['task_link']['link_id'] == $this->getParam('link_id');
+        return $data['link_id'] == $this->getParam('link_id');
     }
 }

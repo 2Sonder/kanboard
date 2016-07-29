@@ -4,15 +4,15 @@ namespace Kanboard\Validator;
 
 use SimpleValidator\Validator;
 use SimpleValidator\Validators;
-use Kanboard\Model\UserModel;
+use Kanboard\Model\User;
 
 /**
  * User Validator
  *
- * @package  Kanboard\Validator
+ * @package  validator
  * @author   Frederic Guillot
  */
-class UserValidator extends BaseValidator
+class UserValidator extends Base
 {
     /**
      * Common validation rules
@@ -25,7 +25,7 @@ class UserValidator extends BaseValidator
         return array(
             new Validators\MaxLength('role', t('The maximum length is %d characters', 25), 25),
             new Validators\MaxLength('username', t('The maximum length is %d characters', 50), 50),
-            new Validators\Unique('username', t('The username must be unique'), $this->db->getConnection(), UserModel::TABLE, 'id'),
+            new Validators\Unique('username', t('The username must be unique'), $this->db->getConnection(), User::TABLE, 'id'),
             new Validators\Email('email', t('Email address invalid')),
             new Validators\Integer('is_ldap_user', t('This value must be an integer')),
         );
