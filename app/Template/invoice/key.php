@@ -5,7 +5,7 @@
         <th><?php echo $user['name']; ?></th>
         <?php } ?>
     </tr>
-    <?php foreach($months as $month){ print_r($month); ?>
+    <?php foreach($months as $month){ ?>
     <tr>
         <td rowspan="4"><?php echo $month['month']; ?></td>
         <?php foreach($users as $user){ ?>

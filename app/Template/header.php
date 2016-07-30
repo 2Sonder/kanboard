@@ -18,7 +18,7 @@
                 <form method="get" action="<?= $this->url->dir() ?>" class="search">
                     <?= $this->form->hidden('controller', array('controller' => 'search')) ?>
                     <?= $this->form->hidden('action', array('action' => 'index')) ?>
-                    <input type="text" name="search" placeholder="Zoeken in PM" />
+                    <input id="main-search" type="text" name="search" placeholder="Zoeken in PM" />
                     <?= $this->render('app/filters_helper') ?>
                 </form>
             </li>

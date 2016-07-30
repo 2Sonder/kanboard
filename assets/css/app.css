@@ -152,7 +152,17 @@ h2
 float:left;position:relative;left:13%;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="text"]:focus
+{
+    width: 300px;
+    background-color: #f2f2f2;
+    border: none;
+    height: 35px;
+    margin-top: 0px;
+}
+
+#main-search {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -174,7 +184,7 @@ input[type="text"] {
     margin-top: 0px;
 }
 
-input[type="text"]:focus,
+#main-search:focus,
 textarea:focus
 {
     color:#000;

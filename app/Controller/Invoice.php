@@ -417,12 +417,18 @@ class Invoice extends Base
         )));
     }
 
+
     public function key()
     {
 
         $products = array();
         foreach ($this->sonderProduct->getAll() as $product) {
             $products[$product['id']] = $product;
+        }
+
+
+        foreach ($this->sonderDebitcredit->getAllWithdrawalsByMonthAndUser($datetime, $userid) as $dc) {
+
         }
 
         $months = array();
@@ -436,8 +442,13 @@ class Invoice extends Base
                 $months[$monthkey][$task['owner_id']] = array();
             }
 
-            if (isset($months[$monthkey][$task['owner_id']]['billable_hours'])) {
-                $billables = $months[$monthkey][$task['owner_id']][$task['sonder_product_id']]['billable_hours'];
+            if (!isset($months[$monthkey][$task['owner_id']]['producten'])) {
+                $months[$monthkey][$task['owner_id']]['producten'] = array();
+            }
+
+
+            if (isset($months[$monthkey][$task['owner_id']]['producten']['billable_hours'])) {
+                $billables = $months[$monthkey][$task['owner_id']][$task['sonder_product_id']]['producten']['billable_hours'];
             } else {
                 $billables = 0;
             }
@@ -448,10 +459,26 @@ class Invoice extends Base
                 $invested = 0;
             }
 
-            // time_spent
+            if (!isset($months[$monthkey][$task['owner_id']]['uitbetaald'])) {
+                $debitcredit = $this->sonderDebitcredit->getAllWithdrawalsByMonthAndUser($monthkey, $task['owner_id']);
+                if (count($debitcredit) > 0) {
+                    foreach ($debitcredit as $dc) {
+                    //    print_r($dc);
+                    }
+                 }
+            }
+
+
             $months[$monthkey][$task['owner_id']]['invested_hours'] = ($invested + $task['time_spent']);
-            $months[$monthkey][$task['owner_id']][$task['sonder_product_id']]['product'] = $products[$task['sonder_product_id']];
-            $months[$monthkey][$task['owner_id']][$task['sonder_product_id']]['billable_hours'] = ($billables + $task['billable_hours']);
+
+
+
+            if(isset($task['sonder_product_id'])) {
+                $months[$monthkey][$task['owner_id']]['producten'][$task['sonder_product_id']]['product'] = $products[$task['sonder_product_id']];
+            }
+
+
+           $months[$monthkey][$task['owner_id']]['producten'][$task['sonder_product_id']]['billable_hours'] = ($billables + $task['billable_hours']);
             $months[$monthkey]['month'] = date('m-Y', strtotime($monthkey));
         }
 

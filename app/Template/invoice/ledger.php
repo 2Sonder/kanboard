@@ -11,7 +11,7 @@
         </tr>
         <?php foreach ($ledger as $index => $dc) { ?>
             <tr>
-                <td><a href="">edit</a></td>
+                <td><a href="/?controller=invoice&action=saveacquisition?id=<?php echo $dc['id']; ?>">edit</a></td>
                 <td><?php echo $dc['id']; ?></td>
                 <td><?php echo $dc['name']; ?></td>
                 <td></td>
@@ -45,7 +45,7 @@
         </tr>
         <?php foreach ($products as $index => $dc) { ?>
             <tr>
-                <td><a href="">edit</a></td>
+                <td><a href="/?controller=invoice&action=saveproduct?id=<?php echo $dc['id']; ?>">edit</a></td>
                 <td><?php echo $dc['id']; ?></td>
                 <td><?php echo $dc['title']; ?></td>
                 <td><?php echo $dc['price']; ?></td>

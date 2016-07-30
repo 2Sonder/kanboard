@@ -49,7 +49,6 @@ class SonderDebitcredit extends SonderBase {
     }
 
     public function save($values) {
-
         $this->db->getStatementHandler()->withLogging();
         return $this->db->table(self::TABLE)->save($values);
         print_r($this->db->getLogMessages());
@@ -124,6 +123,16 @@ class SonderDebitcredit extends SonderBase {
     public function getAll() {
         return $this->db->table(self::TABLE)->findAll();
     }
+
+    public function getAllWithdrawalsByMonthAndUser($datetime,$userid)
+    {
+        return $this->db->table(self::TABLE)
+            ->eq('user_id',$userid)
+            ->gte('entryTimestamp', date('Y-m-01 H:i:s', strtotime($datetime)))
+            ->lte('entryTimestamp', date('Y-m-t H:i:s', strtotime($datetime)))
+            ->findAll();
+    }
+
 
     /**
      * Create a new group
