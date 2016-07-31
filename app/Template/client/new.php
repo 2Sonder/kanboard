@@ -1,17 +1,7 @@
-<div class="page-header">
-    <h2><?= t('New client') ?></h2>
-</div>
-
-<form class="popover-form" method="post" action="<?= $this->url->href('client', 'save', array('client_id' => $_GET['client_id'])) ?>" autocomplete="off">
-
+<? if(isset($_GET['client_id'])){ $clientid = $_GET['client_id']; }else{ $clientid = 0; } ?>
+<form class="popover-form" method="post" action="<?= $this->url->href('client', 'save', array('client_id' => $clientid)) ?>" autocomplete="off">
     <?= $this->form->csrf() ?>
-
     <div class="form-column">
-        <?php
-        $client = $client[0];
-        
-        $errors = array();
-        ?>
 
         <?= $this->form->label(t('Name'), 'name') ?>
         <input type="text" name="name" value="<?php echo $client['name']; ?>" />
@@ -21,8 +11,14 @@
         
         <?= $this->form->label(t('Email'), 'email') ?>
         <input type="text" name="email" value="<?php echo $client['email']; ?>" />
-        
-        
+
+        <?= $this->form->label(t('Technical email'), 'technicalemail') ?>
+        <?= $this->form->text('technicalemail', $client, $errors, array('maxlength="50"')) ?>
+
+        <?= $this->form->label(t('Administrative email'), 'administrativeemail') ?>
+        <?= $this->form->text('administrativeemail', $client, $errors, array('maxlength="50"')) ?>
+
+
         <?= $this->form->label(t('Parent client'), 'client'); ?>
         <select name="parent_id">
             <option value=""></option>
@@ -50,46 +46,6 @@
 <?= t('or') ?> <?= $this->url->link(t('Cancel'), 'client', 'index', array()); ?>
 </div>
 </form>
-
-        <?php /*
-          <?= $this->form->label(t('Description'), 'description') ?>
-          <?= $this->form->textarea(
-          'description',
-          $values,
-          $errors,
-          array(
-          'placeholder="'.t('Leave a description').'"',
-          'tabindex="2"',
-          'data-mention-search-url="'.$this->url->href('UserHelper', 'mention', array('project_id' => $values['project_id'])).'"'
-          ),
-          'markdown-editor'
-          ) ?>
-
-          <?= $this->render('task/color_picker', array('colors_list' => $colors_list, 'values' => $values)) ?>
-
-          <?php if (! isset($duplicate)): ?>
-          <?= $this->form->checkbox('another_task', t('Create another task'), 1, isset($values['another_task']) && $values['another_task'] == 1) ?>
-          <?php endif ?>
-
-          <?= $this->hook->render('template:task:form:left-column', array('values' => $values, 'errors' => $errors)) ?>
-          </div>
-
-          <div class="form-column">
-          <?= $this->form->hidden('project_id', $values) ?>
-          <?= $this->task->selectAssignee($users_list, $values, $errors) ?>
-          <?= $this->task->selectCategory($categories_list, $values, $errors) ?>
-          <?= $this->task->selectSwimlane($swimlanes_list, $values, $errors) ?>
-          <?= $this->task->selectColumn($columns_list, $values, $errors) ?>
-          <?= $this->task->selectPriority($project, $values) ?>
-          <?= $this->task->selectScore($values, $errors) ?>
-          <?= $this->task->selectTimeEstimated($values, $errors) ?>
-          <?= $this->task->selectDueDate($values, $errors) ?>
-
-          <?= $this->hook->render('template:task:form:right-column', array('values' => $values, 'errors' => $errors)) ?>
-          </div>
-
-         */ ?>
-
         <div class="page-header">
             <h2>Credentials</h2>
         </div>

@@ -29,12 +29,42 @@ class Invoice extends Base
 
         $clients = $this->sonderClient->getAll();
         if (count($clients) > 0) {
-
             foreach ($clients as $client) {
+
+                $dates[0]['start'] = date('Y-m-01', strtotime("+1 month"));
+                $dates[0]['end'] = date('Y-m-t', strtotime("+1 month"));
+
+                $cl = $this->sonderInvoice->getByPeriodAndClient($dates[0]['start'], $dates[0]['end'], $client['id']);
+                if (!$cl) {
+
+                    //id 	number 	beschrijvingtop 	beschrijvingbottom 	sonder_client_id 	status 	date 	dateto
+                    $tasks = $this->task->getPeriodByClient($dates[0]['start'], $dates[0]['end'], $client['id']);
+                    if (count($tasks) > 0) {
+                        $invoice = array();
+
+                        $last = ($last + 1);
+                        $invoice['id'] = $last;
+                        $invoice['number'] = 'SO' . $number;
+                        $number = $number + 1;
+                        $invoice['beschrijvingtop'] = $settings['beschrijvingtop']['settingvalue'];
+                        $invoice['beschrijvingbottom'] = $settings['beschrijvingbottom']['settingvalue'];
+                        $invoice['sonder_client_id'] = $client['id'];
+                        $invoice['status'] = 'Concept';
+                        $invoice['date'] = $dates[0]['start'];
+                        $invoice['dateto'] = $dates[0]['end'];
+
+                        $this->sonderInvoice->save($invoice);
+                    }
+                }
+
+
+
 
                 for ($i = 0; $i < 10; $i++) {
                     $dates[$i]['start'] = date('Y-m-01', strtotime("-$i month"));
                     $dates[$i]['end'] = date('Y-m-t', strtotime("-$i month"));
+
+                  //  echo 'here1<br />';
 
                     $cl = $this->sonderInvoice->getByPeriodAndClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                     if (!$cl) {
@@ -60,6 +90,7 @@ class Invoice extends Base
                     }
                 }
             }
+
         }
 
         //save invoicelines to invoice

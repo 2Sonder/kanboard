@@ -24,17 +24,23 @@
         <?= $this->task->selectStartDate($values, $errors) ?>
         <?= $this->task->selectDueDate($values, $errors) ?>
 
-        <?php print_r($values); ?>
+        <?php //print_r($values); ?>
         
         
         <?= $this->form->label(t('Billable hours'), 'billable_hours') ?>
-        <input type="text" class=" form-numeric" tabindex="9" name="billable_hours" /> hours
-        
+        <table>
+            <?php foreach($users as $user){ ?>
+                <tr>
+                    <td><?php echo $user['name']; ?>(<?php echo $user['email']; ?>)</td>
+                    <td><input type="number" name="billable_hours_<?php echo $user['id']; ?>" value="<?php echo $billablehours[$user['id']]['hours']; ?>" /></td>
+                </tr>
+            <? } ?>
+        </table>
         <?= $this->form->label(t('Client (Client van onze klant)'), 'sonder_client_id') ?>
         <select name="sonder_client_id">
             <option value=""></option>
             <?php foreach($clients as $client){ ?>
-            <option value="<?php echo $client['id']; ?>"><?php echo $client['name']; ?></option>
+            <option <?php if($client['id'] == $values['sonder_client_id']){ echo 'selected';} ?> value="<?php echo $client['id']; ?>"><?php echo $client['name']; ?></option>
             <?php } ?>
         </select>
         
@@ -42,7 +48,7 @@
         <select name="sonder_product_id">
             <option value=""></option>
             <?php foreach($products as $product){ ?>
-            <option value="<?php echo $product['id']; ?>"><?php echo $product['title']; ?></option>
+            <option <?php if($product['id'] == $values['sonder_product_id']){ echo 'selected';} ?> value="<?php echo $product['id']; ?>"><?php echo $product['title']; ?></option>
             <?php } ?>
         </select>
         

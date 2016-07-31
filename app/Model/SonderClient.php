@@ -128,17 +128,18 @@ class SonderClient extends SonderBase
 
     public function save($values)
     {
-
         $this->db->getStatementHandler()->withLogging();
-        //return $this->db->table(self::TABLE)->save($values);
+
+        return $this->db->table(self::TABLE)->save($values);
 
         print_r($this->db->getLogMessages());
 
+        die();
     }
 
     public function getById($id)
     {
-        return $this->db->table(self::TABLE)->eq('id', $id)->findAll();
+        return $this->db->table(self::TABLE)->eq('id', $id)->findOne();
     }
 
     /**

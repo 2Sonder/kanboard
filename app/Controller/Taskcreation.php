@@ -69,10 +69,9 @@ class Taskcreation extends Base
                 $hours[] = array('user_id' => $e[1],'hours' => $values[$value]);
 
                 unset($values[$value]);
-
-
             }
         }
+        $values['sonder_parent_client_id'] = $project['sonder_client_id'];
 
         list($valid, $errors) = $this->taskValidator->validateCreation($values);
 
@@ -105,7 +104,6 @@ class Taskcreation extends Base
                 'another_task' => 1,
             ));
         }
-        die();
         $this->response->redirect($this->helper->url->to('board', 'show', array('project_id' => $project['id'])));
     }
 }

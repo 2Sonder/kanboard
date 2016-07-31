@@ -46,20 +46,7 @@
                     ?>
                 </td>
             </tr>
-
         <?php endforeach ?>
-
-<!--        <tr>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td><input type="text" name="name" /></td>-->
-<!--            <td><input type="text" name="email" /></td>-->
-<!--            <td><input type="text" name="administrativeemail" /></td>-->
-<!--            <td><input type="text" name="technicalemail" /></td>-->
-<!--            <td><input type="text" name="description" /></td>-->
-<!--            <td><input type="submit" /></td>-->
-<!--        </tr>-->
-
     </table>
     </form>
     <?= $paginator ?>

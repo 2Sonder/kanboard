@@ -50,7 +50,7 @@ class Asset extends Base {
 
         $this->response->html($this->helper->layout->app('asset/layout', array(
                     'nb_projects' => 'project',
-                    'title' => 'Clients',
+                    'title' => 'Assets / Clients',
                     'data' => array('paginator' => $clienten, 'c' => $c),
                     'sidebar_template' => 'asset/sidebar',
                     'sub_template' => 'asset/index',
@@ -98,7 +98,7 @@ class Asset extends Base {
                         'clients' => $this->sonderClient->getAll()
                     ),
                     'nb_projects' => 'project',
-                    'title' => 'Assets by servers',
+                    'title' => 'Assets / Servers',
                     'sidebar_template' => 'asset/sidebar',
                     'sub_template' => 'asset/server'
         )));
@@ -143,7 +143,7 @@ class Asset extends Base {
                 'clients' => $this->sonderClient->getAll()
             ),
             'nb_projects' => 'project',
-            'title' => 'Assets by servers',
+            'title' => 'Assets / Domains',
             'sidebar_template' => 'asset/sidebar',
             'sub_template' => 'asset/byservers'
         )));

@@ -88,13 +88,19 @@ class Taskmodification extends Base
         $values = $this->dateParser->format($values, array('date_due'), $this->config->get('application_date_format', DateParser::DATE_FORMAT));
         $values = $this->dateParser->format($values, array('date_started'), $this->config->get('application_datetime_format', DateParser::DATE_TIME_FORMAT));
 
-        $this->response->html($this->template->render('task_modification/edit_task', array(
+        $t = $this->task->getById($task['id']);
+
+        $values['sonder_client_id'] = $t['sonder_client_id'];
+        $values['sonder_product_id'] = $t['sonder_product_id'];
+
+            $this->response->html($this->template->render('task_modification/edit_task', array(
             'project' => $project,
             'values' => $values,
             'errors' => $errors,
             'clients' => $this->sonderClient->getAll(),
             'products' => $this->sonderProduct->getAll(),
             'task' => $task,
+            'billablehours' => $this->sonderBillablehours->getAllByUserAndTask($task['id']),
             'users' => $this->user->getAdmins(),
             'users_list' => $this->projectUserRole->getAssignableUsersList($task['project_id']),
             'colors_list' => $this->color->getList(),

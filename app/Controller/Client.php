@@ -46,11 +46,11 @@ class Client extends Base {
         $this->response->html($this->helper->layout->app('client/layout', array(
                     'data' => array(
                         'paginator' => $paginator,
-                        'nb_projects' => 'project',
-                        'title' => 'Clients',
+                        'nb_projects' => 'project'
                     ),
                     'sidebar_template' => 'client/sidebar',
-                    'sub_template' => 'client/index'
+                    'sub_template' => 'client/index',
+                    'title' => 'Assets / Clients'
         )));
     }
 
@@ -62,20 +62,23 @@ class Client extends Base {
             $id = 0;
         }
 
+        $client = $this->sonderClient->getById($id);
         $this->response->html($this->helper->layout->app('client/layout', array(
                     'data' => array(
                         'paginator' => 'page',
                         'nb_projects' => 'project',
                         'title' => 'Clients',
+                        'errors' => array(),
                         'clients' => $this->sonderClient->getAll(),
-                        'client' => $this->sonderClient->getById($id),
+                        'client' => $client,
                         'permissions' => $this->sonderClientUserPermissions->getUsersByClient($id),
                         'credentials' => $this->sonderCredentials->getAllByEntity($id, 'sonder_client'),
                         'users' => $this->user->getAll()
                     ),
                     'sidebar_template' => 'asset/sidebar',
                     'sub_template' => 'client/new',
-                    'client_id' => 'client_id'
+                    'client_id' => 'client_id',
+                    'title' => 'Assets / New client'
         )));
     }
 
@@ -113,7 +116,7 @@ class Client extends Base {
 //        print_r( $this->sonderClientUserPermissions->getClientUserPermissions());
 
 
-        $this->response->redirect($this->helper->url->to('client', 'index', array()));
+        $this->response->redirect($this->helper->url->to('asset', 'index', array()));
     }
 
     /**

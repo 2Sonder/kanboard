@@ -184,14 +184,23 @@ class Task extends Base
     {
         return $this->db->table(self::TABLE)->findAll();
     }
-    
+
+    public function getById($id)
+    {
+        return $this->db->table(self::TABLE)->eq('id',$id)->findOne();
+    }
+
     public function getPeriodByClient($start, $end, $client_id)
     {
-        return $this->db->table(self::TABLE)
-                ->lte('date_due', strtotime($end))
-                ->gte('date_due', strtotime($start))
-                ->eq('sonder_client_id',$client_id)
-                ->findAll();
+        $periode = $this->db->table(self::TABLE)
+            ->lte('date_due', strtotime($end))
+            ->gte('date_due', strtotime($start))
+            ->eq('sonder_parent_client_id',$client_id)
+            ->findAll();
+
+     //   echo $start.'::'.$end.'=='.$client_id.'=='.count($periode).'<br />';
+
+        return $periode;
     }
     
     public function getAllByClientID($clientid)
