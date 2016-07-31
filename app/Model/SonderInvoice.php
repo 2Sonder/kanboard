@@ -51,6 +51,13 @@ class SonderInvoice extends SonderBase {
     public function save($values) {
         return $this->db->table(self::TABLE)->save($values);
     }
+
+    public function getNextInvoiceNumber()
+    {
+        $invoice = $this->db->table(self::TABLE)->desc('number')->findOne();
+        $number = explode('SO',$invoice['number']);
+        return intval($number[1]+1);
+    }
     
     
 

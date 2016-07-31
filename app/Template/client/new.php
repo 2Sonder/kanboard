@@ -18,6 +18,11 @@
         <?= $this->form->label(t('Administrative email'), 'administrativeemail') ?>
         <?= $this->form->text('administrativeemail', $client, $errors, array('maxlength="50"')) ?>
 
+        <?= $this->form->label(t('Name contact'), 'contact') ?>
+        <?= $this->form->text('contact', $client, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
+
+        <?= $this->form->label(t('Description'), 'description') ?>
+        <?= $this->form->text('description', $client, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
 
         <?= $this->form->label(t('Parent client'), 'client'); ?>
         <select name="parent_id">

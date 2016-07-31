@@ -8,6 +8,7 @@
             <th class="column-5">#</th>
             <th class="column-20">Name</th>
             <th class="column-25">Email</th>
+            <th class="column-15">Contact</th>
             <th class="column-20">Administrative email</th>
             <th class="column-20">Technical email</th>
 
@@ -30,12 +31,16 @@
                 <td class="dashboard-project-stats">
                     <?= $project['email']; ?>
                 </td>
+                <td>
+                    <?= $project['contact']; ?>
+                </td>
                 <td class="dashboard-project-stats">
                     <?= $project['administrativeemail']; ?>
                 </td>
                 <td class="dashboard-project-stats">
                     <?= $project['technicalemail']; ?>
                 </td>
+
                 <td class="dashboard-project-stats">
                     <?= $project['description']; ?>
                 </td>

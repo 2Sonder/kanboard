@@ -25,7 +25,11 @@ class Invoice extends Base
 
         $last = $this->sonderInvoice->getLastId();
         $settings = $this->sonderSettings->getAllByKey();
-        $number = ($settings['number']['settingvalue'] + 1);
+
+        $number = $this->sonderInvoice->getNextInvoiceNumber();
+        if(!$number) {
+            $number = ($settings['number']['settingvalue'] + 1);
+        }
 
         $clients = $this->sonderClient->getAll();
         if (count($clients) > 0) {
@@ -611,6 +615,16 @@ class Invoice extends Base
 
     }
 
+    public function exchangeShortcodes($shortcodes,$text)
+    {
+        $t = $text;
+        foreach(array_keys($shortcodes) as $shortcode)
+        {
+            $t = str_replace('['.$shortcode.']',$shortcodes[$shortcode],$t);
+        }
+        return $t;
+    }
+
     public function newinvoice()
     {
 
@@ -636,6 +650,17 @@ class Invoice extends Base
             }
 
             $invoice = $invoice[0];
+
+            $shortcodes = array();
+            $client = $this->sonderClient->getById($invoice['sonder_client_id']);
+
+            $shortcodes['relatie'] = $client['contact'];
+            $shortcodes['maand'] = date('m-Y',strtotime($invoice['date']));
+
+
+            $invoice['beschrijvingtop'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingtop']);
+            $invoice['beschrijvingbottom'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingbottom']);
+
         } else {
             $lines = array();
             $invoice = array();

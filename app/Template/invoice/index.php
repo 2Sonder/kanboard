@@ -7,7 +7,6 @@
             <th>Number</th>
             <th>Client</th>
             <th>Status</th>
-            
             <th>Date</th>
             <th>Period end</th>
         </tr>
@@ -17,11 +16,9 @@
             <td><a href="?controller=invoice&action=newinvoice&id=<?php echo $invoice['invoiceid']; ?>"><?php echo $invoice['invoicenumber']; ?></a></td>
             <td><?php echo $invoice['name']; ?></td>
             <td><?php echo $invoice['status']; ?></td>
-            
-            <td><?php echo $invoice['date']; ?></td>
-            <td><?php echo $invoice['dateto']; ?></td>
+            <td><?php echo date('d-m-Y',strtotime($invoice['date'])); ?></td>
+            <td><?php echo date('d-m-Y',strtotime($invoice['dateto'])); ?></td>
         </tr>
         <?php } ?>
-       
     </table> 
 </div>    
