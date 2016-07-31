@@ -12,18 +12,20 @@ use Kanboard\Model\Base;
  * @package  model
  * @author   Frederic Guillot
  */
-class SonderClient extends SonderBase {
+class SonderClient extends SonderBase
+{
 
-    
+
     const TABLE = 'sonder_client';
-    
-     /**
+
+    /**
      * Get query to fetch all groups
      *
      * @access public
      * @return \PicoDb\Table
      */
-    public function getQuery() {
+    public function getQuery()
+    {
         return $this->db->table(self::TABLE);
     }
 
@@ -31,10 +33,11 @@ class SonderClient extends SonderBase {
      * Search groups by name
      *
      * @access public
-     * @param  string  $input
+     * @param  string $input
      * @return array
      */
-    public function search($input) {
+    public function search($input)
+    {
         return $this->db->table(self::TABLE)->ilike('name', '%' . $input . '%')->asc('name')->findAll();
     }
 
@@ -45,7 +48,8 @@ class SonderClient extends SonderBase {
      * @param  integer $group_id
      * @return array
      */
-    public function remove($group_id) {
+    public function remove($group_id)
+    {
         return $this->db->table(self::TABLE)->eq('id', $group_id)->remove();
     }
 
@@ -56,7 +60,8 @@ class SonderClient extends SonderBase {
      * @param  array $values
      * @return boolean
      */
-    public function update(array $values) {
+    public function update(array $values)
+    {
         return $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
     }
 
@@ -64,10 +69,11 @@ class SonderClient extends SonderBase {
      * Get all projects with given Ids
      *
      * @access public
-     * @param  integer[]   $project_ids
+     * @param  integer[] $project_ids
      * @return array
      */
-    public function getAllByIds(array $project_ids) {
+    public function getAllByIds(array $project_ids)
+    {
         if (empty($project_ids)) {
             return array();
         }
@@ -79,18 +85,19 @@ class SonderClient extends SonderBase {
      * Get project summary for a list of project
      *
      * @access public
-     * @param  array      $project_ids     List of project id
+     * @param  array $project_ids List of project id
      * @return \PicoDb\Table
      */
-    public function getQueryColumnStats($project_ids) {
+    public function getQueryColumnStats($project_ids)
+    {
         if (empty($project_ids)) {
             return $this->db->table(SonderClient::TABLE)->limit(0);
         }
 
         return $this->db->table(SonderClient::TABLE)
-                        ->columns(self::TABLE . '.*')
-                        ->in(self::TABLE . '.id', $project_ids)
-                        ->callback(array($this, 'applyColumnStats'));
+            ->columns(self::TABLE . '.*')
+            ->in(self::TABLE . '.id', $project_ids)
+            ->callback(array($this, 'applyColumnStats'));
     }
 
     /**
@@ -99,42 +106,54 @@ class SonderClient extends SonderBase {
      * @access public
      * @return array
      */
-    public function getAllIds() {
+    public function getAllIds()
+    {
         return $this->db->table(self::TABLE)->asc('name')->findAllByColumn('id');
     }
 
     public function getAll()
     {
-        return $this->db->table(self::TABLE)->findAll(); 
+        return $this->db->table(self::TABLE)->findAll();
     }
-    
+
+    public function getList()
+    {
+        $clients = array();
+        foreach ($this->db->table(self::TABLE)->findAll() as $client) {
+            $clients[$client['id']] = $client['name'];
+        }
+        return $clients;
+    }
+
+
     public function save($values)
     {
-        
+
         $this->db->getStatementHandler()->withLogging();
         //return $this->db->table(self::TABLE)->save($values);
-        
-          print_r($this->db->getLogMessages());
-        
+
+        print_r($this->db->getLogMessages());
+
     }
-    
+
     public function getById($id)
     {
-       return $this->db->table(self::TABLE)->eq('id', $id)->findAll();
+        return $this->db->table(self::TABLE)->eq('id', $id)->findAll();
     }
-    
+
     /**
      * Create a new group
      *
      * @access public
-     * @param  string  $name
-     * @param  string  $external_id
+     * @param  string $name
+     * @param  string $external_id
      * @return integer|boolean
      */
-    public function create($values) {
+    public function create($values)
+    {
         if (is_array($values)) {
             return $this->persist(self::TABLE, $values, $values['id']);
         }
     }
-    
+
 }

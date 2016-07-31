@@ -3,7 +3,7 @@
 namespace Kanboard\Controller;
 
 use Dompdf\Dompdf;
-
+use Kanboard\Core\ObjectStorage\FileStorage;
 /**
  * Project controller (Settings + creation/edition)
  *
@@ -126,19 +126,19 @@ class Invoice extends Base
         )));
     }
 
-    private function getBankFile()
+    private function getBankFile($contents)
     {
         $parser = new \Kingsquare\Parser\Banking\Mt940();
         //    echo __DIR__ . '/test.mta';
-        $tmpFile = __DIR__ . '/test.mta';
-        return $parser->parse(file_get_contents($tmpFile));
+    //    $tmpFile = __DIR__ . '/test.mta';
+        return $parser->parse($contents);
     }
 
-    private function saveBankFile()
+    private function saveBankFile($contents)
     {
 
 
-        foreach ($this->getBankFile() as $day) {
+        foreach ($this->getBankFile($contents) as $day) {
             foreach ($day->getTransactions() as $index => $t) {
 
                 $id = $this->sonderDebitcredit->getByBankId($t->getEntryTimestamp() . $t->getTransactionCode());
@@ -158,20 +158,23 @@ class Invoice extends Base
                 }
             }
         }
+        return true;
     }
 
     public function savefile()
     {
-        print_r($_FILES);
-
-
-        print_r($_POST);
+        $contents = file_get_contents($_FILES['fileToUpload']['tmp_name']);
+        if($this->saveBankFile($contents))
+        {
+            $this->response->redirect($this->helper->url->to('invoice', 'purchasing', array()));
+        }
     }
+
 
 
     public function purchasing()
     {
-        $this->saveBankFile();
+
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
                 'debitcredit' => $this->sonderDebitcredit->getAll(),
@@ -179,6 +182,28 @@ class Invoice extends Base
             'title' => 'Finance / Purchasing',
             'sidebar_template' => 'invoice/sidebar',
             'sub_template' => 'invoice/purchasing'
+        )));
+    }
+
+    public function editpurchasing()
+    {
+
+        if (!isset($_GET['id'])) {
+            $id = 0;
+        } else {
+            $id = $_GET['id'];
+        }
+
+        $debitcredit = $this->sonderDebitcredit->getById($id);
+        $this->response->html($this->helper->layout->app('invoice/layout', array(
+            'data' => array(
+                'debitcredit' => $debitcredit[0],
+                'users' => $this->user->getAll(),
+                'ledgers' => $this->sonderLedger->getAll()
+            ),
+            'title' => 'Finance / Purchasing',
+            'sidebar_template' => 'invoice/sidebar',
+            'sub_template' => 'invoice/editpurchasing'
         )));
     }
 
@@ -463,22 +488,21 @@ class Invoice extends Base
                 $debitcredit = $this->sonderDebitcredit->getAllWithdrawalsByMonthAndUser($monthkey, $task['owner_id']);
                 if (count($debitcredit) > 0) {
                     foreach ($debitcredit as $dc) {
-                    //    print_r($dc);
+                        //    print_r($dc);
                     }
-                 }
+                }
             }
 
 
             $months[$monthkey][$task['owner_id']]['invested_hours'] = ($invested + $task['time_spent']);
 
 
-
-            if(isset($task['sonder_product_id'])) {
+            if (isset($task['sonder_product_id'])) {
                 $months[$monthkey][$task['owner_id']]['producten'][$task['sonder_product_id']]['product'] = $products[$task['sonder_product_id']];
             }
 
 
-           $months[$monthkey][$task['owner_id']]['producten'][$task['sonder_product_id']]['billable_hours'] = ($billables + $task['billable_hours']);
+            $months[$monthkey][$task['owner_id']]['producten'][$task['sonder_product_id']]['billable_hours'] = ($billables + $task['billable_hours']);
             $months[$monthkey]['month'] = date('m-Y', strtotime($monthkey));
         }
 
@@ -500,11 +524,59 @@ class Invoice extends Base
 
     public function saveproduct()
     {
+             if (isset($_POST['title'])) {
+            $values = $this->request->getValues();
+
+            $product = array('title' => $values['title'],'price' => $values['price']);
+            $this->sonderProduct->save($product);
+
+            $this->response->redirect($this->helper->url->to('invoice', 'ledger', array()));
+        }
+
+        if (!isset($_GET['id'])) {
+            $id = 0;
+        } else {
+            $id = $_GET['id'];
+        }
+
+        $product = $this->sonderProduct->getById($id);
+        $this->response->html($this->helper->layout->app('invoice/layout', array(
+            'data' => array(
+                'product' => $product[0]
+    ),
+        'title' => 'Finance / Ledger / Save product',
+            'sidebar_template' => 'invoice/sidebar',
+            'sub_template' => 'invoice/saveproduct'
+        )));
 
     }
 
-    public function saveledger()
-    {
+    public function saveacquisition(){
+
+        if (isset($_POST['name'])) {
+
+            $values = $this->request->getValues();
+
+            $ledger = array('name' => $values['name']);
+            $this->sonderLedger->save($ledger);
+            $this->response->redirect($this->helper->url->to('invoice', 'ledger', array()));
+        }
+
+        if (!isset($_GET['id'])) {
+            $id = 0;
+        } else {
+            $id = $_GET['id'];
+        }
+
+        $ledger = $this->sonderLedger->getById($id);
+        $this->response->html($this->helper->layout->app('invoice/layout', array(
+            'data' => array(
+                'category' => $ledger[0]
+            ),
+            'title' => 'Finance / Ledger / Save category',
+            'sidebar_template' => 'invoice/sidebar',
+            'sub_template' => 'invoice/savecategory'
+        )));
 
     }
 

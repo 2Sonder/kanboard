@@ -37,6 +37,7 @@ class Taskcreation extends Base
             'errors' => $errors,
             'clients' => $this->sonderClient->getAll(),
             'products' => $this->sonderProduct->getAll(),
+            'users' => $this->user->getAdmins(),
             'values' => $values + array('project_id' => $project['id']),
             'columns_list' => $this->column->getList($project['id']),
             'users_list' => $this->projectUserRole->getAssignableUsersList($project['id'], true, false, true),
@@ -57,9 +58,33 @@ class Taskcreation extends Base
         $project = $this->getProject();
         $values = $this->request->getValues();
 
+        $hours = array();
+        $values['billable_hours'] = 0;
+        foreach(array_keys($values) as $value)
+        {
+            $e =explode('billable_hours_',$value);
+            if(isset($e[1]))
+            {
+                $values['billable_hours'] += $values[$value];
+                $hours[] = array('user_id' => $e[1],'hours' => $values[$value]);
+
+                unset($values[$value]);
+
+
+            }
+        }
+
         list($valid, $errors) = $this->taskValidator->validateCreation($values);
 
-        if ($valid && $this->taskCreation->create($values)) {
+        $task = $this->taskCreation->create($values);
+        foreach(array_keys($hours) as $hour)
+        {
+            $bh = $hours[$hour];
+            $bh['task_id'] = intval($task);
+            $this->sonderBillablehours->save($bh);
+        }
+
+        if ($valid && $task) {
             $this->flash->success(t('Task created successfully.'));
             return $this->afterSave($project, $values);
         }
@@ -80,7 +105,7 @@ class Taskcreation extends Base
                 'another_task' => 1,
             ));
         }
-
+        die();
         $this->response->redirect($this->helper->url->to('board', 'show', array('project_id' => $project['id'])));
     }
 }

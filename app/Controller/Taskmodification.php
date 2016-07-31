@@ -95,6 +95,7 @@ class Taskmodification extends Base
             'clients' => $this->sonderClient->getAll(),
             'products' => $this->sonderProduct->getAll(),
             'task' => $task,
+            'users' => $this->user->getAdmins(),
             'users_list' => $this->projectUserRole->getAssignableUsersList($task['project_id']),
             'colors_list' => $this->color->getList(),
             'categories_list' => $this->category->getList($task['project_id']),

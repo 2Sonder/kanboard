@@ -51,6 +51,7 @@ class ProjectCreation extends Base
         $values = $this->request->getValues();
         list($valid, $errors) = $this->projectValidator->validateCreation($values);
 
+
         if ($valid) {
     
             $project_id = $this->createOrDuplicate($values);
@@ -98,9 +99,11 @@ class ProjectCreation extends Base
             'sonder_client_id' => $values['sonder_client_id'],
             'is_private' => $values['is_private'],
         );
+        if(strlen($values['sonder_client_id'])==0)
+        {
+            return false;
+        }
 
-        print_r($project);
-        
         return $this->project->create($project, $this->userSession->getId(), true);
     }
 

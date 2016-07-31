@@ -114,9 +114,12 @@ class ProjectEdit extends Base
     {
         $project = $this->getProject();
 
+        $owners = $this->projectUserRole->getAssignableUsersList($project['id'], true);
+
         $this->response->html($this->helper->layout->project($template, array(
-            'owners' => $this->projectUserRole->getAssignableUsersList($project['id'], true),
+            'owners' => $owners,
             'values' => empty($values) ? $project : $values,
+            'clients' => $this->sonderClient->getList(),
             'errors' => $errors,
             'project' => $project,
             'title' => t('Edit project')

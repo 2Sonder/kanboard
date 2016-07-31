@@ -24,6 +24,10 @@
         <?= $this->form->select('owner_id', $owners, $values, $errors) ?>
     </div>
 
+    <?= $this->form->label(t('Client'), 'client') ?>
+    <?= $this->form->select('sonder_client_id', $clients, $values, $errors) ?>
+
+
     <?php if ($this->user->hasProjectAccess('ProjectCreation', 'create', $project['id'])): ?>
         <hr>
         <?= $this->form->checkbox('is_private', t('Private project'), 1, $project['is_private'] == 1) ?>

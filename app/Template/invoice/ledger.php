@@ -11,7 +11,7 @@
         </tr>
         <?php foreach ($ledger as $index => $dc) { ?>
             <tr>
-                <td><a href="/?controller=invoice&action=saveacquisition?id=<?php echo $dc['id']; ?>">edit</a></td>
+                <td><a href="/?controller=invoice&action=saveacquisition&id=<?php echo $dc['id']; ?>">edit</a></td>
                 <td><?php echo $dc['id']; ?></td>
                 <td><?php echo $dc['name']; ?></td>
                 <td></td>
@@ -20,7 +20,7 @@
         <tr>
             <td></td>
             <td></td>
-            <td><input type="text" name="type" value=""  /></td>
+            <td><input type="text" name="name" value=""  /></td>
             <td>
                 <input type="hidden" name="sonder_entity_name" value="sonder_client" />
                 <input type="hidden" name="sonder_entity_id" value="<?php echo $client['id']; ?>" />
@@ -45,7 +45,7 @@
         </tr>
         <?php foreach ($products as $index => $dc) { ?>
             <tr>
-                <td><a href="/?controller=invoice&action=saveproduct?id=<?php echo $dc['id']; ?>">edit</a></td>
+                <td><a href="/?controller=invoice&action=saveproduct&id=<?php echo $dc['id']; ?>">edit</a></td>
                 <td><?php echo $dc['id']; ?></td>
                 <td><?php echo $dc['title']; ?></td>
                 <td><?php echo $dc['price']; ?></td>

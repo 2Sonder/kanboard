@@ -187,6 +187,11 @@ class User extends Base
         return $this->getQuery()->asc('username')->findAll();
     }
 
+    public function getAdmins()
+    {
+        return $this->getQuery()->eq('role','app-admin')->asc('username')->findAll();
+    }
+
     /**
      * Get the number of users
      *
