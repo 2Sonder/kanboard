@@ -24,6 +24,9 @@ class TaskModification extends Base
     {
         $original_task = $this->taskFinder->getById($values['id']);
 
+        //TODO do something usefull with this
+        if(strlen($values['sonder_client_id'])==0){$values['sonder_client_id'] = 0;}
+
         $this->prepare($values);
         $result = $this->db->table(Task::TABLE)->eq('id', $original_task['id'])->update($values);
 
@@ -31,7 +34,8 @@ class TaskModification extends Base
             $this->fireEvents($original_task, $values);
         }
 
-        return $result;
+
+        return $original_task['id'];
     }
 
     /**

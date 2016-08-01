@@ -486,10 +486,11 @@ class Invoice extends Base
             $products[$product['id']] = $product;
         }
 
-
+        /*
         foreach ($this->sonderDebitcredit->getAllWithdrawalsByMonthAndUser($datetime, $userid) as $dc) {
 
         }
+        */
 
         $months = array();
         foreach ($this->task->getAll() as $task) {
@@ -653,6 +654,7 @@ class Invoice extends Base
 
             $shortcodes = array();
             $client = $this->sonderClient->getById($invoice['sonder_client_id']);
+
 
             $shortcodes['relatie'] = $client['contact'];
             $shortcodes['maand'] = date('m-Y',strtotime($invoice['date']));

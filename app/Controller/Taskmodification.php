@@ -116,11 +116,42 @@ class Taskmodification extends Base
     public function update()
     {
         $task = $this->getTask();
+        $project = $this->getProject();
         $values = $this->request->getValues();
+
+        $hours = array();
+        $values['billable_hours'] = 0;
+        foreach(array_keys($values) as $value)
+        {
+            $e = explode('billable_hours_',$value);
+            if(isset($e[1]))
+            {
+                $values['billable_hours'] += $values[$value];
+                $hours[] = array('user_id' => $e[1],'hours' => $values[$value]);
+
+                unset($values[$value]);
+            }
+        }
+        $values['sonder_parent_client_id'] = $project['sonder_client_id'];
 
         list($valid, $errors) = $this->taskValidator->validateModification($values);
 
-        if ($valid && $this->taskModification->update($values)) {
+        $task = $this->taskModification->update($values);
+        foreach(array_keys($hours) as $hour)
+        {
+            $bh = $this->sonderBillablehours->getByTaskAndUserId($task,$hours[$hour]['user_id']);
+            if(!$bh)
+            {
+                $bh = $hours[$hour];
+                $bh['task_id'] = intval($task);
+            }
+            $bh['hours'] = intval($hours[$hour]['hours']);
+            if($bh['hours'] > 0) {
+                $this->sonderBillablehours->save($bh);
+            }
+        }
+
+        if ($valid && $task) {
             $this->flash->success(t('Task updated successfully.'));
             return $this->response->redirect($this->helper->url->to('task', 'show', array('project_id' => $task['project_id'], 'task_id' => $task['id'])), true);
         } else {

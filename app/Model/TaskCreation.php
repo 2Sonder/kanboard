@@ -27,6 +27,9 @@ class TaskCreation extends Base
 
         $position = empty($values['position']) ? 0 : $values['position'];
 
+        //TODO do something usefull with this
+        if(strlen($values['sonder_client_id'])==0){$values['sonder_client_id'] = 0;}
+
         $this->prepare($values);
         $task_id = $this->persist(Task::TABLE, $values);
 

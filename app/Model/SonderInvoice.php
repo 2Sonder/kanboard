@@ -55,11 +55,13 @@ class SonderInvoice extends SonderBase {
     public function getNextInvoiceNumber()
     {
         $invoice = $this->db->table(self::TABLE)->desc('number')->findOne();
-        $number = explode('SO',$invoice['number']);
-        return intval($number[1]+1);
+        if($invoice) {
+            $number = explode('SO', $invoice['number']);
+            return intval($number[1] + 1);
+        }else{
+            return false;
+        }
     }
-    
-    
 
     /**
      * Update existing group

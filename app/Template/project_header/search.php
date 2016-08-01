@@ -1,4 +1,4 @@
-<div class="filter-box">
+<div class="filter-box" style="display: none">
     <form method="get" action="<?= $this->url->dir() ?>" class="search">
         <?= $this->form->hidden('controller', $filters) ?>
         <?= $this->form->hidden('action', $filters) ?>

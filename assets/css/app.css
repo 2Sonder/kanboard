@@ -149,7 +149,7 @@ h2
     padding-right: 20px;
 }
 .search-main{
-float:left;position:relative;left:13%;
+position:relative;width:480px;margin:0 auto;
 }
 
 input[type="text"],
@@ -193,6 +193,11 @@ textarea:focus
     width: 400px;
     box-shadow:none;
 }
+.user-main{
+    float: right;
+    top: -44px;
+    position: relative;
+}
 ::-webkit-input-placeholder {
    color: #000;
 }
@@ -215,6 +220,12 @@ textarea:focus
 .chosen-container-single .chosen-default {
     color: #999;
     height: 40px;
+    width: 250px;
+    float: right;
+}
+.chosen-container.chosen-with-drop .chosen-drop{
+    width: 250px;
+    left: -75px;
 }
 .chosen-container-single .chosen-single span {
     display: block;
@@ -224,6 +235,7 @@ textarea:focus
     padding-left:3px;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: center;
 }
 .chosen-container-single .chosen-single div b {
     background: rgba(0, 0, 0, 0) url("../img/chosen-sprite.png") no-repeat scroll 0 2px;
@@ -255,7 +267,6 @@ header .user-links .dropdown-avatar {
 header h1 {
     float: left;
     margin: 0 0 0 20px;
-    width: 400px;
 }
 .btn
 {
@@ -307,4 +318,10 @@ header h1 {
     border-bottom: 2px solid #fff;
     padding: 11px;
     padding-top: 12px;
+}
+@media all and (max-width:1500px){
+    .user-main{
+        top:0;
+        float:none;
+    }
 }

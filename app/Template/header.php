@@ -23,7 +23,7 @@
                 </form>
             </li>
         </ul>
-        <ul>
+        <ul class="user-main">
             <?php if (isset($board_selector) && !empty($board_selector)): ?>
                 <li>
                     <select id="board-selector"
