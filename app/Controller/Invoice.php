@@ -363,14 +363,16 @@ class Invoice extends Base
         <td></td>
     </tr>
      </table>
-     <br /><br /><br />
-     
-     <table>
+     <br /><br /><br />';
+
+    if(strlen($invoice['beschrijvingtop']) > 2) {
+        $pdf .= '<table>
         <tr>
-            <td>'.$invoice['beschrijvingtop'].'</td>
+            <td>' . $invoice['beschrijvingtop'] . '</td>
         </tr>
-     </table>
-     
+     </table>';
+    }
+        $pdf .= '
     <br /><br /><br />
     <table>
     <tr>
@@ -389,7 +391,7 @@ class Invoice extends Base
 
             $pdf .= '<tr>
                     <td>' . $line['quantity'] . ' X </td>
-                    <td><b>' . $product['title'] . '</b><br />' . $line['titel'] . '</td>
+                    <td><b>' . ucfirst($product['title']) . '</b><br />' . ucfirst($line['titel']) . '</td>
                     <td align="right">EUR ' . number_format((float)$product['price'], 2, ',', '') . '</td>
                     <td align="right">EUR ' . number_format((float)$linetotal, 2, ',', '') . '</td>
                 </tr><tr><td colspan="4"><hr /></td></tr>';
@@ -426,9 +428,13 @@ class Invoice extends Base
      
     <table>
     <tr >
-        <td colspan="3">
-            <b>'.$invoice['beschrijvingbottom'].'</b>
-            <br /><br /><br />
+        <td colspan="3">';
+
+        if(strlen($invoice['beschrijvingbottom']) > 2) {
+            $pdf .= ' <b>' . $invoice['beschrijvingbottom'] . '</b>';
+        }
+
+        $pdf .= '    <br /><br /><br />
             Wil je de ' . number_format((float)$invoicetotalinc, 2, ',', '') . ' voor ' . $duedate . ' aan ons overmaken met het factuurnummer ' . $invoice['number'] . ' erbij ?<br /> Ons rekeningnummer is NL65 RABO 0303 5495 21.<br />
             Bel gerust: 06-41844518 of email bart@2sonder.com bij vragen.<br />
         </td>
