@@ -44,17 +44,14 @@
         <?= $this->task->selectDueDate($values, $errors) ?>
         
         <?= $this->form->label(t('Billable hours'), 'billable_hours') ?>
-        <!--<input type="text" class=" form-numeric" tabindex="9" name="billable_hours" /> hours-->
         <table>
             <?php foreach($users as $user){ ?>
                 <tr>
                     <td><?php echo $user['name']; ?>(<?php echo $user['email']; ?>)</td>
-                    <td><input type="number" name="billable_hours_<?php echo $user['id']; ?>" value="0" /></td>
+                    <td><input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.5" name="billable_hours_<?php echo $user['id']; ?>" value="0" /></td>
                 </tr>
             <? } ?>
         </table>
-
-
 
         <?= $this->form->label(t('Client (Client van onze klant)'), 'sonder_client_id') ?>
         <select name="sonder_client_id">

@@ -112,13 +112,16 @@ class SonderInvoiceLine extends SonderBase {
         return $this->db->table(self::TABLE)->asc('name')->findAllByColumn('id');
     }
 
+    public function getByInvoiceId($id)
+    {
+        return $this->db->table(self::TABLE)->eq('sonder_invoice_id',$id)->findAll();
+    }
+
     public function getById($id) {
-        return $this->db->table(self::TABLE)->eq('id', $id)->findAll();
+        return $this->db->table(self::TABLE)->eq('id', $id)->findOne();
     }
-        public function getByInvoiceId($id) {
-        return $this->db->table(self::TABLE)->eq('sonder_invoice_id', $id)->findAll();
-    }
-    
+
+
     public function getAll() {
         return $this->db->table(self::TABLE)->findAll();
     }

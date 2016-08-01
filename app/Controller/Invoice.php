@@ -261,32 +261,21 @@ class Invoice extends Base
 
         // define("DOMPDF_ENABLE_REMOTE", false);
 
-        $client_id = $_GET['client'];
+     //   $client_id = $_GET['client'];
         $id = 1;
         $invoicetotal = 0;
         $lines = array();
-        foreach ($this->task->getAllByClientID($client_id) as $task) {
 
-            if ($task['billable_hours'] > 0) {
-                $hourlyrate = 25;
 
-                $total = (intval($task['billable_hours']) * $hourlyrate);
-                $invoicetotal += $total;
-                $lines[] = array(
-                    'product' => 'regular client - hourly (25)',
-                    'description' => $task['title'],
-                    'price' => $hourlyrate,
-                    'quantity' => $task['billable_hours'],
-                    'discount' => 0,
-                    'total' => $total
-                );
-            }
-        }
         $btw = ($invoicetotal / 100) * 21;
         $invoicetotalinc = $btw + $invoicetotal;
         $duedate = date('d-m-Y', strtotime("+30 days"));
         $number = 'SO1111137';
         $relationumber = '17';
+
+        $invoice = $this->sonderInvoice->getById($_GET['id']);
+        $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
+
 
         $pdf = '
             <style>
@@ -333,10 +322,10 @@ class Invoice extends Base
         <td  style="vertical-align: bottom;">
             <table>
                 <tr>
-                    <td>Barnworks<br />
-                        Marc-Peter de Gans<br />
-                        Bennekomseweg 41<br /> 
-                        6717 LL Ede<br /> 
+                    <td>'.$invoice['name'].'<br />
+                        '.$invoice['contact'].'<br />
+                        '.$invoice['adres'].'<br /> 
+                        '.$invoice['postcode'].' '.$invoice['city'].'<br /> 
                     </td>
                     <td></td>
                     <td></td>
@@ -378,27 +367,35 @@ class Invoice extends Base
                     <th align="right">Totaal</th>  
                 </tr>';
         foreach ($lines as $line) {
+
+            $product = $this->sonderProduct->getById($line['sonder_product_id']);
+            $linetotal = (floatval($product['price']) * floatval($line['quantity']));
+
             $pdf .= '<tr>
                     <td>' . $line['quantity'] . ' X </td>
-                    <td><b>' . $line['product'] . '</b><br />' . $line['description'] . '</td>
-                    <td align="right">EUR ' . number_format((float)$line['price'], 2, ',', '') . '</td>
-                    <td align="right">EUR ' . number_format((float)$line['total'], 2, ',', '') . '</td>
+                    <td><b>' . $product['title'] . '</b><br />' . $line['titel'] . '</td>
+                    <td align="right">EUR ' . number_format((float)$product['price'], 2, ',', '') . '</td>
+                    <td align="right">EUR ' . number_format((float)$linetotal, 2, ',', '') . '</td>
                 </tr><tr><td colspan="4"><hr /></td></tr>';
+
+            $invoicetotal += $linetotal;
         }
+
+        $btw = ($invoicetotal / 100) * 21;
+        $invoicetotalinc = $btw + $invoicetotal;
+
         $pdf .= '
                 <tr>
                     <td></td>
                     <td></td>
                     <td align="right">Subtotaal</td>
                     <td align="right">EUR ' . number_format((float)$invoicetotal, 2, ',', '') . '</td>
-                    
                 </tr>
                  <tr>
                     <td></td>
                     <td></td>
                     <td align="right">21% BTW</td>
                     <td align="right">EUR ' . number_format((float)$btw, 2, ',', '') . '</td>
-                    
                 </tr>
                  <tr>
                     <td></td>
@@ -414,14 +411,13 @@ class Invoice extends Base
     <table>
     <tr >
         <td colspan="3">
-            <b>Uren mei 2016</b>
+            <b>'.$invoice['beschrijvingbottom'].'</b>
             <br /><br /><br />
             Wil je de ' . number_format((float)$invoicetotalinc, 2, ',', '') . ' voor ' . $duedate . ' aan ons overmaken met het factuurnummer ' . $number . ' erbij ?<br /> Ons rekeningnummer is NL65 RABO 0303 5495 21.<br />
             Bel gerust: 06-41844518 of email bart@2sonder.com bij vragen.<br />
         </td>
     </tr>
 </table>';
-
 
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
@@ -631,12 +627,11 @@ class Invoice extends Base
 
         if (isset($_GET['id'])) {
             $invoice = $this->sonderInvoice->getById($_GET['id']);
-            $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice[0]['id']);
+            $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
 
             foreach ($lines as $index => $line) {
 
                 $lines[$index]['description'] = $lines[$index]['titel'];
-
                 $product = $this->sonderProduct->getById($lines[$index]['sonder_product_id']);
 
                 if (isset($product[0])) {
@@ -646,11 +641,8 @@ class Invoice extends Base
                 }
 
                 $lines[$index]['price'] = $lines[$index]['product']['price'];
-
                 $lines[$index]['total'] = floatval($lines[$index]['price']) * floatval($lines[$index]['quantity']);
             }
-
-            $invoice = $invoice[0];
 
             $shortcodes = array();
             $client = $this->sonderClient->getById($invoice['sonder_client_id']);

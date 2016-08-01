@@ -112,7 +112,7 @@ class SonderProduct extends SonderBase {
     }
 
     public function getById($id) {
-        return $this->db->table(self::TABLE)->eq('id', $id)->findAll();
+        return $this->db->table(self::TABLE)->eq('id', $id)->findOne();
     }
     
     public function getLastId()
