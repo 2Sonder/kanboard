@@ -244,7 +244,6 @@ class Invoice extends Base
 
     public function ledger()
     {
-
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
                 'ledger' => $this->sonderLedger->getAll(),
@@ -258,14 +257,9 @@ class Invoice extends Base
 
     public function showpdf()
     {
-
-        // define("DOMPDF_ENABLE_REMOTE", false);
-
-     //   $client_id = $_GET['client'];
         $id = 1;
         $invoicetotal = 0;
         $lines = array();
-
 
         $btw = ($invoicetotal / 100) * 21;
         $invoicetotalinc = $btw + $invoicetotal;
@@ -276,6 +270,23 @@ class Invoice extends Base
         $invoice = $this->sonderInvoice->getById($_GET['id']);
         $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
 
+        $client = $this->sonderClient->getById($invoice['sonder_client_id']);
+
+        if(strlen($invoice['adres'])==0)
+        {
+            $invoice['name'] = $client['name'];
+            $invoice['contact'] = $client['contact'];
+            $invoice['adres'] = $client['adres'];
+            $invoice['postcode'] = $client['postcode'];
+            $invoice['city'] = $client['city'];
+        }
+
+        $shortcodes = array();
+        $shortcodes['relatie'] = $client['contact'];
+        $shortcodes['maand'] = date('m-Y',strtotime($invoice['date']));
+
+        $invoice['beschrijvingtop'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingtop']);
+        $invoice['beschrijvingbottom'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingbottom']);
 
         $pdf = '
             <style>
@@ -342,9 +353,9 @@ class Invoice extends Base
         <td>
             <table>
                 <tr>
-                    <td>Factuurnummer: ' . $number . '<br />
+                    <td>Factuurnummer: ' . $invoice['number'] . '<br />
                         Factuurdatum: ' . date('d-m-Y') . '</td>
-                    <td>Relatienummer: ' . $relationumber . '<br />
+                    <td>Relatienummer: ' . $client['number'] . '<br />
                         Vervaldatum: ' . $duedate . '
                     </td>
                     <td></td>
@@ -407,13 +418,13 @@ class Invoice extends Base
         </td> 
     </tr>
      </table>
-
+     
     <table>
     <tr >
         <td colspan="3">
             <b>'.$invoice['beschrijvingbottom'].'</b>
             <br /><br /><br />
-            Wil je de ' . number_format((float)$invoicetotalinc, 2, ',', '') . ' voor ' . $duedate . ' aan ons overmaken met het factuurnummer ' . $number . ' erbij ?<br /> Ons rekeningnummer is NL65 RABO 0303 5495 21.<br />
+            Wil je de ' . number_format((float)$invoicetotalinc, 2, ',', '') . ' voor ' . $duedate . ' aan ons overmaken met het factuurnummer ' . $invoice['number'] . ' erbij ?<br /> Ons rekeningnummer is NL65 RABO 0303 5495 21.<br />
             Bel gerust: 06-41844518 of email bart@2sonder.com bij vragen.<br />
         </td>
     </tr>
@@ -624,7 +635,6 @@ class Invoice extends Base
 
     public function newinvoice()
     {
-
         if (isset($_GET['id'])) {
             $invoice = $this->sonderInvoice->getById($_GET['id']);
             $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
@@ -632,10 +642,11 @@ class Invoice extends Base
             foreach ($lines as $index => $line) {
 
                 $lines[$index]['description'] = $lines[$index]['titel'];
+
                 $product = $this->sonderProduct->getById($lines[$index]['sonder_product_id']);
 
-                if (isset($product[0])) {
-                    $lines[$index]['product'] = $product[0];
+                if (isset($product)) {
+                    $lines[$index]['product'] = $product;
                 } else {
                     $lines[$index]['product'] = array('price' => 0, 'title' => '');
                 }
@@ -647,10 +658,8 @@ class Invoice extends Base
             $shortcodes = array();
             $client = $this->sonderClient->getById($invoice['sonder_client_id']);
 
-
             $shortcodes['relatie'] = $client['contact'];
             $shortcodes['maand'] = date('m-Y',strtotime($invoice['date']));
-
 
             $invoice['beschrijvingtop'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingtop']);
             $invoice['beschrijvingbottom'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingbottom']);
