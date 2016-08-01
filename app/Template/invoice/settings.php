@@ -9,7 +9,7 @@
                 Beschrijving top
             </div>
             <textarea name="beschrijvingtop">
-                <?php echo $settings['beschrijvingtop']['settingvalue']; ?>
+                <?php if(!isset($settings['beschrijvingtop']['settingvalue'])){ echo $settings['beschrijvingtop']['settingvalue']; }  ?>
             </textarea>
         </div>
         <div>
@@ -17,14 +17,14 @@
                 Beschrijving bottom
             </div>
             <textarea name="beschrijvingbottom">
-                <?php echo $settings['beschrijvingbottom']['settingvalue']; ?>
+                <?php if(!isset($settings['beschrijvingbottom']['settingvalue'])){ echo $settings['beschrijvingbottom']['settingvalue']; } ?>
             </textarea>
         </div>
         <div>
             <div>
                 Latest invoice number
             </div>
-            <input type="text" value="<?php echo $settings['number']['settingvalue']; ?>" />
+            <input type="text" value="<?php if(!isset($settings['number']['settingvalue'])){  echo $settings['number']['settingvalue']; } ?>" />
         </div>
         <input type="submit" value="Save"/>
     </div>
