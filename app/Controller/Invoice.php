@@ -257,20 +257,17 @@ class Invoice extends Base
 
     public function showpdf()
     {
-        $id = 1;
-        $invoicetotal = 0;
-        $lines = array();
-
-        $btw = ($invoicetotal / 100) * 21;
-        $invoicetotalinc = $btw + $invoicetotal;
-        $duedate = date('d-m-Y', strtotime("+30 days"));
-        $number = 'SO1111137';
-        $relationumber = '17';
-
+        $values = $this->request->getValues();
         $invoice = $this->sonderInvoice->getById($_GET['id']);
         $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
-
         $client = $this->sonderClient->getById($invoice['sonder_client_id']);
+
+        $invoice['beschrijvingtop'] = $values['beschrijvingtop'];
+        $invoice['beschrijvingbottom'] = $values['beschrijvingbottom'];
+        $invoice['number'] = $values['number'];
+
+        $invoicetotal = 0;
+        $duedate = date('d-m-Y', strtotime("+30 days"));
 
         if(strlen($invoice['adres'])==0)
         {
@@ -366,6 +363,14 @@ class Invoice extends Base
         <td></td>
     </tr>
      </table>
+     <br /><br /><br />
+     
+     <table>
+        <tr>
+            <td>'.$invoice['beschrijvingtop'].'</td>
+        </tr>
+     </table>
+     
     <br /><br /><br />
     <table>
     <tr>
@@ -429,6 +434,9 @@ class Invoice extends Base
         </td>
     </tr>
 </table>';
+
+        //TODO save invoice
+        //$this->sonderInvoice->save($invoice);
 
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
