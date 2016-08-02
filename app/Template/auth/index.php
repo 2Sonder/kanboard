@@ -58,15 +58,15 @@
         <div id="wrapper">
             <!-- Main -->
             <section id="main">
-                <header>
+                <div>
                     <span class="avatar"><a href="http://2sonder.com"><img src="images/sonder.png" alt="" /></a></span>
                     <h1><a href="http://2sonder.com">Online story tellers</a></h1>
                     <p><?= $this->hook->render('template:auth:login-form:after') ?></p>
                      <?php if (isset($errors['login'])): ?>
         <p class="alert alert-error"><?= $this->text->e($errors['login']) ?></p>
     <?php endif ?>
-                </header>
-                <footer>
+        <div>
+            <footer>
                     <ul class="icons">
                         <li><a href="https://twitter.com/2sonder" class="fa-twitter">Twitter</a></li>
                         <li><a href="https://www.linkedin.com/company/2sonder" class="fa-linkedin">Linkedin</a></li>
