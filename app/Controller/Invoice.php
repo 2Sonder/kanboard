@@ -4,22 +4,21 @@ namespace Kanboard\Controller;
 
 use Dompdf\Dompdf;
 use Kanboard\Core\ObjectStorage\FileStorage;
+
 /**
  * Project controller (Settings + creation/edition)
  *
  * @package  controller
  * @author   Frederic Guillot
  */
-class Invoice extends Base
-{
+class Invoice extends Base {
 
     /**
      * List of projects
      *
      * @access public
      */
-    public function generateMonthlyInvoices()
-    {
+    public function generateMonthlyInvoices() {
         $invoices = $this->sonderInvoice->getAll();
         $dates = array();
 
@@ -27,7 +26,7 @@ class Invoice extends Base
         $settings = $this->sonderSettings->getAllByKey();
 
         $number = $this->sonderInvoice->getNextInvoiceNumber();
-        if(!$number) {
+        if (!$number) {
             $number = ($settings['number']['settingvalue'] + 1);
         }
 
@@ -68,12 +67,12 @@ class Invoice extends Base
                     $dates[$i]['start'] = date('Y-m-01', strtotime("-$i month"));
                     $dates[$i]['end'] = date('Y-m-t', strtotime("-$i month"));
 
-                  //  echo 'here1<br />';
+                    //  echo 'here1<br />';
 
                     $cl = $this->sonderInvoice->getByPeriodAndClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                     if (!$cl) {
 
-                        //id 	number 	beschrijvingtop 	beschrijvingbottom 	sonder_client_id 	status 	date 	dateto 
+                        //id 	number 	beschrijvingtop 	beschrijvingbottom 	sonder_client_id 	status 	date 	dateto
                         $tasks = $this->task->getPeriodByClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                         if (count($tasks) > 0) {
                             $invoice = array();
@@ -94,7 +93,6 @@ class Invoice extends Base
                     }
                 }
             }
-
         }
 
         //save invoicelines to invoice
@@ -104,7 +102,7 @@ class Invoice extends Base
             foreach ($tasks as $task) {
                 $line = $this->sonderInvoiceLine->existBytaskId($task['id']);
                 if (!$line) {
-                    //id sonder_invoice_id titel price discount quantity 
+                    //id sonder_invoice_id titel price discount quantity
                     $invoiceline = array();
                     $invoiceline['sonder_invoice_id'] = $invoice['id'];
                     $invoiceline['titel'] = $task['title'];
@@ -119,8 +117,7 @@ class Invoice extends Base
         }
     }
 
-    public function settings()
-    {
+    public function settings() {
 
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
@@ -132,8 +129,7 @@ class Invoice extends Base
         )));
     }
 
-    public function index()
-    {
+    public function index() {
 
         $this->generateMonthlyInvoices();
 
@@ -161,16 +157,14 @@ class Invoice extends Base
         )));
     }
 
-    private function getBankFile($contents)
-    {
+    private function getBankFile($contents) {
         $parser = new \Kingsquare\Parser\Banking\Mt940();
         //    echo __DIR__ . '/test.mta';
-    //    $tmpFile = __DIR__ . '/test.mta';
+        //    $tmpFile = __DIR__ . '/test.mta';
         return $parser->parse($contents);
     }
 
-    private function saveBankFile($contents)
-    {
+    private function saveBankFile($contents) {
 
 
         foreach ($this->getBankFile($contents) as $day) {
@@ -196,19 +190,14 @@ class Invoice extends Base
         return true;
     }
 
-    public function savefile()
-    {
+    public function savefile() {
         $contents = file_get_contents($_FILES['fileToUpload']['tmp_name']);
-        if($this->saveBankFile($contents))
-        {
+        if ($this->saveBankFile($contents)) {
             $this->response->redirect($this->helper->url->to('invoice', 'purchasing', array()));
         }
     }
 
-
-
-    public function purchasing()
-    {
+    public function purchasing() {
 
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
@@ -220,8 +209,7 @@ class Invoice extends Base
         )));
     }
 
-    public function editpurchasing()
-    {
+    public function editpurchasing() {
 
         if (!isset($_GET['id'])) {
             $id = 0;
@@ -242,8 +230,7 @@ class Invoice extends Base
         )));
     }
 
-    public function ledger()
-    {
+    public function ledger() {
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
                 'ledger' => $this->sonderLedger->getAll(),
@@ -255,8 +242,7 @@ class Invoice extends Base
         )));
     }
 
-    public function showpdf()
-    {
+    public function showpdf() {
         $values = $this->request->getValues();
         $invoice = $this->sonderInvoice->getById($_GET['id']);
         $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
@@ -269,8 +255,7 @@ class Invoice extends Base
         $invoicetotal = 0;
         $duedate = date('d-m-Y', strtotime("+30 days"));
 
-        if(strlen($invoice['adres'])==0)
-        {
+        if (strlen($invoice['adres']) == 0) {
             $invoice['name'] = $client['name'];
             $invoice['contact'] = $client['contact'];
             $invoice['adres'] = $client['adres'];
@@ -280,10 +265,10 @@ class Invoice extends Base
 
         $shortcodes = array();
         $shortcodes['relatie'] = $client['contact'];
-        $shortcodes['maand'] = date('m-Y',strtotime($invoice['date']));
+        $shortcodes['maand'] = date('m-Y', strtotime($invoice['date']));
 
-        $invoice['beschrijvingtop'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingtop']);
-        $invoice['beschrijvingbottom'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingbottom']);
+        $invoice['beschrijvingtop'] = $this->exchangeShortcodes($shortcodes, $invoice['beschrijvingtop']);
+        $invoice['beschrijvingbottom'] = $this->exchangeShortcodes($shortcodes, $invoice['beschrijvingbottom']);
 
         $pdf = '
             <style>
@@ -294,46 +279,38 @@ class Invoice extends Base
                     font-size:12px;
                 }
             </style>
-<table>
-    <tr>
-<td style="vertical-align: top;">
-            <img style="width:150px;" src="' . $_SERVER["DOCUMENT_ROOT"] . '/logo.jpg" />
-                <br /><br /><br />
-        </td>
-  <td style="vertical-align: top;"></td>
-  <td style="vertical-align: top;"></td>
-      
-</tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-            <table>
-                <tr><td>Adres:</td><td>Sonder</td></tr>
-                <tr><td></td><td>Kuypersweg 20</td></tr>
-                <tr><td></td><td>6871ED Renkum</td></tr>
-                <tr><td>KVK Nummer:</td><td>63237490</td></tr>
-                <tr><td>BTW Nummer:</td><td>NL855150038B01</td></tr>
-                <tr><td>Bankrekening:</td><td>NL65 RABO 0303 5495 21</td></tr>
-                <tr><td>Tel:</td><td>06-41833518</td></tr>
-                <tr><td>Email:</td><td>info@2sonder.com</td></tr>
-            </table>
-        </td>
-    </tr>
-    </table>
-   
+    <table>
+        <tr>
+            <td align="top"> <img style="width:150px;" src="' . $_SERVER["DOCUMENT_ROOT"] . '/logo.jpg" />
+                    <br /><br /><br /></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <table>
+                    <tr><td>Adres:</td><td>Sonder</td></tr>
+                    <tr><td></td><td>Kuypersweg 20</td></tr>
+                    <tr><td></td><td>6871ED Renkum</td></tr>
+                    <tr><td>KVK Nummer:</td><td>63237490</td></tr>
+                    <tr><td>BTW Nummer:</td><td>NL855150038B01</td></tr>
+                    <tr><td>Bankrekening:</td><td>NL65 RABO 0303 5495 21</td></tr>
+                    <tr><td>Tel:</td><td>06-41833518</td></tr>
+                    <tr><td>Email:</td><td>info@2sonder.com</td></tr>
+                </table>
+            </td>
+        </tr>
+    </table>    
     <table>
     <tr>
         <td  style="vertical-align: bottom;">
+            <br /><br /><br />
             <table>
                 <tr>
-                    <td>'.$invoice['name'].'<br />
-                        '.$invoice['contact'].'<br />
-                        '.$invoice['adres'].'<br /> 
-                        '.$invoice['postcode'].' '.$invoice['city'].'<br /> 
+                    <td>' . $invoice['name'] . '<br />
+                        ' . $invoice['contact'] . '<br />
+                        ' . $invoice['adres'] . '<br /> 
+                        ' . $invoice['postcode'] . ' ' . $invoice['city'] . '<br /> 
                     </td>
                     <td></td>
                     <td></td>
@@ -344,7 +321,6 @@ class Invoice extends Base
         <td></td>
     </tr>
      </table>
-    
     <table>
     <tr>
         <td>
@@ -362,22 +338,20 @@ class Invoice extends Base
         <td></td>
         <td></td>
     </tr>
-     </table>
-     ';
-
-    if(strlen($invoice['beschrijvingtop']) > 2) {
-        $pdf .= '
-        <br /><br /><br />
-        <table>
-        <tr>
-            <td>' . $invoice['beschrijvingtop'] . '</td>
-        </tr>
      </table>';
-    }
+        if (strlen($invoice['beschrijvingtop']) > 2) {
+            $pdf .= '<br /><br /><br />
+        <table>
+            <tr>
+                <td>' . $invoice['beschrijvingtop'] . '</td>
+            </tr>
+        </table>
+        ';
+        }
         $pdf .= '
-    <br /><br /><br />
-    <table>
-    <tr>
+<br /><br /><br />            
+<table>
+        <tr>
         <td colspan="3">
             <table style="width:100%;">
                 <tr>
@@ -387,17 +361,14 @@ class Invoice extends Base
                     <th align="right">Totaal</th>  
                 </tr>';
         foreach ($lines as $line) {
-
             $product = $this->sonderProduct->getById($line['sonder_product_id']);
             $linetotal = (floatval($product['price']) * floatval($line['quantity']));
-
             $pdf .= '<tr>
-                    <td>' . number_format((float)$line['quantity'], 1, ',', '') . ' X </td>
+                    <td>' . number_format((float) $line['quantity'], 1, ',', '') . ' X </td>
                     <td><b>' . ucfirst($product['title']) . '</b><br />' . ucfirst($line['titel']) . '</td>
-                    <td align="right">EUR ' . number_format((float)$product['price'], 2, ',', '') . '</td>
-                    <td align="right">EUR ' . number_format((float)$linetotal, 2, ',', '') . '</td>
+                    <td align="right">EUR ' . number_format((float) $product['price'], 2, ',', '') . '</td>
+                    <td align="right">EUR ' . number_format((float) $linetotal, 2, ',', '') . '</td>
                 </tr><tr><td colspan="4"><hr /></td></tr>';
-
             $invoicetotal += $linetotal;
         }
 
@@ -409,35 +380,34 @@ class Invoice extends Base
                     <td></td>
                     <td></td>
                     <td align="right">Subtotaal</td>
-                    <td align="right">EUR ' . number_format((float)$invoicetotal, 2, ',', '') . '</td>
+                    <td align="right">EUR ' . number_format((float) $invoicetotal, 2, ',', '') . '</td>
                 </tr>
                  <tr>
                     <td></td>
                     <td></td>
                     <td align="right">21% BTW</td>
-                    <td align="right">EUR ' . number_format((float)$btw, 2, ',', '') . '</td>
+                    <td align="right">EUR ' . number_format((float) $btw, 2, ',', '') . '</td>
                 </tr>
                  <tr>
                     <td></td>
                     <td></td>
                     <td align="right">Totaal</td>
-                    <td align="right">EUR ' . number_format((float)$invoicetotalinc, 2, ',', '') . '</td>
+                    <td align="right">EUR ' . number_format((float) $invoicetotalinc, 2, ',', '') . '</td>
                 </tr>
             </table>
         </td> 
     </tr>
      </table>
-     
     <table>
     <tr >
         <td colspan="3">';
 
-        if(strlen($invoice['beschrijvingbottom']) > 2) {
+        if (strlen($invoice['beschrijvingbottom']) > 2) {
             $pdf .= ' <b>' . $invoice['beschrijvingbottom'] . '</b>';
         }
 
         $pdf .= '    <br /><br /><br />
-            Wil je de ' . number_format((float)$invoicetotalinc, 2, ',', '') . ' voor ' . $duedate . ' aan ons overmaken met het factuurnummer ' . $invoice['number'] . ' erbij ?<br /> Ons rekeningnummer is NL65 RABO 0303 5495 21.<br />
+            Wil je de ' . number_format((float) $invoicetotalinc, 2, ',', '') . ' voor ' . $duedate . ' aan ons overmaken met het factuurnummer ' . $invoice['number'] . ' erbij ?<br /> Ons rekeningnummer is NL65 RABO 0303 5495 21.<br />
             Bel gerust: 06-41844518 of email bart@2sonder.com bij vragen.<br />
         </td>
     </tr>
@@ -445,7 +415,6 @@ class Invoice extends Base
 
         //TODO save invoice
         //$this->sonderInvoice->save($invoice);
-
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
         $dompdf->loadHtml($pdf);
@@ -454,8 +423,7 @@ class Invoice extends Base
         $dompdf->stream();
     }
 
-    public function getpdf()
-    {
+    public function getpdf() {
 
         $id = 1;
 
@@ -500,9 +468,7 @@ class Invoice extends Base
         )));
     }
 
-
-    public function key()
-    {
+    public function key() {
 
         $products = array();
         foreach ($this->sonderProduct->getAll() as $product) {
@@ -510,10 +476,10 @@ class Invoice extends Base
         }
 
         /*
-        foreach ($this->sonderDebitcredit->getAllWithdrawalsByMonthAndUser($datetime, $userid) as $dc) {
+          foreach ($this->sonderDebitcredit->getAllWithdrawalsByMonthAndUser($datetime, $userid) as $dc) {
 
-        }
-        */
+          }
+         */
 
         $months = array();
         foreach ($this->task->getAll() as $task) {
@@ -581,12 +547,11 @@ class Invoice extends Base
         )));
     }
 
-    public function saveproduct()
-    {
-             if (isset($_POST['title'])) {
+    public function saveproduct() {
+        if (isset($_POST['title'])) {
             $values = $this->request->getValues();
 
-            $product = array('title' => $values['title'],'price' => $values['price']);
+            $product = array('title' => $values['title'], 'price' => $values['price']);
             $this->sonderProduct->save($product);
 
             $this->response->redirect($this->helper->url->to('invoice', 'ledger', array()));
@@ -602,15 +567,14 @@ class Invoice extends Base
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
                 'product' => $product[0]
-    ),
-        'title' => 'Finance / Ledger / Save product',
+            ),
+            'title' => 'Finance / Ledger / Save product',
             'sidebar_template' => 'invoice/sidebar',
             'sub_template' => 'invoice/saveproduct'
         )));
-
     }
 
-    public function saveacquisition(){
+    public function saveacquisition() {
 
         if (isset($_POST['name'])) {
 
@@ -636,21 +600,17 @@ class Invoice extends Base
             'sidebar_template' => 'invoice/sidebar',
             'sub_template' => 'invoice/savecategory'
         )));
-
     }
 
-    public function exchangeShortcodes($shortcodes,$text)
-    {
+    public function exchangeShortcodes($shortcodes, $text) {
         $t = $text;
-        foreach(array_keys($shortcodes) as $shortcode)
-        {
-            $t = str_replace('['.$shortcode.']',$shortcodes[$shortcode],$t);
+        foreach (array_keys($shortcodes) as $shortcode) {
+            $t = str_replace('[' . $shortcode . ']', $shortcodes[$shortcode], $t);
         }
         return $t;
     }
 
-    public function newinvoice()
-    {
+    public function newinvoice() {
         if (isset($_GET['id'])) {
             $invoice = $this->sonderInvoice->getById($_GET['id']);
             $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
@@ -675,11 +635,10 @@ class Invoice extends Base
             $client = $this->sonderClient->getById($invoice['sonder_client_id']);
 
             $shortcodes['relatie'] = $client['contact'];
-            $shortcodes['maand'] = date('m-Y',strtotime($invoice['date']));
+            $shortcodes['maand'] = date('m-Y', strtotime($invoice['date']));
 
-            $invoice['beschrijvingtop'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingtop']);
-            $invoice['beschrijvingbottom'] = $this->exchangeShortcodes($shortcodes,$invoice['beschrijvingbottom']);
-
+            $invoice['beschrijvingtop'] = $this->exchangeShortcodes($shortcodes, $invoice['beschrijvingtop']);
+            $invoice['beschrijvingbottom'] = $this->exchangeShortcodes($shortcodes, $invoice['beschrijvingbottom']);
         } else {
             $lines = array();
             $invoice = array();
@@ -707,8 +666,7 @@ class Invoice extends Base
      *
      * @access public
      */
-    public function save()
-    {
+    public function save() {
         $values = $this->request->getValues();
         $errors = array();
 
@@ -724,8 +682,7 @@ class Invoice extends Base
      *
      * @access public
      */
-    public function show()
-    {
+    public function show() {
 
         echo 'show';
         /*
@@ -738,14 +695,12 @@ class Invoice extends Base
           ))); */
     }
 
-
     /**
      * Remove a project
      *
      * @access public
      */
-    public function remove()
-    {
+    public function remove() {
         /*
           $project = $this->getProject();
 
@@ -765,7 +720,7 @@ class Invoice extends Base
           'project' => $project,
           'title' => t('Remove project')
           )));
-         * 
+         *
          */
     }
 

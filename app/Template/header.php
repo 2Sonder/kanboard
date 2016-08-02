@@ -1,3 +1,6 @@
+<div style="background-color: #414f57;padding:10px;">
+    <a style="padding:10px;margin:10px;color: #2a62bc;font-size: 16px;" href="https://docs.google.com/spreadsheets/d/1ATgh7q7dlvnAIxJB8OLWsq7SW8RfggiEin8ctvllHhM/edit#gid=0">report hier je bugs</a>
+</div>
 <header>
     <nav>
         <h1>
@@ -23,7 +26,7 @@
                 </form>
             </li>
         </ul>
-        <ul class="user-main">
+        <ul>
             <?php if (isset($board_selector) && !empty($board_selector)): ?>
                 <li>
                     <select id="board-selector"
