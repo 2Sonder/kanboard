@@ -363,10 +363,12 @@ class Invoice extends Base
         <td></td>
     </tr>
      </table>
-     <br /><br /><br />';
+     ';
 
     if(strlen($invoice['beschrijvingtop']) > 2) {
-        $pdf .= '<table>
+        $pdf .= '
+        <br /><br /><br />
+        <table>
         <tr>
             <td>' . $invoice['beschrijvingtop'] . '</td>
         </tr>
@@ -390,7 +392,7 @@ class Invoice extends Base
             $linetotal = (floatval($product['price']) * floatval($line['quantity']));
 
             $pdf .= '<tr>
-                    <td>' . $line['quantity'] . ' X </td>
+                    <td>' . number_format((float)$line['quantity'], 1, ',', '') . ' X </td>
                     <td><b>' . ucfirst($product['title']) . '</b><br />' . ucfirst($line['titel']) . '</td>
                     <td align="right">EUR ' . number_format((float)$product['price'], 2, ',', '') . '</td>
                     <td align="right">EUR ' . number_format((float)$linetotal, 2, ',', '') . '</td>

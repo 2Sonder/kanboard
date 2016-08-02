@@ -13,7 +13,7 @@
         <?= $this->form->label(t('Invoice number'), 'number') ?>
         <?= $this->form->text('number', $invoice, $errors, array('autofocus', 'required', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
         <?= $this->form->label(t('Beschrijving top'), 'beschrijvingtop') ?>
-        <?= $this->form->textarea('beschrijvingtop', $invoice, $errors, array('autofocus', 'required', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
+        <?= $this->form->textarea('beschrijvingtop', $invoice, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
         <div>
             <table class="table-fixed table-medium">
                 <tr>
@@ -29,10 +29,10 @@
                     <tr>
                         <td><input type="text" class="product" name="product_<?php echo $index; ?>" value="<?php echo $line['product']['title']; ?>" /></td>
                         <td><input type="text" class="description" name="description_<?php echo $index; ?>" value="<?php echo $line['description']; ?>" /></td>
-                        <td><input type="text" class="price" name="price_<?php echo $index; ?>" value="<?php echo $line['price']; ?>" /></td>
+                        <td><input type="text" class="price" name="price_<?php echo $index; ?>" value="<?php echo number_format((float)$line['price'], 2, ',', ''); ?>" /></td>
                         <td><input type="text" class="quantity" name="quantity_<?php echo $index; ?>" value="<?php echo $line['quantity']; ?>" /></td>
                         <td><input type="text" class="discount" name="discount_<?php echo $index; ?>" value="<?php echo $line['discount']; ?>" /></td>
-                        <td><input type="text" class="total" name="total_<?php echo $index; ?>" value="<?php echo $line['total']; ?>" /></td>
+                        <td><input type="text" class="total" name="total_<?php echo $index; ?>" value="<?php echo number_format((float)$line['total'], 2, ',', ''); ?>" /></td>
                         <td></td>
                     </tr>
                 <?php $total += floatval($line['total']);  } ?>
@@ -54,16 +54,16 @@
                         Total:  <br />
                     </td>
                     <td>
-                        <span id="totalsex"><?php echo $total; ?></span><br />
-                        <span id="tax"><?php $tax = ($total / 100) * 21; echo $tax; ?></span><br />
-                        <span id="totalsinc"><?php echo ($total + $tax); ?></span><br />
+                        <span id="totalsex"><?php echo number_format((float)$total, 2, ',', ''); ?></span><br />
+                        <span id="tax"><?php $tax = ($total / 100) * 21; echo number_format((float)$tax, 2, ',', ''); ?></span><br />
+                        <span id="totalsinc"><?php echo number_format((float)($total + $tax), 2, ',', ''); ?></span><br />
                     </td>
                     <td></td>
                 </tr>
             </table>
         </div>
         <?= $this->form->label(t('Beschrijving bottom'), 'beschrijvingbottom') ?>
-        <?= $this->form->textarea('beschrijvingbottom', $invoice, $errors, array('autofocus', 'required', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
+        <?= $this->form->textarea('beschrijvingbottom', $invoice, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
 
         <div class="form-actions">
             <button type="submit" class="btn btn-blue" tabindex="15"><?= t('Download PDF') ?></button>
