@@ -190,4 +190,24 @@ class App extends Base
             'user' => $user,
         )));
     }
+
+    public function services()
+    {
+        $user = $this->getUser();
+
+        $tasks = array();
+        foreach($this->task->getAllByParentClientID($user['sonder_client_id']) as $task)
+        {
+            $t = $task;
+            $t['billable_hours'] = $this->sonderBillablehours->getByTaskId($task['id']);
+            $tasks[] = $t;
+        }
+
+        $this->response->html($this->helper->layout->dashboard('app/services', array(
+            'tasks' => $tasks,
+            'title' => t('Provided services'),
+            'notifications' => $this->userUnreadNotification->getAll($user['id']),
+            'user' => $user,
+        )));
+    }
 }

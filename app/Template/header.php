@@ -23,7 +23,7 @@
                 </form>
             </li>
         </ul>
-        <ul>
+        <ul class="user-main">
             <?php if (isset($board_selector) && !empty($board_selector)): ?>
                 <li>
                     <select id="board-selector"
@@ -50,6 +50,7 @@
                 <?php endif ?>
                 <?php $has_project_creation_access = $this->user->hasAccess('ProjectCreation', 'create'); ?>
                 <?php $is_private_project_enabled = $this->app->config('disable_private_project', 0) == 0; ?>
+                <?php  if($this->user->isAdmin()){ ?>
                 <div class="dropdown dropdown-icon">
                     <a href="#" class="dropdown-menu dropdown-menu-link-icon"><i style="position:relative;top:7px;" class="fa fa-th fa-2x fa-fw"></i></a>
                     <ul>
@@ -64,6 +65,7 @@
                         <?= $this->render('app/pluginmenu'); ?>
                     </ul>
                 </div>
+
                 <?php if ($has_project_creation_access || (!$has_project_creation_access && $is_private_project_enabled)): ?>
                     <div class="dropdown dropdown-icon">
                         <a href="#" class="dropdown-menu dropdown-menu-link-icon"><i style="position:relative;top:7px;" class="fa fa-plus fa-2x fa-fw"></i></a>
@@ -79,6 +81,7 @@
                         </ul>
                     </div>
                 <?php endif ?>
+                <?php } ?>
 
                 <div class="dropdown dropdown-avatar">
                     <a href="#" class="dropdown-menu dropdown-menu-link-icon"><?= $this->avatar->currentUserSmall('avatar-inline') ?></a>

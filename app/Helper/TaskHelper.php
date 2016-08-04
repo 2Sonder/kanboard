@@ -120,10 +120,10 @@ class TaskHelper extends Base
 
     public function selectTimeEstimated(array $values, array $errors = array(), array $attributes = array())
     {
-        $attributes = array_merge(array('tabindex="9"'), $attributes);
+        $attributes = array_merge(array('tabindex="9" step="0.5" min=0'), $attributes);
 
         $html = $this->helper->form->label(t('Original estimate'), 'time_estimated');
-        $html .= $this->helper->form->numeric('time_estimated', $values, $errors, $attributes);
+        $html .= $this->helper->form->number('time_estimated', $values, $errors, $attributes);
         $html .= ' '.t('hours');
 
         return $html;

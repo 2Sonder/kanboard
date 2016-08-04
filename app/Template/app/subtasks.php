@@ -1,3 +1,4 @@
+<?php if($paginator->getTotal() > 0){ ?>
 <div class="page-header">
     <h2><?= $this->url->link(t('My subtasks'), 'app', 'subtasks', array('user_id' => $user['id'])) ?> (<?= $paginator->getTotal() ?>)</h2>
 </div>
@@ -40,4 +41,4 @@
     </table>
 
     <?= $paginator ?>
-<?php endif ?>
+<?php endif; }  ?>

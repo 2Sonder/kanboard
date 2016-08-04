@@ -12,6 +12,21 @@ use Kanboard\Core\Base;
  */
 class AppHelper extends Base
 {
+    protected function getUser()
+    {
+        $user = $this->user->getById($this->request->getIntegerParam('user_id', $this->userSession->getId()));
+
+        if (empty($user)) {
+            $this->notfound();
+        }
+
+        if (! $this->userSession->isAdmin() && $this->userSession->getId() != $user['id']) {
+            $this->forbidden();
+        }
+
+        return $user;
+    }
+
     /**
      * Get config variable
      *
@@ -34,6 +49,22 @@ class AppHelper extends Base
      * @param  string $plugin
      * @return string
      */
+
+    public function checkProjectCount()
+    {
+        $user = $this->getUser();
+
+        if($this->projectPermission->getActiveProjectIds($user['id']))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
     public function checkMenuSelection($controller, $action = '', $plugin = '')
     {
         $result = strtolower($this->getRouterController()) === strtolower($controller);

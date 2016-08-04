@@ -1,6 +1,4 @@
-
-            <?= $this->url->link(t('New Client'), 'client', 'newclient', array()) ?>
-
+    <a class='btn btn-danger' href="?controller=client&action=newclient">New client</a>
     <form action="/?controller=asset&action=addclient" method="POST" />
     <table class="table-fixed table-small">
         <tr>

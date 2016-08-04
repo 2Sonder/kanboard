@@ -202,7 +202,25 @@ class Task extends Base
 
         return $periode;
     }
-    
+
+    public function getAllByParentClientID($clientid)
+    {
+       // $this->db->getStatementHandler()->withLogging();
+
+        $q = $this->db->table(self::TABLE)
+            ->select('*,t1.title AS producttitle, tasks.title AS tasktitle, t3.title AS columntitle')
+            ->left('projects', 't2', 'id', self::TABLE, 'project_id')
+            ->left('columns', 't3', 'id', self::TABLE, 'column_id')
+            ->left('sonder_product', 't1', 'id', self::TABLE, 'sonder_product_id')
+            ->eq('sonder_parent_client_id',$clientid)
+            ->desc('date_completed')
+            ->findAll();
+
+      //  print_r($this->db->getLogMessages());
+
+        return $q;
+    }
+
     public function getAllByClientID($clientid)
     {
         return $this->db->table(self::TABLE)->eq('sonder_client_id',$clientid)->findAll();

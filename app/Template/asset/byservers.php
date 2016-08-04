@@ -1,3 +1,4 @@
+<a class='btn btn-danger' href="?controller=assets&action=editdomain">New invoice</a>
     <form action="/?controller=asset&action=adddomain" method="POST" />
     <?= $this->form->csrf() ?>
     <table class="table-fixed table-small">

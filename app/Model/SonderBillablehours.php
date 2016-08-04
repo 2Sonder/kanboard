@@ -152,6 +152,17 @@ class SonderBillablehours extends SonderBase
         return $this->db->table(self::TABLE)->eq('id', $id)->findAll();
     }
 
+
+    public function getByTaskId($id)
+    {
+        //$this->db->getStatementHandler()->withLogging();
+        $q = $this->db->table(self::TABLE)
+            ->left('users', 't1', 'id', self::TABLE, 'user_id')
+            ->eq('task_id', $id)->findAll();
+
+        //print_r($this->db->getLogMessages());
+        return $q;
+    }
     public function getAll()
     {
         return $this->db->table(self::TABLE)->findAll();

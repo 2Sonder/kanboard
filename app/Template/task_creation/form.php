@@ -18,7 +18,8 @@
             array(
                 'placeholder="'.t('Leave a description').'"',
                 'tabindex="2"',
-                'data-mention-search-url="'.$this->url->href('UserHelper', 'mention', array('project_id' => $values['project_id'])).'"'
+                'data-mention-search-url="'.$this->url->href('UserHelper', 'mention', array('project_id' => $values['project_id'])).'"',
+                'required'
             ),
             'markdown-editor'
         ) ?>
@@ -34,14 +35,14 @@
 
     <div class="form-column">
         <?= $this->form->hidden('project_id', $values) ?>
-        <?= $this->task->selectAssignee($users_list, $values, $errors) ?>
+        <?= $this->task->selectAssignee($users_list, $values, $errors, array('required') ) ?>
         <?= $this->task->selectCategory($categories_list, $values, $errors) ?>
         <?= $this->task->selectSwimlane($swimlanes_list, $values, $errors) ?>
         <?= $this->task->selectColumn($columns_list, $values, $errors)  ?>
         <?= $this->task->selectPriority($project, $values) ?>
         <?= $this->task->selectScore($values, $errors) ?>
-        <?= $this->task->selectTimeEstimated($values, $errors) ?>
-        <?= $this->task->selectDueDate($values, $errors) ?>
+        <?= $this->task->selectTimeEstimated($values, $errors, array('required') ) ?>
+        <?= $this->task->selectDueDate($values, $errors, array('required') ) ?>
         
         <?= $this->form->label(t('Billable hours'), 'billable_hours') ?>
         <table>
@@ -62,7 +63,7 @@
         </select>
         
         <?= $this->form->label(t('Product (uurtarief)'), 'sonder_product_id') ?>
-        <select name="sonder_product_id">
+        <select name="sonder_product_id" required>
             <option value=""></option>
             <?php foreach($products as $product){ ?>
             <option value="<?php echo $product['id']; ?>"><?php echo $product['title']; ?></option>
