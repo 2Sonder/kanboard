@@ -650,6 +650,7 @@ class Invoice extends Base {
                 'paginator' => 'page',
                 'nb_projects' => 'project',
                 'invoice' => $invoice,
+                'statusoptions' => array('Concept','Send','Payed','Overdue'),
                 'clients' => $this->sonderClient->getAll(),
                 'lines' => $lines,
                 'errors' => array()

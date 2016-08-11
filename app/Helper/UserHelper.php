@@ -24,6 +24,8 @@ class UserHelper extends Base
         return $this->userUnreadNotification->hasNotifications($this->userSession->getId());
     }
 
+
+
     /**
      * Get initials from a user
      *
@@ -86,7 +88,12 @@ class UserHelper extends Base
         return $this->userSession->isAdmin();
     }
 
-    /**
+    public function isSuperAdmin()
+    {
+        return $this->userSession->isSuperAdmin();
+    }
+
+        /**
      * Get role name
      *
      * @access public

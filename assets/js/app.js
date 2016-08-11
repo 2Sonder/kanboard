@@ -74,17 +74,6 @@ for(var r=e.getCursor("start"),i=e.getCursor("end"),o=r.line;o<=i.line;o++)!func
             });
 
 
-
-            function calculateLine()
-            {
-
-            }
-
-            function calculateTotal()
-            {
-
-            }
-
 (function($) {
     var $window;
 
@@ -123,6 +112,10 @@ for(var r=e.getCursor("start"),i=e.getCursor("end"),o=r.line;o<=i.line;o++)!func
         return confirm('Do you really want to preform that action?');
     }
     $(document).on( "click", ".confirmMessage", confirmMessage);
+
+    $('#close-task').click(function () {
+        alert('test');
+    });
     
 })(jQuery)
                                                                                                                                                                                                                                                                                                                                             

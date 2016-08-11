@@ -16,6 +16,15 @@
         <?= $this->task->selectScore($values, $errors) ?>
 
         <?= $this->hook->render('template:task:form:left-column', array('values' => $values, 'errors' => $errors)) ?>
+
+        <?php if($this->user->isSuperAdmin()){ ?>
+
+            <?= $this->form->label(t('Only for the sysadmin'), 'date_completed') ?>
+
+            <?= $this->task->selectCloseDate($values, $errors, array() ) ?>
+
+
+        <?php } ?>
     </div>
 
     <div class="form-column">

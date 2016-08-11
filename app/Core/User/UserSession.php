@@ -123,7 +123,12 @@ class UserSession extends Base
         return isset($this->sessionStorage->user['role']) && $this->sessionStorage->user['role'] === Role::APP_ADMIN;
     }
 
-    /**
+    public function isSuperAdmin()
+    {
+        return isset($this->sessionStorage->user['role']) && $this->sessionStorage->user['id'] === 1;
+    }
+
+        /**
      * Get the connected user id
      *
      * @access public

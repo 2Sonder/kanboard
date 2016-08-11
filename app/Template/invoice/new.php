@@ -9,7 +9,12 @@
             <?php foreach ($clients as $client) { ?>
                 <option <?php if($client['id'] == $invoice['sonder_client_id']){ echo 'selected'; } ?> value="<?= $client['id']; ?>"><?= $client['name']; ?></option>
             <?php } ?>
-        </select> 
+        </select>
+
+        <?= $this->form->label(t('Status'), 'status') ?>
+        <?= $this->form->select('status', $statusoptions , $invoice, $errors, array('required'), 'form-input-large') ?>
+
+
         <?= $this->form->label(t('Invoice number'), 'number') ?>
         <?= $this->form->text('number', $invoice, $errors, array('autofocus', 'required', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
         <?= $this->form->label(t('Beschrijving top'), 'beschrijvingtop') ?>
@@ -46,6 +51,13 @@
                     <td></td>
                     <td><input type="submit"  value="add" /></td>
                 </tr>-->
+                <tr>
+                    <td colspan="3"></td>
+                    <td>Discount: </td>
+                    <td><input type="text" name="percentdiscount" value="0" /></td>
+                    <td><input type="text" name="discount" value="<?php echo number_format(0, 2, ',', ''); ?>" /></td>
+                    <td></td>
+                </tr>
                 <tr>
                     <td colspan="4"></td>
                     <td>

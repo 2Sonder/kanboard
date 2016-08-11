@@ -162,6 +162,17 @@ class TaskHelper extends Base
         return $html;
     }
 
+    public function selectCloseDate(array $values, array $errors = array(), array $attributes = array())
+    {
+        $attributes = array_merge(array('tabindex="12"', 'placeholder=""'), $attributes);
+
+        $html = $this->helper->form->label(t('Date Completed'), 'date_completed');
+        $html .= $this->helper->form->text('date_completed', $values, $errors, $attributes, 'form-date');
+
+        return $html;
+    }
+
+
     public function formatPriority(array $project, array $task)
     {
         $html = '';
