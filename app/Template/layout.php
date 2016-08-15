@@ -1,5 +1,5 @@
 <?php 
-if("$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" != "pm2.2sonder.com/?controller=auth&action=login"){ ?> 
+if("$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" != "pm3.2sonder.com/?controller=auth&action=login"){ ?>
 <!DOCTYPE html>
 <html>
     <head>

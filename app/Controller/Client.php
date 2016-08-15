@@ -98,7 +98,12 @@ class Client extends Base {
             $values['parent_id'] = 0;
         }
 
-        $this->sonderClient->save($values);
+        if($this->sonderClient->eq('id', $id)->exists()){
+            $this->sonderClient->update($values);
+        }else{
+            $this->sonderClient->save($values);
+        }
+
 
         if (!empty($_GET['client_id'])) {
             $id = $_GET['client_id'];
