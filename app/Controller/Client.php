@@ -98,12 +98,6 @@ class Client extends Base {
             $values['parent_id'] = 0;
         }
 
-        if($this->sonderClient->eq('id', $id)->exists()){
-            $this->sonderClient->update($values);
-        }else{
-            $this->sonderClient->save($values);
-        }
-
 
         if (!empty($_GET['client_id'])) {
             $id = $_GET['client_id'];
@@ -113,6 +107,12 @@ class Client extends Base {
 
         foreach ($permissions as $per){
             $this->sonderClientUserPermissions->addClientUserPermission($id, $per);
+        }
+
+        if($this->sonderClient->eq('id', $id)->exists()){
+            $this->sonderClient->update($values);
+        }else{
+            $this->sonderClient->save($values);
         }
 
 //        print_r($values);
