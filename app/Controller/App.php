@@ -17,9 +17,9 @@ class App extends Base
      * Get project pagination
      *
      * @access private
-     * @param  integer  $user_id
-     * @param  string   $action
-     * @param  integer  $max
+     * @param  integer $user_id
+     * @param  string $action
+     * @param  integer $max
      * @return \Kanboard\Core\Paginator
      */
     private function getProjectPaginator($user_id, $action, $max)
@@ -27,7 +27,7 @@ class App extends Base
         return $this->paginator
             ->setUrl('app', $action, array('pagination' => 'projects', 'user_id' => $user_id))
             ->setMax($max)
-            ->setOrder(ProjectModel::TABLE.'.name')
+            ->setOrder(ProjectModel::TABLE . '.name')
             ->setQuery($this->project->getQueryColumnStats($this->projectPermission->getActiveProjectIds($user_id)))
             ->calculateOnlyIf($this->request->getStringParam('pagination') === 'projects');
     }
@@ -36,9 +36,9 @@ class App extends Base
      * Get task pagination
      *
      * @access private
-     * @param  integer  $user_id
-     * @param  string   $action
-     * @param  integer  $max
+     * @param  integer $user_id
+     * @param  string $action
+     * @param  integer $max
      * @return \Kanboard\Core\Paginator
      */
     private function getTaskPaginator($user_id, $action, $max)
@@ -55,9 +55,9 @@ class App extends Base
      * Get subtask pagination
      *
      * @access private
-     * @param  integer  $user_id
-     * @param  string   $action
-     * @param  integer  $max
+     * @param  integer $user_id
+     * @param  string $action
+     * @param  integer $max
      * @return \Kanboard\Core\Paginator
      */
     private function getSubtaskPaginator($user_id, $action, $max)
@@ -196,8 +196,7 @@ class App extends Base
         $user = $this->getUser();
 
         $tasks = array();
-        foreach($this->task->getAllByParentClientID($user['sonder_client_id']) as $task)
-        {
+        foreach ($this->task->getAllByParentClientID($user['sonder_client_id']) as $task) {
             $t = $task;
             $t['billable_hours'] = $this->sonderBillablehours->getByTaskId($task['id']);
             $tasks[] = $t;
@@ -208,6 +207,91 @@ class App extends Base
             'title' => t('Provided services'),
             'notifications' => $this->userUnreadNotification->getAll($user['id']),
             'user' => $user,
+        )));
+    }
+
+    public function assets()
+    {
+        $user = $this->getUser();
+
+
+        $this->response->html($this->helper->layout->dashboard('app/assets', array(
+            //  'tasks' => $tasks,
+            'title' => t('Provided services'),
+            //  'notifications' => $this->userUnreadNotification->getAll($user['id']),
+            'user' => $user,
+        )));
+    }
+
+    private function permissionCheck($userId, $clientId)
+    {
+        if ($this->sonderClientUserPermissions->existsClientUser($clientId, $userId) == "true" || $this->userSession->isAdmin()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function domains()
+    {
+        $user = $this->getUser();
+
+        $user = $this->userSession->getId();
+        $domains = array();
+
+        foreach ($this->sonderServer->getServersWithDomains() as $index => $domain) {
+            if ($this->permissionCheck($user, $domain['parent_id']) || $this->permissionCheck($user, $domain['id'])) {
+                $domain['credentials'] = $this->sonderCredentials->getDomainCredentialsById($domain['domainid']);
+                $domains[] = $domain;
+            }
+        }
+
+        $this->response->html($this->helper->layout->dashboard('asset/byservers', array(
+            'data' =>
+                array('servers' => $this->sonderServer->getServers(),
+                    'paginator' => $domains,
+                    'clients' => $this->sonderClient->getAll()
+                ),
+            'admin' => false,
+            'servers' => $this->sonderServer->getServers(),
+            'paginator' => $domains,
+            'clients' => $this->sonderClient->getAll(),
+            'nb_projects' => 'project',
+            'title' => 'Assets / Domains',
+            'sidebar_template' => 'asset/sidebar',
+            'sub_template' => 'asset/byservers',
+            'user' => $user
+        )));
+
+    }
+
+    public function servers()
+    {
+        $user = $this->userSession->getId();
+
+        $servers = array();
+        foreach($this->sonderServer->getServersWithCredentials() as $server)
+        {
+
+            if($this->permissionCheck($user, $server['parent_id']) || $this->permissionCheck($user, $server['sonder_client_id'])) {
+                $s = $server;
+
+                $s['credentials'] = $this->sonderCredentials->getServerCredentialsById($server['id']);
+
+                $servers[] = $s;
+            }
+        }
+
+        $this->response->html($this->helper->layout->dashboard('asset/server', array(
+            'user' => $user,
+            'admin' => false,
+            'servers' => $servers,
+            'clients' => $this->sonderClient->getAll(),
+            'nb_projects' => 'project',
+            'title' => 'Assets / Servers',
+            'sidebar_template' => 'asset/sidebar',
+            'sub_template' => 'asset/server'
         )));
     }
 }

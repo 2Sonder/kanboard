@@ -48,8 +48,12 @@ abstract class BaseController extends Base
      */
     protected function getTask()
     {
+
         $project_id = $this->request->getIntegerParam('project_id');
-        $task = $this->taskFinderModel->getDetails($this->request->getIntegerParam('task_id'));
+
+        $task = $this->taskFinder->getDetails($this->request->getIntegerParam('task_id'));
+
+
 
         if (empty($task)) {
             throw new PageNotFoundException();

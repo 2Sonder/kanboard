@@ -43,11 +43,11 @@ class TaskStatus extends Base
      * @param  integer   $task_id   Task id
      * @return boolean
      */
-    public function close($task_id, $time = false)
+    public function close($task_id)
     {
-        if(!$time){ $time = time(); }
+
         $this->subtask->closeAll($task_id);
-        return $this->changeStatus($task_id, Task::STATUS_CLOSED, $time , Task::EVENT_CLOSE);
+        return $this->changeStatus($task_id, Task::STATUS_CLOSED, Task::EVENT_CLOSE);
     }
 
     /**
@@ -104,7 +104,7 @@ class TaskStatus extends Base
      * @param  string    $event               Event name
      * @return boolean
      */
-    private function changeStatus($task_id, $status, $date_completed, $event)
+    private function changeStatus($task_id, $status, $event)
     {
         if (! $this->taskFinder->exists($task_id)) {
             return false;
@@ -115,6 +115,10 @@ class TaskStatus extends Base
         if($currenttask['date_completed'] > 0)
         {
             $date_completed = $currenttask['date_completed'];
+        }
+        else
+        {
+           $date_completed = time();
         }
 
         $result = $this->db

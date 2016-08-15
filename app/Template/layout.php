@@ -63,6 +63,7 @@ if("$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" != "pm2.2sonder.com/?controller=au
         </section>
         <?= $this->hook->render('template:layout:bottom') ?>
      <?php endif ?>
+        <script src="/assets/js/footer.js" type="text/javascript"></script>
     </body>
 </html>
 <?php }else{ ?>

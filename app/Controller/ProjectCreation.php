@@ -94,17 +94,26 @@ class ProjectCreation extends Base
      */
     private function createNewProject(array $values)
     {
+
         $project = array(
             'name' => $values['name'],
             'sonder_client_id' => $values['sonder_client_id'],
             'is_private' => $values['is_private'],
+            'drive_link' => $values['drive_link']
         );
+
         if(strlen($values['sonder_client_id'])==0)
         {
             return false;
         }
 
-        return $this->project->create($project, $this->userSession->getId(), true);
+        $this->db->getStatementHandler()->withLogging();
+
+        $p = $this->project->create($project, $this->userSession->getId(), true);
+
+        print_r($this->db->getLogMessages());
+
+        return $p;
     }
 
     /**

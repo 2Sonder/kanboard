@@ -58,8 +58,24 @@ class Taskcreation extends Base
         $project = $this->getProject();
         $values = $this->request->getValues();
 
-        $hours = array();
+    //    print_r($values);
+    //    echo '<br /><br /><br /><br /><br /><br />';
+
+        $hours = array();$hours2 = array();
         $values['billable_hours'] = 0;
+
+        if($values['date_completed'] == '')
+        {
+            unset($values['date_completed']);
+        }
+        else
+        {
+            $values['date_completed'] = strtotime($values['date_completed']);
+            if($values['date_completed'] == 0){ unset($values['date_completed']); }
+        }
+
+
+
         foreach(array_keys($values) as $value)
         {
             $e =explode('billable_hours_',$value);
@@ -67,7 +83,15 @@ class Taskcreation extends Base
             {
                 $values['billable_hours'] += $values[$value];
                 $hours[] = array('user_id' => $e[1],'hours' => $values[$value]);
+                unset($values[$value]);
+            }
 
+            $e2 = explode('invested_hours_',$value);
+            if(isset($e2[1]))
+            {
+                $hours2[] = array('user_id' => $e2[1],'hours' => $values[$value]);
+
+                echo $value.'::'.$values[$value];
                 unset($values[$value]);
             }
         }
@@ -81,6 +105,16 @@ class Taskcreation extends Base
             $bh = $hours[$hour];
             $bh['task_id'] = intval($task);
             $this->sonderBillablehours->save($bh);
+        }
+
+        foreach(array_keys($hours2) as $hour)
+        {
+
+            $ih = $hours2[$hour];
+            $ih['task_id'] = intval($task);
+            if($ih['hours'] > 0) {
+                $this->sonderInvestedhours->save($ih);
+            }
         }
 
         if ($valid && $task) {

@@ -24,21 +24,7 @@ class Taskstatus extends Base
 
     public function close()
     {
-
-        /*
-        $values = $this->request->getValues();
-        print_r($_GET);
-
-        print_r($_POST);
-
-        print_r($values);
-
-        if(isset($_GET['saving']))
-        {
-            die('saving');
-        }*/
-
-       $this->changeStatus('close', 'task_status/close', t('Task closed successfully.'), t('Unable to close this task.'));
+        $this->changeStatus('close', 'task_status/close', t('Task closed successfully.'), t('Unable to close this task.'));
     }
 
     /**
@@ -63,7 +49,6 @@ class Taskstatus extends Base
     private function changeStatus($method, $template, $success_message, $failure_message)
     {
         $task = $this->getTask();
-     //   die('here');
 
         if ($this->request->getStringParam('confirmation') === 'yes') {
 
@@ -72,7 +57,7 @@ class Taskstatus extends Base
             if ($method == 'close') {
 
                 $values = $this->request->getValues();
-                if ($this->taskStatus->close($task['id'],strtotime($values['date_due']))) {
+                if ($this->taskStatus->close($task['id'])) {
                         $this->flash->success($success_message);
                 } else {
                     $this->flash->failure($failure_message);
@@ -83,16 +68,18 @@ class Taskstatus extends Base
                 } else {
                     $this->flash->failure($failure_message);
                 }
-
             }
 
-
-          //  return $this->response->redirect($this->helper->url->to('task', 'show', array('task_id' => $task['id'], 'project_id' => $task['project_id'])), true);
+            return $this->response->redirect($this->helper->url->to('task', 'show', array('task_id' => $task['id'], 'project_id' => $task['project_id'])), true);
         }
 
 
-        $this->response->html($this->template->render($template, array(
+        $t = $this->template->render($template, array(
             'task' => $task,
-        )));
+        ));
+
+        $this->response->html($t);
+
+
     }
 }

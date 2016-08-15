@@ -30,6 +30,10 @@ class TaskCreation extends Base
         //TODO do something usefull with this
         if(strlen($values['sonder_client_id'])==0){$values['sonder_client_id'] = 0;}
 
+        $this->db->getStatementHandler()->withLogging();
+
+    //    print_r($values);
+
         $this->prepare($values);
         $task_id = $this->persist(Task::TABLE, $values);
 
@@ -40,6 +44,10 @@ class TaskCreation extends Base
 
             $this->fireEvents($task_id, $values);
         }
+
+    //    print_r($this->db->getLogMessages());
+
+
 
         return (int) $task_id;
     }

@@ -26,7 +26,7 @@ class TaskFinderModel extends Base
         if (empty($project_ids)) {
             $project_ids = array(-1);
         }
-
+  
         return $this->db
                     ->table(TaskModel::TABLE)
                     ->columns(

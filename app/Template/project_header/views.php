@@ -21,4 +21,10 @@
         <?= $this->url->link(t('Gantt'), 'gantt', 'project', array('project_id' => $project['id'], 'search' => $filters['search']), false, 'view-gantt', t('Keyboard shortcut: "%s"', 'v g')) ?>
     </li>
     <?php endif ?>
+    <?php if(strlen($project['drive_link'])>0){ ?>
+    <li>
+        <img style="height: 18px;position: relative;top: 3px;" src="/assets/img/drive.png" />
+        <a class="view-gantt" target="_blank" href="<?php echo $project['drive_link']; ?>">Drive</a>
+    </li>
+    <?php } ?>
 </ul>

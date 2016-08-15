@@ -100,6 +100,7 @@ class Taskmodification extends Base
             'clients' => $this->sonderClient->getAll(),
             'products' => $this->sonderProduct->getAll(),
             'task' => $task,
+            'investedhours' => $this->sonderInvestedhours->getAllByUserAndTask($task['id']),
             'billablehours' => $this->sonderBillablehours->getAllByUserAndTask($task['id']),
             'users' => $this->user->getAdmins(),
             'users_list' => $this->projectUserRole->getAssignableUsersList($task['project_id']),
@@ -119,7 +120,17 @@ class Taskmodification extends Base
         $project = $this->getProject();
         $values = $this->request->getValues();
 
-        $hours = array();
+        if($values['date_completed'] == '')
+        {
+            unset($values['date_completed']);
+        }
+        else
+        {
+            $values['date_completed'] = strtotime($values['date_completed']);
+            if($values['date_completed'] == 0){ unset($values['date_completed']); }
+        }
+
+        $hours = array();$hours2 = array();
         $values['billable_hours'] = 0;
         foreach(array_keys($values) as $value)
         {
@@ -128,13 +139,23 @@ class Taskmodification extends Base
             {
                 $values['billable_hours'] += $values[$value];
                 $hours[] = array('user_id' => $e[1],'hours' => $values[$value]);
-
                 unset($values[$value]);
             }
+
+            $e2 = explode('invested_hours_',$value);
+            if(isset($e2[1]))
+            {
+                //$values['invested_hours'] += $values[$value];
+                $hours2[] = array('user_id' => $e2[1],'hours' => $values[$value]);
+                unset($values[$value]);
+            }
+
         }
         $values['sonder_parent_client_id'] = $project['sonder_client_id'];
 
         list($valid, $errors) = $this->taskValidator->validateModification($values);
+
+
 
         $task = $this->taskModification->update($values);
         foreach(array_keys($hours) as $hour)
@@ -147,9 +168,31 @@ class Taskmodification extends Base
             }
             $bh['hours'] = intval($hours[$hour]['hours']);
             if($bh['hours'] > 0) {
+
+                print_r($bh); echo '<br />';
+
                 $this->sonderBillablehours->save($bh);
             }
         }
+
+        foreach(array_keys($hours2) as $hour)
+        {
+            $bh = $this->sonderBillablehours->getByTaskAndUserId($task,$hours2[$hour]['user_id']);
+            if(!$bh)
+            {
+                $bh = $hours2[$hour];
+                $bh['task_id'] = intval($task);
+            }
+            $bh['hours'] = intval($hours2[$hour]['hours']);
+            if($bh['hours'] > 0) {
+
+                print_r($bh); echo '<br />';
+
+                $this->sonderInvestedhours->save($bh);
+            }
+        }
+
+
 
         if ($valid && $task) {
             $this->flash->success(t('Task updated successfully.'));

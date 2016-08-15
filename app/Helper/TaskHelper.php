@@ -153,8 +153,10 @@ class TaskHelper extends Base
 
     public function selectDueDate(array $values, array $errors = array(), array $attributes = array())
     {
-        $placeholder = date($this->config->get('application_date_format', 'm/d/Y'));
+        $placeholder = date($this->config->get('application_date_format', 'Y-m-d'));
         $attributes = array_merge(array('tabindex="12"', 'placeholder="'.$placeholder.'"'), $attributes);
+
+
 
         $html = $this->helper->form->label(t('Due Date'), 'date_due');
         $html .= $this->helper->form->text('date_due', $values, $errors, $attributes, 'form-date');
@@ -165,6 +167,15 @@ class TaskHelper extends Base
     public function selectCloseDate(array $values, array $errors = array(), array $attributes = array())
     {
         $attributes = array_merge(array('tabindex="12"', 'placeholder=""'), $attributes);
+        
+        if(!isset($values['date_completed']) || $values['date_completed'] == '')
+        {
+            $values['date_completed'] = '0000-00-00';
+        }
+        else
+        {
+            $values['date_completed'] = date('Y-m-d',$values['date_completed']);
+        }
 
         $html = $this->helper->form->label(t('Date Completed'), 'date_completed');
         $html .= $this->helper->form->text('date_completed', $values, $errors, $attributes, 'form-date');

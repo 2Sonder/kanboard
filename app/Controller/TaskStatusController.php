@@ -43,6 +43,8 @@ class TaskStatusController extends BaseController
     {
         $task = $this->getTask();
 
+        print_r($task);
+
         if ($this->request->getStringParam('confirmation') === 'yes') {
             $this->checkCSRFParam();
 
@@ -52,11 +54,16 @@ class TaskStatusController extends BaseController
                 $this->flash->failure($failure_message);
             }
 
-         //   return $this->response->redirect($this->helper->url->to('TaskViewController', 'show', array('task_id' => $task['id'], 'project_id' => $task['project_id'])), true);
+            return $this->response->redirect($this->helper->url->to('TaskViewController', 'show', array('task_id' => $task['id'], 'project_id' => $task['project_id'])), true);
         }
 
         return $this->response->html($this->template->render($template, array(
             'task' => $task,
         )));
+    }
+
+    public function beforeAction()
+    {
+
     }
 }

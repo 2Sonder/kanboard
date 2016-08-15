@@ -12,8 +12,7 @@ use Kanboard\Model\Base;
  * @package  model
  * @author   Frederic Guillot
  */
-class SonderBillablehours extends SonderBase
-{
+class SonderBillablehours extends SonderBase {
 
     const TABLE = 'sonder_billablehours';
 
@@ -23,8 +22,7 @@ class SonderBillablehours extends SonderBase
      * @access public
      * @return \PicoDb\Table
      */
-    public function getQuery()
-    {
+    public function getQuery() {
         return $this->db->table(self::TABLE);
     }
 
@@ -32,11 +30,10 @@ class SonderBillablehours extends SonderBase
      * Search groups by name
      *
      * @access public
-     * @param  string $input
+     * @param  string  $input
      * @return array
      */
-    public function search($input)
-    {
+    public function search($input) {
         return $this->db->table(self::TABLE)->ilike('name', '%' . $input . '%')->asc('name')->findAll();
     }
 
@@ -47,43 +44,15 @@ class SonderBillablehours extends SonderBase
      * @param  integer $group_id
      * @return array
      */
-    public function remove($group_id)
-    {
+    public function remove($group_id) {
         return $this->db->table(self::TABLE)->eq('id', $group_id)->remove();
     }
 
-    public function getAllByUserAndTask($taskid)
-    {
-        $bh = array();
-        foreach ($this->db->table(self::TABLE)->eq('task_id', $taskid)->findAll() as $task) {
-            $bh[$task['user_id']] = $task;
-        }
-        return $bh;
-    }
+    public function save($values) {
 
-    public function save($values)
-    {
         $this->db->getStatementHandler()->withLogging();
-
-        if (isset($values['id'])) {
-
-            $v = $this->db->table(self::TABLE)->eq('id', $values['id'])->save($values);
-
-            return $v;
-        } else {
-            return $this->db->table(self::TABLE)->save($values);
-        }
-
-
-
-    }
-
-    public function getByTaskAndUserId($taskid, $userid)
-    {
-        return $this->db->table(self::TABLE)
-            ->eq('task_id', $taskid)
-            ->eq('user_id', $userid)
-            ->findOne();
+        return $this->db->table(self::TABLE)->save($values);
+        print_r($this->db->getLogMessages());
     }
 
     /**
@@ -93,8 +62,7 @@ class SonderBillablehours extends SonderBase
      * @param  array $values
      * @return boolean
      */
-    public function update(array $values)
-    {
+    public function update(array $values) {
         return $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
     }
 
@@ -102,11 +70,10 @@ class SonderBillablehours extends SonderBase
      * Get all projects with given Ids
      *
      * @access public
-     * @param  integer[] $project_ids
+     * @param  integer[]   $project_ids
      * @return array
      */
-    public function getAllByIds(array $project_ids)
-    {
+    public function getAllByIds(array $project_ids) {
         if (empty($project_ids)) {
             return array();
         }
@@ -118,11 +85,10 @@ class SonderBillablehours extends SonderBase
      * Get project summary for a list of project
      *
      * @access public
-     * @param  array $project_ids List of project id
+     * @param  array      $project_ids     List of project id
      * @return \PicoDb\Table
      */
-    public function getQueryColumnStats($project_ids)
-    {
+    public function getQueryColumnStats($project_ids) {
         if (empty($project_ids)) {
             return $this->db->table(SonderClient::TABLE)->limit(0);
         }
@@ -142,42 +108,58 @@ class SonderBillablehours extends SonderBase
      * @access public
      * @return array
      */
-    public function getAllIds()
-    {
+    public function getAllIds() {
         return $this->db->table(self::TABLE)->asc('name')->findAllByColumn('id');
     }
 
-    public function getById($id)
-    {
-        return $this->db->table(self::TABLE)->eq('id', $id)->findAll();
+    public function getById($id) {
+        return $this->db->table(self::TABLE)
+            ->eq('id', $id)
+            ->findAll();
     }
 
-
-    public function getByTaskId($id)
+    public function getByTaskId($task_id)
     {
-        //$this->db->getStatementHandler()->withLogging();
-        $q = $this->db->table(self::TABLE)
+        return $this->db->table(self::TABLE)
             ->left('users', 't1', 'id', self::TABLE, 'user_id')
-            ->eq('task_id', $id)->findAll();
-
-        //print_r($this->db->getLogMessages());
-        return $q;
+            ->eq('task_id', $task_id)
+            ->findAll();
     }
-    public function getAll()
-    {
+
+    public function getAll() {
         return $this->db->table(self::TABLE)->findAll();
+    }
+
+    public function getAllByUserAndTask($taskid)
+
+    {
+
+        $bh = array();
+
+        foreach ($this->db->table(self::TABLE)->eq('task_id', $taskid)->findAll() as $task) {
+
+            $bh[$task['user_id']] = $task;
+
+        }
+
+        return $bh;
+
+    }
+
+    public function getByTaskAndUserId($task,$userid)
+    {
+        return $this->db->table(self::TABLE)->eq('task_id', $task)->eq('user_id', $userid)->findOne();
     }
 
     /**
      * Create a new group
      *
      * @access public
-     * @param  string $name
-     * @param  string $external_id
+     * @param  string  $name
+     * @param  string  $external_id
      * @return integer|boolean
      */
-    public function create($values)
-    {
+    public function create($values) {
         if (is_array($values)) {
             return $this->persist(self::TABLE, $values, $values['id']);
         }

@@ -45,7 +45,7 @@
                     <td><?php echo $user['name']; ?>(<?php echo $user['email']; ?>)</td>
                     <td><input type="number" pattern="[0-9]+([\.,][0-9]+)?" step="0.5"
                                name="invested_hours_<?php echo $user['id']; ?>"
-                               value=""/></td>
+                               value="0"/></td>
                 </tr>
             <? } ?>
         </table>
@@ -84,12 +84,12 @@
         </select>
 
         <?= $this->form->label(t('Product (uurtarief)'), 'sonder_product_id') ?>
-        <select name="sonder_product_id" required>
+        <select required="required" name="sonder_product_id" required>
             <option value=""></option>
             <?php foreach ($products as $product) { ?>
                 <option value="<?php echo $product['id']; ?>"><?php echo $product['title']; ?></option>
             <?php } ?>
-        </select>
+        </select><span class="form-required">*</span>
         <?= $this->hook->render('template:task:form:right-column', array('values' => $values, 'errors' => $errors)) ?>
     </div>
 

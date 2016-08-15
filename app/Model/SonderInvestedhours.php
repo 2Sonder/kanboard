@@ -12,9 +12,9 @@ use Kanboard\Model\Base;
  * @package  model
  * @author   Frederic Guillot
  */
-class SonderBillablehours extends SonderBase {
+class SonderInvestedhours extends SonderBase {
 
-    const TABLE = 'sonder_billablehours';
+    const TABLE = 'sonder_investedhours';
 
     /**
      * Get query to fetch all groups
@@ -48,11 +48,14 @@ class SonderBillablehours extends SonderBase {
         return $this->db->table(self::TABLE)->eq('id', $group_id)->remove();
     }
 
+
+
     public function save($values) {
 
         $this->db->getStatementHandler()->withLogging();
+
         return $this->db->table(self::TABLE)->save($values);
-        print_r($this->db->getLogMessages());
+     //   print_r($this->db->getLogMessages());
     }
 
     /**
@@ -101,13 +104,26 @@ class SonderBillablehours extends SonderBase {
 
         //    return $this->db->table(self::TABLE)->findAll();
     }
+    public function getByTaskAndUserId($task,$userid)
+    {
+        return $this->db->table(self::TABLE)->eq('task_id', $task)->eq('user_id', $userid)->findAll();
+    }
+    public function getAllByUserAndTask($taskid)
 
-    /**
-     * Get all project ids
-     *
-     * @access public
-     * @return array
-     */
+    {
+
+        $bh = array();
+
+        foreach ($this->db->table(self::TABLE)->eq('task_id', $taskid)->findAll() as $task) {
+
+            $bh[$task['user_id']] = $task;
+
+        }
+
+        return $bh;
+
+    }
+
     public function getAllIds() {
         return $this->db->table(self::TABLE)->asc('name')->findAllByColumn('id');
     }

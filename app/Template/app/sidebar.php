@@ -1,9 +1,14 @@
 <div class="sidebar">
     <ul>
-        <li <?= $this->app->checkMenuSelection('app', 'index') ?>>
+        <li <?= $this->app->checkMenuSelection('app', 'services') ?>>
             <?= $this->url->link(t('Provided services'), 'app', 'services', array('user_id' => $user['id'])) ?>
         </li>
- 
+        <li <?= $this->app->checkMenuSelection('app', 'domains') ?>>
+            <?= $this->url->link(t('Domains'), 'app', 'domains', array('user_id' => $user['id'])) ?>
+        </li>
+        <li <?= $this->app->checkMenuSelection('app', 'servers') ?>>
+            <?= $this->url->link(t('Servers'), 'app', 'servers', array('user_id' => $user['id'])) ?>
+        </li>
 
         <?php if($this->app->checkProjectCount()){ ?>
         <li <?= $this->app->checkMenuSelection('app', 'index') ?>>

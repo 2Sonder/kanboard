@@ -91,7 +91,6 @@ class Asset extends Base {
             }
         }
 
-      //  die();
         $this->response->html($this->helper->layout->app('asset/layout', array(
                     'data' =>
                     array('servers' => $servers,
@@ -200,29 +199,26 @@ class Asset extends Base {
     {
         $id = $_GET['id'];
         $this->response->html($this->helper->layout->app('asset/layout', array(
-                    'data' =>
-                    array( 
-                        'server' => $this->sonderServer->getById($id),
-                        'credentials' => $this->sonderCredentials->getAllByEntity($id,'sonder_server'),
-                        'clients' => $this->sonderClient->getAll()
-                    ),
-                    'nb_projects' => 'project',
-                    'title' => 'Assets by servers',
-                    'sidebar_template' => 'asset/sidebar',
-                    'sub_template' => 'asset/editserver'
+            'data' =>
+            array(
+                'server' => $this->sonderServer->getById($id),
+                'credentials' => $this->sonderCredentials->getAllByEntity($id,'sonder_server'),
+                'clients' => $this->sonderClient->getAll()
+            ),
+            'nb_projects' => 'project',
+            'title' => 'Assets by servers',
+            'sidebar_template' => 'asset/sidebar',
+            'sub_template' => 'asset/editserver'
         )));
     }
-    
-    
+
     public function saveeditserver()
     {
-
         $id = $_GET['id'];
         $value = $this->request->getValues();
         $value['id'] = $id;
 
         $this->sonderServer->update($value);
-
         $this->response->redirect($this->helper->url->to('asset', 'editdomain', array('id' => $id)));
     }
     
@@ -273,10 +269,7 @@ class Asset extends Base {
         $errors = array();
 
         $this->sonderCredentials->save($values);
-
         $this->sonderServer->save($values);
-
-        
 
         $values['id'] = 3;
         $this->sonderClient->create($values);
@@ -290,7 +283,6 @@ class Asset extends Base {
         }else{
             return false;
         }
-
     }
 
     public function search($term){

@@ -116,7 +116,14 @@ for(var r=e.getCursor("start"),i=e.getCursor("end"),o=r.line;o<=i.line;o++)!func
     $('#close-task').click(function () {
         alert('test');
     });
-    
+
+    $('#enable-financial-columns').click(function(){
+
+        $('financial').hide();
+    });
+    $('#test').click(function(){
+        alert('clicck');
+    });
 })(jQuery)
                                                                                                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                                                             

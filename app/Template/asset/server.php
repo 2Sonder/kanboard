@@ -2,7 +2,9 @@
     <?= $this->form->csrf() ?>
     <table class="table-fixed table-small">
         <tr>
+            <?php if(false){ ?>
             <th class="column-6">Bewerken</th>
+            <?php } ?>
             <th class="column-3">#</th>
             <th class="column-10">Server</th>
             <th class="column-10">Ipv4</th>
@@ -16,11 +18,12 @@
             <th></th>
         </tr>
         <?php foreach ($servers as $server): // print_r($server);?>
-
             <tr>
+                <?php if(false){ ?>
                 <td>
                     <?= $this->url->link('Edit', 'asset', 'editserver', array('id' => $server['id']), false, '') ?>/<button class="confirmMessage" formaction="/?controller=asset&action=removeServer&id=<?php echo $server['id']; ?>">Remove</button>
                 </td>
+                <?php } ?>
                 <td>
                     <?= $server['id']; ?>
                 </td>
@@ -57,6 +60,7 @@
                 </td>
             </tr>
         <?php endforeach ?>
+        <?php if($admin){ ?>
         <tr>
             <td></td>
             <td></td>
@@ -80,5 +84,6 @@
 
             <td><input type="submit" value="Submit" /></td>
         </tr>
+        <?php } ?>
     </table>
 </form>
