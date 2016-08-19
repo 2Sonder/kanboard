@@ -18,6 +18,7 @@
             <th></th>
         </tr>
         <?php foreach ($servers as $server): // print_r($server);?>
+
             <tr>
                 <?php  if($this->user->isAdmin()){ ?>
                 <td>
