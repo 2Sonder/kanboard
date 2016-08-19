@@ -41,6 +41,18 @@ class Client extends Base
     }
 
     /**
+     * Check if exists by id
+     *
+     * @access public
+     * @param  integer $id
+     * @return array
+     */
+    public function exists($id)
+    {
+        return $this->getQuery()->eq('id', $id)->exists();
+    }
+
+    /**
      * Get a specific group by external id
      *
      * @access public

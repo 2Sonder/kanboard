@@ -98,7 +98,13 @@ class Client extends Base {
             $values['parent_id'] = 0;
         }
 
-        $this->sonderClient->save($values);
+        if($this->sonderClient->getById($id)){
+            $values['id'] = $id;
+            $this->sonderClient->update($values);
+            print_r($values);
+        }else{
+            $this->sonderClient->save($values);
+        }
 
         if (!empty($_GET['client_id'])) {
             $id = $_GET['client_id'];
@@ -109,12 +115,6 @@ class Client extends Base {
         foreach ($permissions as $per){
             $this->sonderClientUserPermissions->addClientUserPermission($id, $per);
         }
-
-//        print_r($values);
-//        print_r($id);
-//        print_r($permissions);
-//        print_r( $this->sonderClientUserPermissions->getClientUserPermissions());
-
 
         $this->response->redirect($this->helper->url->to('asset', 'index', array()));
     }

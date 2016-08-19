@@ -33,10 +33,10 @@
         <?php endif ?>
         <?= $this->hook->render('template:task:form:left-column', array('values' => $values, 'errors' => $errors)) ?>
 
-        <?php if ($this->user->isSuperAdmin()) { ?>
+        <?php if($this->user->isAdmin()){ ?>
             <?= $this->form->label(t('Only for the sysadmin'), 'date_completed') ?>
             <?= $this->task->selectCloseDate($values, $errors, array()) ?>
-        <?php } ?>
+
 
         <?= $this->form->label(t('Invested hours'), 'invested_hours') ?>
         <table>
@@ -49,13 +49,14 @@
                 </tr>
             <? } ?>
         </table>
+        <?php } ?>
 
 
     </div>
 
     <div class="form-column">
         <?= $this->form->hidden('project_id', $values) ?>
-        <?= $this->task->selectAssignee($users_list, $values, $errors, array('required')) ?>
+        <?= $this->task->selectAssignee($users_list, $values, $errors) ?>
         <?= $this->task->selectCategory($categories_list, $values, $errors) ?>
         <?= $this->task->selectSwimlane($swimlanes_list, $values, $errors) ?>
         <?= $this->task->selectColumn($columns_list, $values, $errors) ?>
@@ -63,7 +64,7 @@
         <?= $this->task->selectScore($values, $errors) ?>
         <?= $this->task->selectTimeEstimated($values, $errors, array('required')) ?>
         <?= $this->task->selectDueDate($values, $errors, array('required')) ?>
-
+        <?php if($this->user->isAdmin()){ ?>
         <?= $this->form->label(t('Billable hours'), 'billable_hours') ?>
         <table>
             <?php foreach ($users as $user) { ?>
@@ -84,7 +85,7 @@
         </select>
 
         <?= $this->form->label(t('Product (uurtarief)'), 'sonder_product_id') ?>
-        <select required="required" name="sonder_product_id" required>
+        <select name="sonder_product_id" required>
             <option value=""></option>
             <?php foreach ($products as $product) { ?>
                 <option value="<?php echo $product['id']; ?>"><?php echo $product['title']; ?></option>
@@ -92,7 +93,7 @@
         </select><span class="form-required">*</span>
         <?= $this->hook->render('template:task:form:right-column', array('values' => $values, 'errors' => $errors)) ?>
     </div>
-
+    <?php } ?>
     <div class="form-actions">
         <button type="submit" class="btn btn-blue" tabindex="15"><?= t('Save') ?></button>
         <?= t('or') ?> <?= $this->url->link(t('cancel'), 'board', 'show', array('project_id' => $values['project_id']), false, 'close-popover') ?>

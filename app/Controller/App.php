@@ -235,15 +235,15 @@ class App extends Base
 
     public function domains()
     {
-        $user = $this->getUser();
-
         $user = $this->userSession->getId();
         $domains = array();
 
         foreach ($this->sonderServer->getServersWithDomains() as $index => $domain) {
-            if ($this->permissionCheck($user, $domain['parent_id']) || $this->permissionCheck($user, $domain['id'])) {
+            // The $domain['parent_id'] != 0 check is to make sure that clients with no parents are added when checking for sub-clients
+            if ($this->permissionCheck($user, $domain['parent_id']) == true && $domain['parent_id'] != 0 || $this->permissionCheck($user, $domain['id']) == true) {
                 $domain['credentials'] = $this->sonderCredentials->getDomainCredentialsById($domain['domainid']);
                 $domains[] = $domain;
+            }else{
             }
         }
 
@@ -274,7 +274,7 @@ class App extends Base
         foreach($this->sonderServer->getServersWithCredentials() as $server)
         {
 
-            if($this->permissionCheck($user, $server['parent_id']) || $this->permissionCheck($user, $server['sonder_client_id'])) {
+            if($this->permissionCheck($user, $server['parent_id']) == true && $server['parent_id'] != 0 || $this->permissionCheck($user, $server['sonder_client_id'])) {
                 $s = $server;
 
                 $s['credentials'] = $this->sonderCredentials->getServerCredentialsById($server['id']);
@@ -292,6 +292,42 @@ class App extends Base
             'title' => 'Assets / Servers',
             'sidebar_template' => 'asset/sidebar',
             'sub_template' => 'asset/server'
+        )));
+    }
+
+    public function credentials()
+    {
+        $user = $this->userSession->getId();
+
+        $servers = array();
+        $domains = array();
+
+        foreach($this->sonderServer->getServersWithCredentials() as $server)
+        {
+            if($this->permissionCheck($user, $server['parent_id']) == true && $server['parent_id'] != 0 || $this->permissionCheck($user, $server['sonder_client_id'])) {
+                $server['credentials'] = $this->sonderCredentials->getServerCredentialsById($server['id']);
+                $servers[] = $server;
+                
+            }
+        }
+
+        foreach ($this->sonderServer->getServersWithDomains() as $index => $domain) {
+            if ($this->permissionCheck($user, $domain['parent_id']) == true && $domain['parent_id'] != 0 || $this->permissionCheck($user, $domain['id']) == true) {
+                $domain['credentials'] = $this->sonderCredentials->getDomainCredentialsById($domain['domainid']);
+                $domains[] = $domain;
+            }
+        }
+
+        $this->response->html($this->helper->layout->dashboard('asset/credentials', array(
+            'user' => $user,
+            'admin' => false,
+            'servers' => $servers,
+            'domains' => $domains,
+            'clients' => $this->sonderClient->getAll(),
+            'nb_projects' => 'project',
+            'title' => 'Assets / Credentials',
+            'sidebar_template' => 'asset/sidebar',
+            'sub_template' => 'asset/credentials'
         )));
     }
 }

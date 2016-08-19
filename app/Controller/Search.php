@@ -14,10 +14,12 @@ class Search extends Base
 {
     public function index()
     {
-        $projects = $this->projectUserRole->getProjectsByUser($this->userSession->getId());
+        $userId = $this->userSession->getId();
+        $projects = $this->projectUserRole->getProjectsByUser($userId);
+
+        $domains = $this->sonderDomain->getDomainsByUser($userId);
         $search = urldecode($this->request->getStringParam('search'));
         $nb_tasks = 0;
-
         $paginator = $this->paginator
                 ->setUrl('search', 'index', array('search' => $search))
                 ->setMax(30)

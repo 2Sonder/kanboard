@@ -35,8 +35,9 @@ class Credentials extends Base {
                 $vals['password'] = $values['password_' . $i];
                 unset($values['password_' . $i]);
                 $vals['sonder_entity_id'] = $values['sonder_entity_id'];
-                unset($values['sonder_entity_name']);
+
                 $vals['sonder_entity_name'] = $values['sonder_entity_name'];
+
 
                 $emptyCheck = array($this->isempty($vals['type']), $this->isempty($vals['url']), $this->isempty($vals['user']), $this->isempty($vals['password']));
                 if (in_array(false, $emptyCheck))
@@ -68,7 +69,7 @@ class Credentials extends Base {
                 $this->response->redirect($this->helper->url->to('client', 'newclient', array('client_id' => $valId)));
                 break;
             case 'sonder_domain':
-                $this->response->redirect($this->helper->url->to('asset', 'edit', array('id' => $valId)));
+                $this->response->redirect($this->helper->url->to('asset', 'editdomain', array('id' => $valId)));
                 break;
             case 'sonder_server':
                 $this->response->redirect($this->helper->url->to('asset', 'editserver', array('id' => $valId)));

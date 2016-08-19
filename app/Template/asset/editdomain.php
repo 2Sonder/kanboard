@@ -83,7 +83,7 @@
     <td><input type="text" name="url" value=""  /></td>
     <td><input type="text" name="user" value=""  /></td>
     <td><input type="text" name="password" value=""  /></td>
-    <td><input type="hidden" name="sonder_entity_id" value="<?php echo $domainid; ?>" /><input type="submit" value="add passwords" /></td>
+    <td><input type="hidden" name="sonder_entity_id" value="<?php echo $domainid; ?>" /><input type="submit" value="add passwords" /><input type="hidden" name="sonder_entity_name" value="sonder_domain" /></td>
     </tr>    
 </table>
 </form>

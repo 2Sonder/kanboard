@@ -10,6 +10,10 @@
             <?= $this->url->link(t('Servers'), 'app', 'servers', array('user_id' => $user['id'])) ?>
         </li>
 
+        <li <?= $this->app->checkMenuSelection('app', 'credentials') ?>>
+            <?= $this->url->link(t('Credentials'), 'app', 'credentials') ?>
+        </li>
+
         <?php if($this->app->checkProjectCount()){ ?>
         <li <?= $this->app->checkMenuSelection('app', 'index') ?>>
             <?= $this->url->link(t('Overview'), 'app', 'index', array('user_id' => $user['id'])) ?>

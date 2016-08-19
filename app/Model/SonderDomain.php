@@ -130,5 +130,27 @@ class SonderDomain extends SonderBase {
             return $this->persist(self::TABLE, $values, $values['id']);
         }
     }
-    
+
+    public function getDomainsByUser($user_id)
+    {
+        $domains = array();
+
+        foreach($this->sonderServer->getServersWithDomains() as $index => $domain)
+        {
+            if($this->permissionCheck($user_id, $domain['parent_id']) || $this->permissionCheck($user_id, $domain['id'])) {
+                $domain['credentials'] = $this->sonderCredentials->getDomainCredentialsById($domain['domainid']);
+                $domains[] = $domain;
+            }
+        }
+        return $domains;
+    }
+
+    private function permissionCheck($userId, $clientId){
+        if($this->sonderClientUserPermissions->existsClientUser($clientId,$userId) == "true" || $this->userSession->isAdmin()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

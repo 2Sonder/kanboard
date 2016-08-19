@@ -1,11 +1,11 @@
-<?php if ($admin) { ?>
+<?php  if($this->user->isAdmin()){ ?>
     <a class='btn btn-danger' href="?controller=assets&action=editdomain">New domain</a>
 <?php } ?>
 <form action="/?controller=asset&action=adddomain" method="POST"/>
 <?= $this->form->csrf() ?>
 <table class="table-fixed table-small">
     <tr>
-        <?php if ($admin) { ?>
+        <?php  if($this->user->isAdmin()){ ?>
             <th class="column-5">Bewerken</th>
         <?php } ?>
         <th class="column-10">Servername</th>
@@ -21,7 +21,7 @@
     <?php foreach ($paginator as $domain) {
         $pos = strpos($domain['status'], 'offline'); ?>
         <tr>
-            <?php if ($admin) { ?>
+            <?php  if($this->user->isAdmin()){ ?>
                 <td><a href="/?controller=asset&action=editdomain&id=<?php echo $domain['domainid']; ?>">Edit</a>/
                     <button class="confirmMessage"
                             formaction="/?controller=asset&action=removeDomain&id=<?php echo $domain['domainid']; ?>">
@@ -62,7 +62,7 @@
                        target="_blank"><?php echo $credential['type'] ?></a><?php } ?></td>
         </tr>
     <?php } ?>
-    <?php if ($admin) { ?>
+    <?php  if($this->user->isAdmin()){ ?>
         <tr>
             <td></td>
             <td>

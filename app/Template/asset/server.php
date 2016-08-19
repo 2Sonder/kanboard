@@ -19,7 +19,7 @@
         </tr>
         <?php foreach ($servers as $server): // print_r($server);?>
             <tr>
-                <?php if(false){ ?>
+                <?php  if($this->user->isAdmin()){ ?>
                 <td>
                     <?= $this->url->link('Edit', 'asset', 'editserver', array('id' => $server['id']), false, '') ?>/<button class="confirmMessage" formaction="/?controller=asset&action=removeServer&id=<?php echo $server['id']; ?>">Remove</button>
                 </td>
@@ -60,7 +60,7 @@
                 </td>
             </tr>
         <?php endforeach ?>
-        <?php if($admin){ ?>
+        <?php  if($this->user->isAdmin()){ ?>
         <tr>
             <td></td>
             <td></td>
