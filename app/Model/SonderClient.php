@@ -15,7 +15,6 @@ use Kanboard\Model\Base;
 class SonderClient extends SonderBase
 {
 
-
     const TABLE = 'sonder_client';
 
     /**
@@ -51,18 +50,6 @@ class SonderClient extends SonderBase
     public function remove($group_id)
     {
         return $this->db->table(self::TABLE)->eq('id', $group_id)->remove();
-    }
-
-    /**
-     * Update existing group
-     *
-     * @access public
-     * @param  array $values
-     * @return boolean
-     */
-    public function update(array $values)
-    {
-        return $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
     }
 
     /**
@@ -125,6 +112,10 @@ class SonderClient extends SonderBase
         return $clients;
     }
 
+    public function getHighestId()
+    {
+        return $this->db->table(self::TABLE)->desc('id')->findOne();
+    }
 
     public function save($values)
     {
@@ -133,6 +124,18 @@ class SonderClient extends SonderBase
         } else {
             return $this->db->table(self::TABLE)->save($values);
         }
+    }
+
+    /**
+     * Update existing group
+     *
+     * @access public
+     * @param  array $values
+     * @return boolean
+     */
+    public function update(array $values)
+    {
+        return $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
     }
 
     public function getById($id)

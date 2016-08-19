@@ -51,7 +51,7 @@
                     <td><?php echo $task['time_estimated']; ?></td>
                     <td align="right"
                         class="financial">€<?php echo number_format((float)$estimatedCost, $decimals = 2); ?></td>
-                    <td><?php if ($task['date_completed'] != null) {
+                    <td align="right"><?php if ($task['date_completed'] != null) {
                             echo date('d-m-Y', $task['date_completed']);
                         } ?></td>
                     <td class="financial">                        <?php if (count($task['billable_hours']) > 0) { ?>

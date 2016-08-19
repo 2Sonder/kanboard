@@ -33,7 +33,7 @@ class Client extends Base {
 
         $paginator = $this->paginator
                 ->setUrl('client', 'index')
-                ->setMax(20)
+                ->setMax(500)
                 ->setOrder('name')
                 ->setQuery($this->sonderClient->getQueryColumnStats($project_ids))
                 ->calculate();
@@ -101,15 +101,21 @@ class Client extends Base {
         if($this->sonderClient->getById($id)){
             $values['id'] = $id;
             $this->sonderClient->update($values);
-            print_r($values);
+
         }else{
+            $id = $this->sonderClient->getHighestId();
+            $values['number'] = $id['id'] + 1;
             $this->sonderClient->save($values);
         }
+        print_r($values);
 
         if (!empty($_GET['client_id'])) {
             $id = $_GET['client_id'];
         }else{
-            $id = $this->db->getLastId();
+            $id = $this->sonderClient->getHighestId();
+            $id = $id['id'] + 1;
+            echo $id;
+
         }
 
         foreach ($permissions as $per){
