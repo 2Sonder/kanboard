@@ -155,8 +155,6 @@ class Taskmodification extends Base
 
         list($valid, $errors) = $this->taskValidator->validateModification($values);
 
-
-
         $task = $this->taskModification->update($values);
         foreach(array_keys($hours) as $hour)
         {
@@ -184,7 +182,7 @@ class Taskmodification extends Base
                 $bh['task_id'] = intval($task);
             }
             $bh['hours'] = intval($hours2[$hour]['hours']);
-            if($bh['hours'] > 0) {
+            if($bh['hours'] >= 0) {
 
                 print_r($bh); echo '<br />';
 
