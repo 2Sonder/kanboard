@@ -7,7 +7,7 @@ use Kanboard\Event\TaskEvent;
 /**
  * Task Modification
  *
- * @package  model
+ * @package  Kanboard\Model
  * @author   Frederic Guillot
  */
 class TaskModification extends Base
