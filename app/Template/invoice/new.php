@@ -41,16 +41,6 @@
                         <td></td>
                     </tr>
                 <?php $total += floatval($line['total']);  } ?>
-        <!--        <tr>
-                    <td><input type="text" class="product"  name="product" value="" /></td>
-                    <td><input type="text" class="description"  name="description" value="" /></td>
-                    <td><input type="text" class="price" name="price" value="" /></td>
-                    <td><input type="text" class="quantity" name="quantity" value="" /></td>
-                    <td><input type="text" class="discount" name="discount" value="" /></td>
-                    <td></td>
-                    <td></td>
-                    <td><input type="submit"  value="add" /></td>
-                </tr>-->
                 <tr>
                     <td colspan="3"></td>
                     <td>Discount: </td>
@@ -78,7 +68,8 @@
         <?= $this->form->textarea('beschrijvingbottom', $invoice, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-blue" tabindex="15"><?= t('Download PDF') ?></button>
+            <input type="submit" name="save" value="<?= t('Save'); ?>" class="btn btn-blue" tabindex="15" />
+            <input type="submit" name="save" value="<?= t('Download PDF'); ?>" class="btn btn-blue" tabindex="15" />
             <?= t('or') ?> <?= $this->url->link(t('cancel'), 'invoice', 'index', array()); ?>
         </div>
 </form>

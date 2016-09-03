@@ -11,6 +11,9 @@
         </li>        
         <li>
             <?= $this->url->link(t('Distribution key'), 'invoice', 'key', array()) ?>
-        </li>       
+        </li>
+        <li>
+            <?= $this->url->link(t('Kilometer registration'), 'invoice', 'routeregistration', array()) ?>
+        </li>
     </ul>
 </div>
