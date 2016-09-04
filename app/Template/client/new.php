@@ -24,6 +24,16 @@
         <?= $this->form->label(t('Description'), 'description') ?>
         <?= $this->form->text('description', $client, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
 
+        <?= $this->form->label(t('Adres'), 'adres') ?>
+        <?= $this->form->text('adres', $client, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
+
+        <?= $this->form->label(t('Postcode'), 'postcode') ?>
+        <?= $this->form->text('postcode', $client, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
+
+        <?= $this->form->label(t('City'), 'city') ?>
+        <?= $this->form->text('city', $client, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
+
+
         <?= $this->form->label(t('Parent client'), 'client'); ?>
         <select name="parent_id">
             <option value=""></option>
