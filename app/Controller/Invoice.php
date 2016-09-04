@@ -287,7 +287,7 @@ class Invoice extends Base
     public function fillPdfTemplate($client,$invoice,$lines)
     {
 
-
+        $duedate = date('d-m-Y', strtotime("+30 days"));
 
         $invoicetotal = 0;
                 $pdf = '
@@ -466,8 +466,6 @@ class Invoice extends Base
         $invoice = $this->sonderInvoice->getById($_GET['id']);
         $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
         $client = $this->sonderClient->getById($invoice['sonder_client_id']);
-
-        $duedate = date('d-m-Y', strtotime("+30 days"));
         $invoice = $this->saveInvoice($values, $invoice, $client);
 
         if ($values['save'] == 'Save') {
@@ -476,7 +474,6 @@ class Invoice extends Base
         }
 
         $pdf = $this->fillPdfTemplate($client,$invoice,$lines);
-        //TODO save invoice
 
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
