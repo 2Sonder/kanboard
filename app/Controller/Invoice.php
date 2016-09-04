@@ -51,8 +51,10 @@ class Invoice extends Base
                         $invoice['id'] = $last;
                         $invoice['number'] = 'SO' . $number;
                         $number = $number + 1;
+
                         $invoice['beschrijvingtop'] = $settings['beschrijvingtop']['settingvalue'];
                         $invoice['beschrijvingbottom'] = $settings['beschrijvingbottom']['settingvalue'];
+
                         $invoice['sonder_client_id'] = $client['id'];
                         $invoice['status'] = 'Concept';
                         $invoice['date'] = $dates[0]['start'];
@@ -67,22 +69,20 @@ class Invoice extends Base
                     $dates[$i]['start'] = date('Y-m-01', strtotime("-$i month"));
                     $dates[$i]['end'] = date('Y-m-t', strtotime("-$i month"));
 
-                    //  echo 'here1<br />';
-
                     $cl = $this->sonderInvoice->getByPeriodAndClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                     if (!$cl) {
-
                         //id 	number 	beschrijvingtop 	beschrijvingbottom 	sonder_client_id 	status 	date 	dateto
                         $tasks = $this->task->getPeriodByClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                         if (count($tasks) > 0) {
                             $invoice = array();
 
                             $last = ($last + 1);
-                            $invoice['id'] = $last;
                             $invoice['number'] = 'SO' . $number;
                             $number = $number + 1;
+
                             $invoice['beschrijvingtop'] = $settings['beschrijvingtop']['settingvalue'];
                             $invoice['beschrijvingbottom'] = $settings['beschrijvingbottom']['settingvalue'];
+
                             $invoice['sonder_client_id'] = $client['id'];
                             $invoice['status'] = 'Concept';
                             $invoice['date'] = $dates[$i]['start'];
@@ -92,6 +92,7 @@ class Invoice extends Base
                         }
                     }
                 }
+
             }
         }
 

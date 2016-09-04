@@ -153,10 +153,8 @@ class TaskHelper extends Base
 
     public function selectDueDate(array $values, array $errors = array(), array $attributes = array())
     {
-        $placeholder = date($this->config->get('application_date_format', 'Y-m-d'));
+        $placeholder = date( 'Y-m-d');
         $attributes = array_merge(array('tabindex="12"', 'placeholder="'.$placeholder.'"'), $attributes);
-
-
 
         $html = $this->helper->form->label(t('Due Date'), 'date_due');
         $html .= $this->helper->form->text('date_due', $values, $errors, $attributes, 'form-date');

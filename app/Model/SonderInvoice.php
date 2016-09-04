@@ -59,6 +59,7 @@ class SonderInvoice extends SonderBase
         } else {
             $q = $this->db->table(self::TABLE)->save($values);
         }
+
         return $q;
     }
 
