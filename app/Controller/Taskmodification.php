@@ -98,7 +98,7 @@ class Taskmodification extends Base
             'project' => $project,
             'values' => $values,
             'errors' => $errors,
-            'contracts' => $this->sonderContract->getList(true),
+            'contracts' => $this->sonderContract->getList(true,$project['sonder_client_id']),
             'clients' => $this->sonderClient->getAll(),
             'products' => $this->sonderProduct->getAll(),
             'task' => $task,

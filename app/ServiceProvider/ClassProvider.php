@@ -95,7 +95,8 @@ class ClassProvider implements ServiceProviderInterface
             'SonderClientUserPermissions',
             'SonderBillablehours',
             'SonderInvestedhours',
-            'SonderContract'
+            'SonderContract',
+            'SonderRoute'
         ),
         'Validator' => array(
             'ActionValidator',
@@ -108,7 +109,7 @@ class ClassProvider implements ServiceProviderInterface
             'ExternalLinkValidator',
             'GroupValidator',
             'LinkValidator',
-            'PasswordResetValidator', 
+            'PasswordResetValidator',
             'ProjectValidator',
             'SubtaskValidator',
             'SwimlaneValidator',

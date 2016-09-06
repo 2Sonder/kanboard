@@ -843,7 +843,9 @@ class Invoice extends Base
             'data' => array(
                 'paginator' => 'page',
                 'nb_projects' => 'project',
-                'errors' => array()
+                'routes' => $this->sonderRoute->getAll(),
+                'clients' => $this->sonderClient->getList(),
+                'users' => $this->user->prepareList($this->user->getAll())
             ),
             'title' => 'Finance / Invoice / Routeregistration',
             'sidebar_template' => 'invoice/sidebar',
@@ -852,6 +854,15 @@ class Invoice extends Base
         )));
     }
 
+    public function saveRoute()
+    {
+        $values = $this->request->getValues();
+        $errors = array();
+        $this->sonderRoute->save($values);
+        $this->response->redirect($this->helper->url->to('invoice', 'routeregistration', array()));
+    }
+
+
     public function deletecontract()
     {
 
@@ -859,7 +870,6 @@ class Invoice extends Base
 
     public function editcontract()
     {
-
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
                 'paginator' => 'page',

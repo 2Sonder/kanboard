@@ -145,7 +145,13 @@ trait ModelTrait
 
     public function getAll()
     {
-        return $this->db->table(self::TABLE)->findAll();
+        $this->db->getStatementHandler()->withLogging();
+
+        $q = $this->db->table(self::TABLE)->findAll();
+
+        print_r($this->db->getLogMessages());
+
+        return $q;
     }
 
     /**
