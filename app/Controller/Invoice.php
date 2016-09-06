@@ -76,7 +76,6 @@ class Invoice extends Base
                         $tasks = $this->task->getPeriodByClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                         if (count($tasks) > 0) {
 
-
                             $invoice = array();
 
                             $last = ($last + 1);
@@ -141,7 +140,6 @@ class Invoice extends Base
                     $invoiceline['sonder_contract_id'] = $contract['id'];
                     $invoiceline['sonder_product_id'] = $contract['sonder_product_id'];
 
-                    echo 'saving';
                     $this->sonderInvoiceLine->save($invoiceline);
 
 
@@ -616,7 +614,7 @@ class Invoice extends Base
                 $debitcredit = $this->sonderDebitcredit->getAllWithdrawalsByMonthAndUser($monthkey, $task['owner_id']);
                 if (count($debitcredit) > 0) {
                     foreach ($debitcredit as $dc) {
-                        //    print_r($dc);
+
                     }
                 }
             }

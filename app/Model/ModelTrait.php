@@ -90,7 +90,7 @@ trait ModelTrait
 
     public function save($values)
     {
-       // $this->db->getStatementHandler()->withLogging();
+        $this->db->getStatementHandler()->withLogging();
 
         if (isset($values['id'])) {
             $q = $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
