@@ -5,6 +5,7 @@ namespace Kanboard\Model;
 use Kanboard\Core\Security\Token;
 use Kanboard\Core\Security\Role;
 use Kanboard\Model\Base;
+use Kanboard\Model\ModelTrait;
 
 /**
  * Project model
@@ -14,71 +15,9 @@ use Kanboard\Model\Base;
  */
 class SonderDebitcredit extends SonderBase {
 
+    use ModelTrait;
+
     const TABLE = 'sonder_debitcredit';
-
-    /**
-     * Get query to fetch all groups
-     *
-     * @access public
-     * @return \PicoDb\Table
-     */
-    public function getQuery() {
-        return $this->db->table(self::TABLE);
-    }
-
-    /**
-     * Search groups by name
-     *
-     * @access public
-     * @param  string  $input
-     * @return array
-     */
-    public function search($input) {
-        return $this->db->table(self::TABLE)->ilike('name', '%' . $input . '%')->asc('name')->findAll();
-    }
-
-    /**
-     * Remove a group
-     *
-     * @access public
-     * @param  integer $group_id
-     * @return array
-     */
-    public function remove($group_id) {
-        return $this->db->table(self::TABLE)->eq('id', $group_id)->remove();
-    }
-
-    public function save($values) {
-        $this->db->getStatementHandler()->withLogging();
-        return $this->db->table(self::TABLE)->save($values);
-        print_r($this->db->getLogMessages());
-    }
-
-    /**
-     * Update existing group
-     *
-     * @access public
-     * @param  array $values
-     * @return boolean
-     */
-    public function update(array $values) {
-        return $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
-    }
-
-    /**
-     * Get all projects with given Ids
-     *
-     * @access public
-     * @param  integer[]   $project_ids
-     * @return array
-     */
-    public function getAllByIds(array $project_ids) {
-        if (empty($project_ids)) {
-            return array();
-        }
-
-        return $this->db->table(self::TABLE)->in('id', $project_ids)->asc('name')->findAll();
-    }
 
     /**
      * Get project summary for a list of project
@@ -112,17 +51,6 @@ class SonderDebitcredit extends SonderBase {
         return $this->db->table(self::TABLE)->eq('bankid',$id)->findAll('id'); 
     }
     
-    public function getAllIds() {
-        return $this->db->table(self::TABLE)->asc('name')->findAllByColumn('id');
-    }
-
-    public function getById($id) {
-        return $this->db->table(self::TABLE)->eq('id', $id)->findAll();
-    }
-    
-    public function getAll() {
-        return $this->db->table(self::TABLE)->findAll();
-    }
 
     public function getAllWithdrawalsByMonthAndUser($datetime,$userid)
     {
@@ -132,20 +60,4 @@ class SonderDebitcredit extends SonderBase {
             ->lte('entryTimestamp', date('Y-m-t H:i:s', strtotime($datetime)))
             ->findAll();
     }
-
-
-    /**
-     * Create a new group
-     *
-     * @access public
-     * @param  string  $name
-     * @param  string  $external_id
-     * @return integer|boolean
-     */
-    public function create($values) {
-        if (is_array($values)) {
-            return $this->persist(self::TABLE, $values, $values['id']);
-        }
-    }
-
 }

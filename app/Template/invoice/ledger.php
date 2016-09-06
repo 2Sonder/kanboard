@@ -10,12 +10,12 @@
             <th class="column-5"></th>
         </tr>
         <?php foreach ($ledger as $index => $dc) { ?>
-            <tr>
-                <td><a href="/?controller=invoice&action=saveacquisition&id=<?php echo $dc['id']; ?>">edit</a></td>
-                <td><?php echo $dc['id']; ?></td>
-                <td><?php echo $dc['name']; ?></td>
-                <td></td>
-            </tr>
+        <tr>
+            <td><a href="/?controller=invoice&action=saveacquisition&id=<?php echo $dc['id']; ?>">edit</a></td>
+            <td><?php echo $dc['id']; ?></td>
+            <td><?php echo $dc['name']; ?></td>
+            <td></td>
+        </tr>
         <?php } ?>
         <tr>
             <td></td>

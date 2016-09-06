@@ -48,6 +48,10 @@
         <?php //print_r($values); ?>
 
         <?php if($this->user->isAdmin()){ ?>
+
+            <?= $this->form->label(t('Contract (Select only if these hours are part part of a predefined contract).'), 'sonder_contract_id') ?>
+            <?= $this->form->select('sonder_contract_id', $contracts , $values, $errors, array('required'), 'form-input-large'); ?>
+
             <?= $this->task->selectTimeSpent($values, $errors) ?>
             <?= $this->form->label(t('Billable hours'), 'billable_hours') ?>
             <table>

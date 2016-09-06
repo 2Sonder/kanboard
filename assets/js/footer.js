@@ -19,3 +19,9 @@ $('#enable-financial-columns').change(function(){
 $('#test').click(function () {
     alert('clicck');
 });
+
+//DeleteInvoiceLine
+$('.DeleteInvoiceLine').click(function () {
+    $('#invoiceLine_'+$(this).attr('id')).remove();
+    $('#linecount').val($('#linecount').val()-1);
+});

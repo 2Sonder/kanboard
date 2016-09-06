@@ -7,6 +7,9 @@
             <?= $this->url->link(t('Ledger'), 'invoice', 'ledger', array()) ?>
         </li>
         <li>
+            <?= $this->url->link(t('Contracts'), 'invoice', 'contract', array()) ?>
+        </li>
+        <li>
             <?= $this->url->link(t('Invoices'), 'invoice', 'index', array()) ?>
         </li>        
         <li>

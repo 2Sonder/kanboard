@@ -151,9 +151,21 @@ class TaskHelper extends Base
         return $html;
     }
 
+    public function selectdate($label,$name,array $values, array $errors = array(), array $attributes = array())
+    {
+        $placeholder = date('Y-m-d');
+        $attributes = array_merge(array('tabindex="12"', 'placeholder="'.$placeholder.'"'), $attributes);
+
+        $html = $this->helper->form->label($label, $name);
+        $html .= $this->helper->form->text($name, $values, $errors, $attributes, 'form-date');
+
+        return $html;
+    }
+
+
     public function selectDueDate(array $values, array $errors = array(), array $attributes = array())
     {
-        $placeholder = date( 'Y-m-d');
+        $placeholder = date('Y-m-d');
         $attributes = array_merge(array('tabindex="12"', 'placeholder="'.$placeholder.'"'), $attributes);
 
         $html = $this->helper->form->label(t('Due Date'), 'date_due');

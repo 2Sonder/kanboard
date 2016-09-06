@@ -39,10 +39,11 @@ class Invoice extends Base
                 $dates[0]['start'] = date('Y-m-01', strtotime("+1 month"));
                 $dates[0]['end'] = date('Y-m-t', strtotime("+1 month"));
 
+               // echo 'client'.$client['id'].'<br />';
+
                 $cl = $this->sonderInvoice->getByPeriodAndClient($dates[0]['start'], $dates[0]['end'], $client['id']);
                 if (!$cl) {
 
-                    //id 	number 	beschrijvingtop 	beschrijvingbottom 	sonder_client_id 	status 	date 	dateto
                     $tasks = $this->task->getPeriodByClient($dates[0]['start'], $dates[0]['end'], $client['id']);
                     if (count($tasks) > 0) {
                         $invoice = array();
@@ -74,6 +75,8 @@ class Invoice extends Base
                         //id 	number 	beschrijvingtop 	beschrijvingbottom 	sonder_client_id 	status 	date 	dateto
                         $tasks = $this->task->getPeriodByClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                         if (count($tasks) > 0) {
+
+
                             $invoice = array();
 
                             $last = ($last + 1);
@@ -103,18 +106,48 @@ class Invoice extends Base
             foreach ($tasks as $task) {
                 $line = $this->sonderInvoiceLine->existBytaskId($task['id']);
                 if (!$line) {
-                    //id sonder_invoice_id titel price discount quantity
-                    $invoiceline = array();
-                    $invoiceline['sonder_invoice_id'] = $invoice['id'];
-                    $invoiceline['titel'] = $task['title'];
-                    $invoiceline['price'] = '';
-                    $invoiceline['discount'] = '0';
-                    $invoiceline['quantity'] = $task['billable_hours'];
-                    $invoiceline['task_id'] = $task['id'];
-                    $invoiceline['sonder_product_id'] = $task['sonder_product_id'];
-                    $this->sonderInvoiceLine->save($invoiceline);
+
+                    if(isset($task['sonder_contract_id']) && $task['sonder_contract_id'] > 0){
+
+                    }else{
+                        //id sonder_invoice_id titel price discount quantity
+                        $invoiceline = array();
+                        $invoiceline['sonder_invoice_id'] = $invoice['id'];
+                        $invoiceline['titel'] = $task['title'];
+                        $invoiceline['price'] = '';
+                        $invoiceline['discount'] = '0';
+                        $invoiceline['quantity'] = $task['billable_hours'];
+                        $invoiceline['task_id'] = $task['id'];
+                        $invoiceline['sonder_product_id'] = $task['sonder_product_id'];
+                        $this->sonderInvoiceLine->save($invoiceline);
+                    }
                 }
             }
+
+            $contracts = $this->sonderContract->getPeriodByClient($invoice['date'], $invoice['dateto'], $invoice['sonder_client_id']);
+            foreach($contracts as $contract)
+            {
+                $line = $this->sonderInvoiceLine->existByContractId($contract['id']);
+                if (!$line) {
+
+                    $invoiceline = array();
+                    $invoiceline['sonder_invoice_id'] = $invoice['id'];
+                    $invoiceline['titel'] = $contract['name'];
+                    $invoiceline['quantity'] = $contract['uren'];
+
+                    $invoiceline['price'] = '';
+                    $invoiceline['discount'] = '0';
+
+                    $invoiceline['sonder_contract_id'] = $contract['id'];
+                    $invoiceline['sonder_product_id'] = $contract['sonder_product_id'];
+
+                    echo 'saving';
+                    $this->sonderInvoiceLine->save($invoiceline);
+
+
+                }
+            }
+
         }
     }
 
@@ -146,7 +179,6 @@ class Invoice extends Base
             ->calculate();
 
         $first = $this->sonderClient->getAll();
-
 
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
@@ -464,7 +496,23 @@ class Invoice extends Base
     {
         $values = $this->request->getValues();
         $invoice = $this->sonderInvoice->getById($_GET['id']);
-        $lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
+        //$lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
+        $lines = [];
+        foreach($this->sonderInvoiceLine->getByInvoiceId($invoice['id']) as $line)
+        {
+            $ls[$line['id']] = $line;
+        }
+
+        $keys = array_keys($ls);
+        for($i=0;$i<$values['linecount'];$i++)
+        {
+            $lineid = $values['id_'.$i];
+            if(in_array($lineid,$keys))
+            {
+                $lines[] = $ls[$lineid];
+            }
+        }
+
         $client = $this->sonderClient->getById($invoice['sonder_client_id']);
         $invoice = $this->saveInvoice($values, $invoice, $client);
 
@@ -535,12 +583,6 @@ class Invoice extends Base
         foreach ($this->sonderProduct->getAll() as $product) {
             $products[$product['id']] = $product;
         }
-
-        /*
-          foreach ($this->sonderDebitcredit->getAllWithdrawalsByMonthAndUser($datetime, $userid) as $dc) {
-
-          }
-         */
 
         $months = array();
         foreach ($this->task->getAll() as $task) {
@@ -799,16 +841,10 @@ class Invoice extends Base
 
     public function routeregistration()
     {
-
-
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
                 'paginator' => 'page',
                 'nb_projects' => 'project',
-                //    'invoice' => $invoice,
-                //    'statusoptions' => array('Concept','Send','Payed','Overdue'),
-                //    'clients' => $this->sonderClient->getAll(),
-                //   'lines' => $lines,
                 'errors' => array()
             ),
             'title' => 'Finance / Invoice / Routeregistration',
@@ -818,4 +854,56 @@ class Invoice extends Base
         )));
     }
 
+    public function deletecontract()
+    {
+
+    }
+
+    public function editcontract()
+    {
+
+        $this->response->html($this->helper->layout->app('invoice/layout', array(
+            'data' => array(
+                'paginator' => 'page',
+                'nb_projects' => 'project',
+                'products' => $this->sonderProduct->getList(),
+                'contract' => $this->sonderContract->getById($_GET['id']),
+                'clients' => $this->sonderClient->getList(),
+                'errors' => array()
+            ),
+            'title' => 'Finance / Invoice / Contracts',
+            'sidebar_template' => 'invoice/sidebar',
+            'sub_template' => 'invoice/editcontract',
+            'invoice_id' => 'invoice_id'
+        )));
+    }
+
+    public function contract()
+    {
+        $this->response->html($this->helper->layout->app('invoice/layout', array(
+            'data' => array(
+                'paginator' => 'page',
+                'nb_projects' => 'project',
+                'products' => $this->sonderProduct->getList(),
+                'contracts' => $this->sonderContract->getAll(),
+                'clients' => $this->sonderClient->getList(),
+                'errors' => array()
+            ),
+            'title' => 'Finance / Invoice / Contracts',
+            'sidebar_template' => 'invoice/sidebar',
+            'sub_template' => 'invoice/contract',
+            'invoice_id' => 'invoice_id'
+        )));
+    }
+
+    public function savecontract()
+    {
+        $values = $this->request->getValues();
+        $errors = array();
+
+        $this->sonderContract->save($values);
+
+        $this->response->redirect($this->helper->url->to('invoice', 'contract', array()));
+
+    }
 }

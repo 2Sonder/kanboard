@@ -263,7 +263,6 @@ class App extends Base
             'sub_template' => 'asset/byservers',
             'user' => $user
         )));
-
     }
 
     public function servers()

@@ -92,11 +92,13 @@ class Taskmodification extends Base
 
         $values['sonder_client_id'] = $t['sonder_client_id'];
         $values['sonder_product_id'] = $t['sonder_product_id'];
+        $values['sonder_contract_id'] = $t['sonder_contract_id'];
 
             $this->response->html($this->template->render('task_modification/edit_task', array(
             'project' => $project,
             'values' => $values,
             'errors' => $errors,
+            'contracts' => $this->sonderContract->getList(true),
             'clients' => $this->sonderClient->getAll(),
             'products' => $this->sonderProduct->getAll(),
             'task' => $task,
@@ -155,6 +157,8 @@ class Taskmodification extends Base
 
         list($valid, $errors) = $this->taskValidator->validateModification($values);
 
+
+
         $task = $this->taskModification->update($values);
         foreach(array_keys($hours) as $hour)
         {
@@ -182,7 +186,7 @@ class Taskmodification extends Base
                 $bh['task_id'] = intval($task);
             }
             $bh['hours'] = intval($hours2[$hour]['hours']);
-            if($bh['hours'] >= 0) {
+            if($bh['hours'] > 0) {
 
                 print_r($bh); echo '<br />';
 

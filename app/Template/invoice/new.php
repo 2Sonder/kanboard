@@ -22,6 +22,7 @@
         <div>
             <table class="table-fixed table-medium">
                 <tr>
+                    <th class="column-10"></th>
                     <th class="column-30">Product</th>
                     <th class="column-30">Description</th>
                     <th class="column-10">Price</th>
@@ -30,26 +31,27 @@
                     <th class="column-10">Total</th>
                     <th class="column-10"></th>
                 </tr>
-                <?php $total = 0; foreach ($lines as $index => $line) { ?>
-                    <tr>
-                        <td><input type="text" class="product" name="product_<?php echo $index; ?>" value="<?php echo $line['product']['title']; ?>" /></td>
-                        <td><input type="text" class="description" name="description_<?php echo $index; ?>" value="<?php echo $line['description']; ?>" /></td>
-                        <td><input type="text" class="price" name="price_<?php echo $index; ?>" value="<?php echo number_format((float)$line['price'], 2, ',', ''); ?>" /></td>
-                        <td><input type="text" class="quantity" name="quantity_<?php echo $index; ?>" value="<?php echo $line['quantity']; ?>" /></td>
-                        <td><input type="text" class="discount" name="discount_<?php echo $index; ?>" value="<?php echo $line['discount']; ?>" /></td>
-                        <td><input type="text" class="total" name="total_<?php echo $index; ?>" value="<?php echo number_format((float)$line['total'], 2, ',', ''); ?>" /></td>
-                        <td></td>
-                    </tr>
-                <?php $total += floatval($line['total']);  } ?>
+                <?php $linecount = 0; $total = 0; foreach ($lines as $index => $line) { ?>
+                <tr id="invoiceLine_<?php echo $index; ?>">
+                    <td><input type="hidden"  value="<?php echo $line['id']; ?>" name="id_<?php echo $index; ?>"><a id="<?php echo $index; ?>" class="DeleteInvoiceLine">Delete</a></td>
+                    <td><input type="text" class="product" name="product_<?php echo $index; ?>" value="<?php echo $line['product']['title']; ?>" /></td>
+                    <td><input type="text" class="description" name="description_<?php echo $index; ?>" value="<?php echo $line['description']; ?>" /></td>
+                    <td><input type="text" class="price" name="price_<?php echo $index; ?>" value="<?php echo number_format((float)$line['price'], 2, ',', ''); ?>" /></td>
+                    <td><input type="text" class="quantity" name="quantity_<?php echo $index; ?>" value="<?php echo $line['quantity']; ?>" /></td>
+                    <td><input type="text" class="discount" name="discount_<?php echo $index; ?>" value="<?php echo $line['discount']; ?>" /></td>
+                    <td><input type="text" class="total" name="total_<?php echo $index; ?>" value="<?php echo number_format((float)$line['total'], 2, ',', ''); ?>" /></td>
+                    <td></td>
+                </tr>
+                <?php $total += floatval($line['total']);$linecount++;  } ?>
                 <tr>
-                    <td colspan="3"></td>
+                    <td colspan="4"><input type="hidden" name="linecount" id="linecount" value="<?php echo $linecount; ?>" /></td>
                     <td>Discount: </td>
                     <td><input type="text" name="percentdiscount" value="0" /></td>
                     <td><input type="text" name="discount" value="<?php echo number_format(0, 2, ',', ''); ?>" /></td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td colspan="4"></td>
+                    <td colspan="5"></td>
                     <td>
                         Subtotal: <br />
                         Tax:  <br />

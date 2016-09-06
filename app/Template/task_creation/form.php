@@ -63,8 +63,17 @@
         <?= $this->task->selectPriority($project, $values) ?>
         <?= $this->task->selectScore($values, $errors) ?>
         <?= $this->task->selectTimeEstimated($values, $errors, array('required')) ?>
+        <?= $this->task->selectTimeEstimated($values, $errors, array('required')) ?>
         <?= $this->task->selectDueDate($values, $errors, array('required')) ?>
+
+
         <?php if($this->user->isAdmin()){ ?>
+
+        <?php if(count($contracts) > 1){ ?>
+        <?= $this->form->label(t('Contract (Select only if these hours are part part of a predefined contract).'), 'sonder_contract_id') ?>
+        <?= $this->form->select('sonder_contract_id', $contracts , $values, $errors, array('required'), 'form-input-large'); ?>
+    <? } ?>
+
         <?= $this->form->label(t('Billable hours'), 'billable_hours') ?>
         <table>
             <?php foreach ($users as $user) { ?>

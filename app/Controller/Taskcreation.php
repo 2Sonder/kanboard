@@ -35,6 +35,7 @@ class Taskcreation extends Base
         $this->response->html($this->template->render('task_creation/form', array(
             'project' => $project,
             'errors' => $errors,
+            'contracts' => $this->sonderContract->getList(true,$project['sonder_client_id']),
             'clients' => $this->sonderClient->getAll(),
             'products' => $this->sonderProduct->getAll(),
             'users' => $this->user->getAdmins(),
@@ -78,7 +79,7 @@ class Taskcreation extends Base
 
         foreach(array_keys($values) as $value)
         {
-            $e =explode('billable_hours_',$value);
+            $e = explode('billable_hours_',$value);
             if(isset($e[1]))
             {
                 $values['billable_hours'] += $values[$value];
@@ -109,7 +110,6 @@ class Taskcreation extends Base
 
         foreach(array_keys($hours2) as $hour)
         {
-
             $ih = $hours2[$hour];
             $ih['task_id'] = intval($task);
             if($ih['hours'] > 0) {
