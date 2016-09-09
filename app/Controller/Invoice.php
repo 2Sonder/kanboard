@@ -490,10 +490,7 @@ class Invoice extends Base
                 </td>
             </tr>
         </table>';
-
-        echo $pdf;
-
-        die();
+        
         return $pdf;
     }
 
