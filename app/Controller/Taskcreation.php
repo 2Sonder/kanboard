@@ -17,8 +17,6 @@ class Taskcreation extends Base
      */
     public function create(array $values = array(), array $errors = array())
     {
-
-
         $project = $this->getProject();
         $swimlanes_list = $this->swimlane->getList($project['id'], false, true);
 
@@ -33,6 +31,9 @@ class Taskcreation extends Base
             $values = $this->hook->merge('controller:task:form:default', $values, array('default_values' => $values));
             $values = $this->hook->merge('controller:task-creation:form:default', $values, array('default_values' => $values));
         }
+
+        $values['priority'] = 1;
+        $values['score'] = 1;
 
         $this->response->html($this->template->render('task_creation/form', array(
             'project' => $project,

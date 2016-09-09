@@ -53,7 +53,7 @@ class FormHelper extends Base
         $html = '<select name="'.$name.'" id="form-'.$name.'" class="'.$class.'" '.implode(' ', $attributes).'>';
 
         foreach ($options as $id => $value) {
-            $html .= '<option value="'.$this->helper->text->e($id).'"';
+            $html .= '<option value="'.$id.'"';
 
             if (isset($values->$name) && $id == $values->$name) {
                 $html .= ' selected="selected"';
@@ -62,7 +62,7 @@ class FormHelper extends Base
                 $html .= ' selected="selected"';
             }
 
-            $html .= '>'.$this->helper->text->e($value).'</option>';
+            $html .= '>'.$value.'</option>';
         }
 
         $html .= '</select>';
