@@ -43,7 +43,7 @@ class Invoice extends Base
                 if (!$cl) {
 
                     $tasks = $this->task->getPeriodByClient($dates[0]['start'], $dates[0]['end'], $client['id']);
-                    $contracts = $this->sonderContract->getPeriodByClient($invoice['date'], $invoice['dateto'], $invoice['sonder_client_id']);
+                    $contracts = $this->sonderContract->getPeriodByClient($dates[0]['start'], $dates[0]['end'], $client['id']);
                     if (count($tasks) > 0 || count($contracts) > 0) {
                         $invoice = array();
 
