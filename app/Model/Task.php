@@ -10,6 +10,7 @@ namespace Kanboard\Model;
  */
 class Task extends Base
 {
+    use ModelTrait;
     /**
      * SQL table name
      *
@@ -273,4 +274,7 @@ class Task extends Base
 
         return true;
     }
+
+
+
 }

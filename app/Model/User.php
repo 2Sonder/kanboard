@@ -234,7 +234,7 @@ class User extends Base
         $result = array();
 
         foreach ($users as $user) {
-            $result[$user['id']] = $this->getFullname($user);
+            $result[''.$user['id']] = $this->getFullname($user);
         }
 
         asort($result);

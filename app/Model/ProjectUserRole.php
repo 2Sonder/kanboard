@@ -184,9 +184,15 @@ class ProjectUserRole extends Base
      * @param  bool      $singleUser    If there is only one user return only this user
      * @return array
      */
-    public function getAssignableUsersList($project_id, $unassigned = true, $everybody = false, $singleUser = false)
+    public function getAssignableUsersList($project_id = false, $unassigned = true, $everybody = false, $singleUser = false)
     {
-        $users = $this->getAssignableUsers($project_id);
+        if(!$project_id)
+        {
+            $users = $this->user->getAll();
+        }
+        else {
+            $users = $this->getAssignableUsers($project_id);
+        }
 
         if ($singleUser && count($users) === 1) {
             return $users;

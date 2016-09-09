@@ -60,7 +60,8 @@
         <?= $this->task->selectCategory($categories_list, $values, $errors) ?>
         <?= $this->task->selectSwimlane($swimlanes_list, $values, $errors) ?>
         <?= $this->task->selectColumn($columns_list, $values, $errors) ?>
-        <?= $this->task->selectPriority($project, $values) ?>
+
+        <?php if(isset($project['priority_end'])){ echo  $this->task->selectPriority($project, $values); } ?>
         <?= $this->task->selectScore($values, $errors) ?>
         <?= $this->task->selectTimeEstimated($values, $errors, array('required')) ?>
         <?= $this->task->selectTimeEstimated($values, $errors, array('required')) ?>

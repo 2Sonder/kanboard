@@ -2,7 +2,12 @@
 <form class="popover-form" method="post" action="<?= $this->url->href('Invoice', 'showpdf', array('id' => $invoice['id'])) ?>" autocomplete="off">
     <?= $this->form->csrf() ?>
     <div class="form-column">
-     
+     <style>
+         .right
+         {
+             text-align: right;
+         }
+     </style>
         <?= $this->form->label(t('Client'), 'client') ?>
         <select name="sonder_client_id">
             <option value=""></option>
@@ -36,18 +41,18 @@
                     <td><input type="hidden"  value="<?php echo $line['id']; ?>" name="id_<?php echo $index; ?>"><a id="<?php echo $index; ?>" class="DeleteInvoiceLine">Delete</a></td>
                     <td><input type="text" class="product" name="product_<?php echo $index; ?>" value="<?php echo $line['product']['title']; ?>" /></td>
                     <td><input type="text" class="description" name="description_<?php echo $index; ?>" value="<?php echo $line['description']; ?>" /></td>
-                    <td><input type="text" class="price" name="price_<?php echo $index; ?>" value="<?php echo number_format((float)$line['price'], 2, ',', ''); ?>" /></td>
-                    <td><input type="text" class="quantity" name="quantity_<?php echo $index; ?>" value="<?php echo $line['quantity']; ?>" /></td>
-                    <td><input type="text" class="discount" name="discount_<?php echo $index; ?>" value="<?php echo $line['discount']; ?>" /></td>
-                    <td><input type="text" class="total" name="total_<?php echo $index; ?>" value="<?php echo number_format((float)$line['total'], 2, ',', ''); ?>" /></td>
+                    <td><input type="text" class="right" class="price" name="price_<?php echo $index; ?>" value="<?php echo number_format((float)$line['price'], 2, ',', ''); ?>" /></td>
+                    <td><input type="text" class="right" class="quantity" name="quantity_<?php echo $index; ?>" value="<?php echo $line['quantity']; ?>" /></td>
+                    <td><input type="text" class="right" class="discount" name="discount_<?php echo $index; ?>" value="<?php echo $line['discount']; ?>" /></td>
+                    <td><input type="text" class="right" class="total" name="total_<?php echo $index; ?>" value="<?php echo number_format((float)$line['total'], 2, ',', ''); ?>" /></td>
                     <td></td>
                 </tr>
-                <?php $total += floatval($line['total']);$linecount++;  } ?>
+                <?php $total += floatval($line['total']); if($line['id'] > $linecount){$linecount=$line['id'];}  } ?>
                 <tr>
-                    <td colspan="4"><input type="hidden" name="linecount" id="linecount" value="<?php echo $linecount; ?>" /></td>
+                    <td colspan="4"><input class="right" type="hidden" name="linecount" id="linecount" value="<?php echo $linecount; ?>" /></td>
                     <td>Discount: </td>
-                    <td><input type="text" name="percentdiscount" value="0" /></td>
-                    <td><input type="text" name="discount" value="<?php echo number_format(0, 2, ',', ''); ?>" /></td>
+                    <td><input class="right" type="text" name="percentdiscount" value="0" /></td>
+                    <td><input class="right" type="text" name="discount" value="<?php echo number_format(0, 2, ',', ''); ?>" /></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -57,10 +62,10 @@
                         Tax:  <br />
                         Total:  <br />
                     </td>
-                    <td>
-                        <span id="totalsex"><?php echo number_format((float)$total, 2, ',', ''); ?></span><br />
-                        <span id="tax"><?php $tax = ($total / 100) * 21; echo number_format((float)$tax, 2, ',', ''); ?></span><br />
-                        <span id="totalsinc"><?php echo number_format((float)($total + $tax), 2, ',', ''); ?></span><br />
+                    <td class="right">
+                        <span class="right" id="totalsex"><?php echo number_format((float)$total, 2, ',', ''); ?></span><br />
+                        <span class="right" id="tax"><?php $tax = ($total / 100) * 21; echo number_format((float)$tax, 2, ',', ''); ?></span><br />
+                        <span class="right" id="totalsinc"><?php echo number_format((float)($total + $tax), 2, ',', ''); ?></span><br />
                     </td>
                     <td></td>
                 </tr>

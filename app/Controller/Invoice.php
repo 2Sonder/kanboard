@@ -13,7 +13,6 @@ use Kanboard\Core\ObjectStorage\FileStorage;
  */
 class Invoice extends Base
 {
-
     /**
      * List of projects
      *
@@ -39,13 +38,13 @@ class Invoice extends Base
                 $dates[0]['start'] = date('Y-m-01', strtotime("+1 month"));
                 $dates[0]['end'] = date('Y-m-t', strtotime("+1 month"));
 
-               // echo 'client'.$client['id'].'<br />';
-
                 $cl = $this->sonderInvoice->getByPeriodAndClient($dates[0]['start'], $dates[0]['end'], $client['id']);
+
                 if (!$cl) {
 
                     $tasks = $this->task->getPeriodByClient($dates[0]['start'], $dates[0]['end'], $client['id']);
-                    if (count($tasks) > 0) {
+                    $contracts = $this->sonderContract->getPeriodByClient($invoice['date'], $invoice['dateto'], $invoice['sonder_client_id']);
+                    if (count($tasks) > 0 || count($contracts) > 0) {
                         $invoice = array();
 
                         $last = ($last + 1);
@@ -106,9 +105,9 @@ class Invoice extends Base
                 $line = $this->sonderInvoiceLine->existBytaskId($task['id']);
                 if (!$line) {
 
-                    if(isset($task['sonder_contract_id']) && $task['sonder_contract_id'] > 0){
+                    if (isset($task['sonder_contract_id']) && $task['sonder_contract_id'] > 0) {
 
-                    }else{
+                    } else {
                         //id sonder_invoice_id titel price discount quantity
                         $invoiceline = array();
                         $invoiceline['sonder_invoice_id'] = $invoice['id'];
@@ -124,8 +123,7 @@ class Invoice extends Base
             }
 
             $contracts = $this->sonderContract->getPeriodByClient($invoice['date'], $invoice['dateto'], $invoice['sonder_client_id']);
-            foreach($contracts as $contract)
-            {
+            foreach ($contracts as $contract) {
                 $line = $this->sonderInvoiceLine->existByContractId($contract['id']);
                 if (!$line) {
 
@@ -306,21 +304,20 @@ class Invoice extends Base
         $invoice['percentdiscount'] = $values['percentdiscount'];
         $invoice['discount'] = $values['discount'];
 
-        if($this->sonderInvoice->save($invoice))
-        {
+        if ($this->sonderInvoice->save($invoice)) {
             echo 'saved';
         }
 
         return $invoice;
     }
 
-    public function fillPdfTemplate($client,$invoice,$lines)
+    public function fillPdfTemplate($client, $invoice, $lines)
     {
 
         $duedate = date('d-m-Y', strtotime("+30 days"));
 
         $invoicetotal = 0;
-                $pdf = '
+        $pdf = '
                     <style>
                         table
                         {
@@ -389,16 +386,16 @@ class Invoice extends Base
                 <td></td>
             </tr>
              </table>';
-                if (strlen($invoice['beschrijvingtop']) > 2) {
-                    $pdf .= '<br /><br /><br />
+        if (strlen($invoice['beschrijvingtop']) > 2) {
+            $pdf .= '<br /><br /><br />
                 <table>
                     <tr>
                         <td>' . $invoice['beschrijvingtop'] . '</td>
                     </tr>
                 </table>
                 ';
-                }
-                $pdf .= '
+        }
+        $pdf .= '
         <br /><br /><br />            
         <table>
                 <tr>
@@ -410,52 +407,59 @@ class Invoice extends Base
                             <th align="right">Bedrag</th>
                             <th align="right">Totaal</th>  
                         </tr>';
-                foreach ($lines as $line) {
-                    $product = $this->sonderProduct->getById($line['sonder_product_id']);
-                    $linetotal = (floatval($product['price']) * floatval($line['quantity']));
-                    $pdf .= '<tr>
+        foreach ($lines as $line) {
+            $product = $this->sonderProduct->getById($line['sonder_product_id']);
+            $linetotal = (floatval($product['price']) * floatval($line['quantity']));
+            $pdf .= '<tr>
                             <td>' . number_format((float)$line['quantity'], 1, ',', '') . ' X </td>
                             <td><b>' . ucfirst($product['title']) . '</b><br />' . ucfirst($line['titel']) . '</td>
                             <td align="right">EUR ' . number_format((float)$product['price'], 2, ',', '') . '</td>
                             <td align="right">EUR ' . number_format((float)$linetotal, 2, ',', '') . '</td>
                         </tr><tr><td colspan="4"><hr /></td></tr>';
-                    $invoicetotal += $linetotal;
-                }
+            $invoicetotal += $linetotal;
+        }
 
-                $btw = ($invoicetotal / 100) * 21;
-                $invoicetotalinc = $btw + $invoicetotal;
-
-                //discount
-                if(isset($invoice['discount']) && $invoice['discount'] > 0) {
-                    $pdf .= '
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td align="right">Korting</td>
-                            <td align="right">EUR ' . $invoice['discount'] . '</td>
-                        </tr>            
-                    ';
-                }
-                if(isset($invoice['percentagediscount']) && $invoice['percentagediscount'] > 0) {
-                    $pdf .= '
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td align="right">Korting</td>
-                                    <td align="right">EUR ' . $invoice['percentagediscount'] . '</td>
-                                </tr>            
-                            ';
-                }
-
-
-                //total
-                $pdf .= '
+        //total
+        $pdf .= '
                         <tr>
                             <td></td>
                             <td></td>
                             <td align="right">Subtotaal</td>
                             <td align="right">EUR ' . number_format((float)$invoicetotal, 2, ',', '') . '</td>
-                        </tr>
+                        </tr>';
+
+        //discount
+        if (isset($invoice['percentdiscount']) && $invoice['percentdiscount'] > 0) {
+
+            $discount = ($invoicetotal / 100) * $invoice['percentdiscount'];
+            $invoicetotal = ($invoicetotal - $discount);
+
+            $pdf .= '
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td align="right">Korting ('.$invoice['percentdiscount'].'%)</td>
+                            <td align="right">EUR -' . number_format((float)$discount, 2, ',', '') . '</td>
+                        </tr>            
+                    ';
+        } else if (isset($invoice['discount']) && $invoice['discount'] > 0) {
+
+            $invoicetotal = $invoicetotal - $invoice['discount'];
+
+            $pdf .= '
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td align="right">Korting</td>
+                            <td align="right">EUR -' . number_format((float)$invoice['discount'], 2, ',', '') . '</td>
+                        </tr>            
+                    ';
+        }
+
+        $btw = ($invoicetotal / 100) * 21;
+        $invoicetotalinc = $btw + $invoicetotal;
+
+        $pdf .= '
                          <tr>
                             <td></td>
                             <td></td>
@@ -476,17 +480,20 @@ class Invoice extends Base
             <tr >
                 <td colspan="3">';
 
-                if (strlen($invoice['beschrijvingbottom']) > 2) {
-                    $pdf .= ' <b>' . $invoice['beschrijvingbottom'] . '</b>';
-                }
+        if (strlen($invoice['beschrijvingbottom']) > 2) {
+            $pdf .= ' <b>' . $invoice['beschrijvingbottom'] . '</b>';
+        }
 
-                $pdf .= '    <br /><br /><br />
+        $pdf .= '    <br /><br /><br />
                     Wil je de ' . number_format((float)$invoicetotalinc, 2, ',', '') . ' voor ' . $duedate . ' aan ons overmaken met het factuurnummer ' . $invoice['number'] . ' erbij ?<br /> Ons rekeningnummer is NL65 RABO 0303 5495 21.<br />
                     Bel gerust: 06-41844518 of email bart@2sonder.com bij vragen.<br />
                 </td>
             </tr>
         </table>';
 
+        echo $pdf;
+
+        die();
         return $pdf;
     }
 
@@ -496,18 +503,17 @@ class Invoice extends Base
         $invoice = $this->sonderInvoice->getById($_GET['id']);
         //$lines = $this->sonderInvoiceLine->getByInvoiceId($invoice['id']);
         $lines = [];
-        foreach($this->sonderInvoiceLine->getByInvoiceId($invoice['id']) as $line)
-        {
+        foreach ($this->sonderInvoiceLine->getByInvoiceId($invoice['id']) as $line) {
             $ls[$line['id']] = $line;
         }
 
         $keys = array_keys($ls);
-        for($i=0;$i<$values['linecount'];$i++)
-        {
-            $lineid = $values['id_'.$i];
-            if(in_array($lineid,$keys))
-            {
-                $lines[] = $ls[$lineid];
+        for ($i = 0; $i < $values['linecount']; $i++) {
+            if(isset($values['id_' . $i])) {
+                $lineid = $values['id_' . $i];
+                if (in_array($lineid, $keys)) {
+                    $lines[] = $ls[$lineid];
+                }
             }
         }
 
@@ -519,7 +525,7 @@ class Invoice extends Base
             return true;
         }
 
-        $pdf = $this->fillPdfTemplate($client,$invoice,$lines);
+        $pdf = $this->fillPdfTemplate($client, $invoice, $lines);
 
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();

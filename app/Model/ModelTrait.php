@@ -92,14 +92,17 @@ trait ModelTrait
     {
         $this->db->getStatementHandler()->withLogging();
 
+//        print_r($values);
+
         if (isset($values['id'])) {
             $q = $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
         } else {
             $q = $this->db->table(self::TABLE)->save($values);
         }
 
-        print_r($this->db->getLogMessages());
 
+  //      print_r($this->db->getLogMessages());
+//die();
         return $q;
     }
 

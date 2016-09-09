@@ -45,10 +45,6 @@ class TaskCreation extends Base
             $this->fireEvents($task_id, $values);
         }
 
-    //    print_r($this->db->getLogMessages());
-
-
-
         return (int) $task_id;
     }
 
