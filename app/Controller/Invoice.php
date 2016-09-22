@@ -167,9 +167,6 @@ class Invoice extends Base
                 $invoiceline['sonder_product_id'] = $contract['sonder_product_id'];
                 $invoiceline['sonder_contract_id'] = $contract['id'];
 
-
-                print_r($invoiceline);
-
                 $this->sonderInvoiceLine->save($invoiceline);
             }
         }
@@ -340,6 +337,7 @@ class Invoice extends Base
             $invoice['adres'] = $client['adres'];
             $invoice['postcode'] = $client['postcode'];
             $invoice['city'] = $client['city'];
+            $invoice['department'] = $client['department'];
         }
 
         $invoice['beschrijvingtop'] = $this->exchangeShortcodes($shortcodes, $invoice['beschrijvingtop']);
@@ -401,7 +399,15 @@ class Invoice extends Base
                             <td>' . $invoice['name'] . '<br />
                                 ' . $invoice['contact'] . '<br />
                                 ' . $invoice['adres'] . '<br /> 
-                                ' . $invoice['postcode'] . ' ' . $invoice['city'] . '<br /> 
+                                ' . $invoice['postcode'] . ' ' . $invoice['city'] . '<br /> ';
+
+         if(strlen($invoice['department']) > 0)
+         {
+             $pdf .= 'TAV '.$invoice['department'].'<br />';
+         }
+
+
+        $pdf .= '
                             </td>
                             <td></td>
                             <td></td>

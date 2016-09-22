@@ -33,6 +33,9 @@
         <?= $this->form->label(t('City'), 'city') ?>
         <?= $this->form->text('city', $client, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
 
+        <?= $this->form->label(t('Department'), 'department') ?>
+        <?= $this->form->text('department', $client, $errors, array('autofocus', 'maxlength="200"', 'tabindex="1"'), 'form-input-large') ?>
+
 
         <?= $this->form->label(t('Parent client'), 'client'); ?>
         <select name="parent_id">
