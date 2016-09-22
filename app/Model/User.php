@@ -14,6 +14,9 @@ use Kanboard\Core\Security\Role;
  */
 class User extends Base
 {
+
+    use ModelTrait;
+
     /**
      * SQL table name
      *
@@ -39,6 +42,8 @@ class User extends Base
     {
         return $this->db->table(self::TABLE)->eq('id', $user_id)->exists();
     }
+
+
 
     /**
      * Return true if the user is active
@@ -234,7 +239,7 @@ class User extends Base
         $result = array();
 
         foreach ($users as $user) {
-            $result[''.$user['id']] = $this->getFullname($user);
+            $result[$user['id']] = $this->getFullname($user);
         }
 
         asort($result);

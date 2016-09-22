@@ -94,7 +94,7 @@ class Taskmodification extends Base
         $values['sonder_product_id'] = $t['sonder_product_id'];
         $values['sonder_contract_id'] = $t['sonder_contract_id'];
 
-            $this->response->html($this->template->render('task_modification/edit_task', array(
+        $this->response->html($this->template->render('task_modification/edit_task', array(
             'project' => $project,
             'values' => $values,
             'errors' => $errors,

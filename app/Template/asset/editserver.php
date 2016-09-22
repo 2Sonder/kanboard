@@ -12,7 +12,6 @@
                 <th class="column-10">Client</th>
                 <th></th>
             </tr>
-            <?php $server = $server[0]; ?>
             <tr>
                 <td>
                     <?php echo $server['id']; ?>

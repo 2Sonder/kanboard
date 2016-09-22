@@ -7,7 +7,7 @@ use Kanboard\Event\TaskEvent;
 /**
  * Task Modification
  *
- * @package  Kanboard\Model
+ * @package  model
  * @author   Frederic Guillot
  */
 class TaskModification extends Base
@@ -27,6 +27,8 @@ class TaskModification extends Base
         //TODO do something usefull with this
         if(strlen($values['sonder_client_id'])==0){$values['sonder_client_id'] = 0;}
 
+    //    $this->db->getStatementHandler()->withLogging();
+
         $this->prepare($values);
         $result = $this->db->table(Task::TABLE)->eq('id', $original_task['id'])->update($values);
 
@@ -34,6 +36,7 @@ class TaskModification extends Base
             $this->fireEvents($original_task, $values);
         }
 
+     //   print_r($this->db->getLogMessages());
 
         return $original_task['id'];
     }

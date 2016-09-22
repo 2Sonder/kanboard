@@ -22,6 +22,10 @@
 </li>
 <li>
     <i class="fa fa-folder fa-fw"></i>
+    <?= $this->url->link(t('Quotations'), 'quotation', 'index') ?>
+</li>
+<li>
+    <i class="fa fa-folder fa-fw"></i>
     <?= $this->url->link(t('Distribution key'), 'invoice', 'key') ?>
 </li>
 <li>

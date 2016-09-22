@@ -9,15 +9,17 @@
             <th>Status</th>
             <th>Date</th>
             <th>Period end</th>
+            <th>Contract</th>
         </tr>
         <?php foreach($invoices as $index => $invoice){ ?>
         <tr>
             <td><?php echo $invoice['id']; ?></td>
-            <td><a href="?controller=invoice&action=newinvoice&id=<?php echo $invoice['invoiceid']; ?>"><?php echo $invoice['invoicenumber']; ?></a></td>
-            <td><?php echo $invoice['name']; ?></td>
+            <td><a href="?controller=invoice&action=newinvoice&id=<?php echo $invoice['id']; ?>"><?php echo $invoice['invoicenumber']; ?></a></td>
+            <td><?php echo $invoice['clientname']; ?></td>
             <td><?php echo $invoice['status']; ?></td>
             <td><?php echo date('d-m-Y',strtotime($invoice['date'])); ?></td>
             <td><?php echo date('d-m-Y',strtotime($invoice['dateto'])); ?></td>
+            <td><a href="?controller=invoice&action=editcontract&id=<?php echo $invoice['contractid']; ?>"><?php echo $invoice['contractname']; ?></a></td>
         </tr>
         <?php } ?>
     </table> 

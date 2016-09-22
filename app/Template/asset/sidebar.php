@@ -13,5 +13,9 @@
         <li>
             <?= $this->url->link(t('Servers'), 'asset', 'server', array()) ?>
         </li>
+       <!--
+        <li>
+            <?= $this->url->link(t('Legal Contractsas'), 'asset', 'legal', array()) ?>
+        </li>-->
     </ul>
 </div>

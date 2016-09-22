@@ -19,6 +19,7 @@ class Auth extends Base
      */
     public function login(array $values = array(), array $errors = array())
     {
+
         if ($this->userSession->isLogged()) {
             $this->response->redirect($this->helper->url->to('app', 'index'));
         }

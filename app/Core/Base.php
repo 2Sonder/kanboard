@@ -89,6 +89,7 @@ use Pimple\Container;
  * @property \Kanboard\Model\TaskAnalytic                               $taskAnalytic
  * @property \Kanboard\Model\TaskCreation                               $taskCreation
  * @property \Kanboard\Model\SonderCalender                             $sonderCalender
+ * @property \Kanboard\Model\SonderGoogle                               $sonderGoogle
  * @property \Kanboard\Model\TaskDuplication                            $taskDuplication
  * @property \Kanboard\Model\TaskExternalLink                           $taskExternalLink
  * @property \Kanboard\Model\TaskFinder                                 $taskFinder

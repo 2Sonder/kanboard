@@ -41,9 +41,53 @@ class SonderInvoice extends SonderBase
 
     public function getAllWithClients()
     {
-        return $this->db->table(self::TABLE)
-            ->select('*,sonder_invoice.number AS invoicenumber, sonder_invoice.id AS invoiceid, sonder_invoice.id AS id')
+      //  $this->db->getStatementHandler()->withLogging();
+
+        $q = $this->db->table(self::TABLE)
+            ->select('*, sonder_invoice.number AS invoicenumber, sonder_invoice.id AS id, t2.id AS contractid, t2.name AS contractname, t1.name AS clientname ')
             ->left('sonder_client', 't1', 'id', self::TABLE, 'sonder_client_id')
+            ->left('sonder_contract', 't2', 'id', self::TABLE, 'sonder_contract_id')
             ->findAll();
+
+        //print_r($this->db->getLogMessages());
+
+        return $q;
+    }
+
+    public function getAllContractIds()
+    {
+        $ids = [];
+        foreach($this->db->table(self::TABLE)->asc('sonder_contract_id')->findAllByColumn('sonder_contract_id') as $contract)
+        {
+            if($contract > 0)
+            {
+                $ids[] = $contract;
+            }
+        }
+        return $ids;
+    }
+
+    public function getAllMonthlyInvoices()
+    {
+
+        $this->db->getStatementHandler()->withLogging();
+
+        $invoices = [];
+        foreach($this->db->table(self::TABLE)->findAll() as $invoice)
+        {
+        //    echo $invoice['id'];
+            if($invoice['sonder_contract_id'] > 0)
+            {
+
+            }
+            else
+            {
+                $invoices[] = $invoice;
+            }
+        }
+
+   //         print_r($this->db->getLogMessages());
+
+        return $invoices;
     }
 }

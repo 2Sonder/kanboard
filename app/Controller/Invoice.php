@@ -39,12 +39,12 @@ class Invoice extends Base
                 $dates[0]['end'] = date('Y-m-t', strtotime("+1 month"));
 
                 $cl = $this->sonderInvoice->getByPeriodAndClient($dates[0]['start'], $dates[0]['end'], $client['id']);
-
                 if (!$cl) {
 
+
                     $tasks = $this->task->getPeriodByClient($dates[0]['start'], $dates[0]['end'], $client['id']);
-                    $contracts = $this->sonderContract->getPeriodByClient($dates[0]['start'], $dates[0]['end'], $client['id']);
-                    if (count($tasks) > 0 || count($contracts) > 0) {
+                    if (count($tasks) > 0) {
+
                         $invoice = array();
 
                         $last = ($last + 1);
@@ -69,14 +69,15 @@ class Invoice extends Base
                     $dates[$i]['start'] = date('Y-m-01', strtotime("-$i month"));
                     $dates[$i]['end'] = date('Y-m-t', strtotime("-$i month"));
 
+                    // if there is an invoice.
                     $cl = $this->sonderInvoice->getByPeriodAndClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                     if (!$cl) {
                         //id 	number 	beschrijvingtop 	beschrijvingbottom 	sonder_client_id 	status 	date 	dateto
+
+
                         $tasks = $this->task->getPeriodByClient($dates[$i]['start'], $dates[$i]['end'], $client['id']);
                         if (count($tasks) > 0) {
-
                             $invoice = array();
-
                             $last = ($last + 1);
                             $invoice['number'] = 'SO' . $number;
                             $number = $number + 1;
@@ -98,53 +99,81 @@ class Invoice extends Base
         }
 
         //save invoicelines to invoice
-        foreach ($this->sonderInvoice->getAll() as $invoice) {
+        foreach ($this->sonderInvoice->getAllMonthlyInvoices() as $invoice) {
 
             $tasks = $this->task->getPeriodByClient($invoice['date'], $invoice['dateto'], $invoice['sonder_client_id']);
             foreach ($tasks as $task) {
-                $line = $this->sonderInvoiceLine->existBytaskId($task['id']);
-                if (!$line) {
 
-                    if (isset($task['sonder_contract_id']) && $task['sonder_contract_id'] > 0) {
+                if (isset($task['sonder_contract_id']) && $task['sonder_contract_id'] > 0) {
+                } else {
 
-                    } else {
-                        //id sonder_invoice_id titel price discount quantity
+                    $invoiceline = $this->sonderInvoiceLine->existBytaskId($task['id']);
+                    if (!$invoiceline) {
                         $invoiceline = array();
-                        $invoiceline['sonder_invoice_id'] = $invoice['id'];
-                        $invoiceline['titel'] = $task['title'];
-                        $invoiceline['price'] = '';
-                        $invoiceline['discount'] = '0';
-                        $invoiceline['quantity'] = $task['billable_hours'];
-                        $invoiceline['task_id'] = $task['id'];
-                        $invoiceline['sonder_product_id'] = $task['sonder_product_id'];
-                        $this->sonderInvoiceLine->save($invoiceline);
                     }
-                }
-            }
+                    else{
+                        $invoiceline = $invoiceline[0];
+                    }
 
-            $contracts = $this->sonderContract->getPeriodByClient($invoice['date'], $invoice['dateto'], $invoice['sonder_client_id']);
-            foreach ($contracts as $contract) {
-                $line = $this->sonderInvoiceLine->existByContractId($contract['id']);
-                if (!$line) {
-
-                    $invoiceline = array();
                     $invoiceline['sonder_invoice_id'] = $invoice['id'];
-                    $invoiceline['titel'] = $contract['name'];
-                    $invoiceline['quantity'] = $contract['uren'];
-
-                    $invoiceline['price'] = '';
-                    $invoiceline['discount'] = '0';
-
-                    $invoiceline['sonder_contract_id'] = $contract['id'];
-                    $invoiceline['sonder_product_id'] = $contract['sonder_product_id'];
-
+                    $invoiceline['titel'] = $task['title'];
+                    $invoiceline['price'] = 0;
+                    $invoiceline['discount'] = 0;
+                    $invoiceline['quantity'] = (double)$task['billable_hours'];
+                    $invoiceline['task_id'] = (int)$task['id'];
+                    $invoiceline['sonder_product_id'] = $task['sonder_product_id'];
                     $this->sonderInvoiceLine->save($invoiceline);
-
-
                 }
             }
-
         }
+    }
+
+    public function generateContractInvoices()
+    {
+        $settings = $this->sonderSettings->getAllByKey();
+        $number = $this->sonderInvoice->getNextInvoiceNumber();
+        if (!$number) {
+            $number = ($settings['number']['settingvalue'] + 1);
+        }
+
+        $last = $this->sonderInvoice->getLastId();
+        $ids = $this->sonderInvoice->getAllContractIds();
+        foreach($this->sonderContract->getAll() as $contract)
+        {
+            if(!in_array($contract['id'],$ids))
+            {
+                $invoice = array();
+                $last = ($last + 1);
+                $invoice['id'] = $last;
+
+                $invoice['number'] = 'SO' . $number;
+                $number = $number + 1;
+
+                $invoice['beschrijvingtop'] = $settings['beschrijvingtop']['settingvalue'];
+                $invoice['beschrijvingbottom'] = $settings['beschrijvingbottom']['settingvalue'];
+                $invoice['sonder_client_id'] = $contract['sonder_client_id'];
+                $invoice['status'] = 'Concept';
+                $invoice['date'] = date('Y-m-d H:i:s');
+                $invoice['dateto'] = date('Y-m-d H:i:s',strtotime(date("Y-m-d", time()) . " + 365 day"));
+                $invoice['sonder_contract_id'] = $contract['id'];
+                $this->sonderInvoice->save($invoice,false);
+
+                $invoiceline = array();
+                $invoiceline['sonder_invoice_id'] = $invoice['id'];
+                $invoiceline['titel'] = $contract['name'];
+                $invoiceline['price'] = 0;
+                $invoiceline['discount'] = 0;
+                $invoiceline['quantity'] = (double)$contract['uren'];
+                $invoiceline['sonder_product_id'] = $contract['sonder_product_id'];
+                $invoiceline['sonder_contract_id'] = $contract['sonder_contract_id'];
+
+
+                print_r($invoiceline);
+
+                $this->sonderInvoiceLine->save($invoiceline);
+            }
+        }
+     //   die();
     }
 
     public function settings()
@@ -160,10 +189,24 @@ class Invoice extends Base
         )));
     }
 
+    public function addSendInvoicesToBalance()
+    {
+        foreach($this->sonderInvoice->getAll() as $invoice)
+        {
+            if($invoice['status'] == 'Send')
+            {
+                //TODO: Post invoice pdf to 'purchasing'
+
+            }
+        }
+
+    }
+
     public function index()
     {
-
+        $this->generateContractInvoices();
         $this->generateMonthlyInvoices();
+        $this->addSendInvoicesToBalance();
 
         $project_ids = $this->sonderClient->getAllIds();
 
@@ -236,7 +279,8 @@ class Invoice extends Base
 
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
-                'debitcredit' => $this->sonderDebitcredit->getAll(),
+                'debitcredit' => $this->sonderDebitcredit->getAllFromBankImport(),
+                'openstatements' => $this->sonderDebitcredit->getAllFromSystemImport()
             ),
             'title' => 'Finance / Purchasing',
             'sidebar_template' => 'invoice/sidebar',
@@ -438,7 +482,7 @@ class Invoice extends Base
                         <tr>
                             <td></td>
                             <td></td>
-                            <td align="right">Korting ('.$invoice['percentdiscount'].'%)</td>
+                            <td align="right">Korting (' . $invoice['percentdiscount'] . '%)</td>
                             <td align="right">EUR -' . number_format((float)$discount, 2, ',', '') . '</td>
                         </tr>            
                     ';
@@ -490,7 +534,7 @@ class Invoice extends Base
                 </td>
             </tr>
         </table>';
-        
+
         return $pdf;
     }
 
@@ -506,7 +550,7 @@ class Invoice extends Base
 
         $keys = array_keys($ls);
         for ($i = 0; $i < $values['linecount']; $i++) {
-            if(isset($values['id_' . $i])) {
+            if (isset($values['id_' . $i])) {
                 $lineid = $values['id_' . $i];
                 if (in_array($lineid, $keys)) {
                     $lines[] = $ls[$lineid];

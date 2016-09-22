@@ -96,7 +96,8 @@ class ClassProvider implements ServiceProviderInterface
             'SonderBillablehours',
             'SonderInvestedhours',
             'SonderContract',
-            'SonderRoute'
+            'SonderRoute',
+            'SonderQuotation'
         ),
         'Validator' => array(
             'ActionValidator',

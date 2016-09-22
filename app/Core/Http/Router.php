@@ -113,6 +113,17 @@ class Router extends Base
         $this->action = $this->sanitize($action, 'index');
         $this->plugin = ucfirst($this->sanitize($plugin));
 
+        /*
+        $task = $this->request->getStringParam('task');
+        if(isset($task))
+        {
+            $this->task = $task;
+            $class = $this->getTaskClassName();
+            $instance = new $class($this->container);
+            $instance->{$this->action}();
+            return $instance;
+        }*/
+
         return $this->executeAction();
     }
 
@@ -146,11 +157,24 @@ class Router extends Base
             throw new RuntimeException('Action not implemented');
         }
 
+
         $instance = new $class($this->container);
         $instance->beforeAction();
         $instance->{$this->action}();
         return $instance;
     }
+
+    /**
+     * Get task class name
+     *
+     * @access private
+     * @return string
+     */
+    private function getTaskClassName()
+    {
+        return '\Kanboard\Tasks\\'.$this->task;
+    }
+
 
     /**
      * Get controller class name

@@ -88,13 +88,19 @@ trait ModelTrait
         return $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
     }
 
-    public function save($values)
+    public function save($values,$update = true)
     {
-        if (isset($values['id'])) {
+    //    print_r($values);
+
+        $this->db->getStatementHandler()->withLogging();
+
+        if (isset($values['id']) && $update) {
             $q = $this->db->table(self::TABLE)->eq('id', $values['id'])->update($values);
         } else {
             $q = $this->db->table(self::TABLE)->save($values);
         }
+
+    //    print_r($this->db->getLogMessages());
 
         return $q;
     }

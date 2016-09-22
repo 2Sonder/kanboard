@@ -50,7 +50,20 @@ class SonderDebitcredit extends SonderBase {
     {
         return $this->db->table(self::TABLE)->eq('bankid',$id)->findAll('id'); 
     }
-    
+
+    public function getAllFromBankImport()
+    {
+        $q = $this->db->table(self::TABLE)->eq('open',0)->findAll();
+
+        return $q;
+    }
+    public function getAllFromSystemImport()
+    {
+        $q = $this->db->table(self::TABLE)->eq('open',1)->findAll();
+
+        return $q;
+    }
+
 
     public function getAllWithdrawalsByMonthAndUser($datetime,$userid)
     {
