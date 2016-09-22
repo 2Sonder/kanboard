@@ -110,8 +110,7 @@ class Invoice extends Base
                     $invoiceline = $this->sonderInvoiceLine->existBytaskId($task['id']);
                     if (!$invoiceline) {
                         $invoiceline = array();
-                    }
-                    else{
+                    } else {
                         $invoiceline = $invoiceline[0];
                     }
 
@@ -138,10 +137,8 @@ class Invoice extends Base
 
         $last = $this->sonderInvoice->getLastId();
         $ids = $this->sonderInvoice->getAllContractIds();
-        foreach($this->sonderContract->getAll() as $contract)
-        {
-            if(!in_array($contract['id'],$ids))
-            {
+        foreach ($this->sonderContract->getAll() as $contract) {
+            if (!in_array($contract['id'], $ids)) {
                 $invoice = array();
                 $last = ($last + 1);
                 $invoice['id'] = $last;
@@ -154,9 +151,9 @@ class Invoice extends Base
                 $invoice['sonder_client_id'] = $contract['sonder_client_id'];
                 $invoice['status'] = 'Concept';
                 $invoice['date'] = date('Y-m-d H:i:s');
-                $invoice['dateto'] = date('Y-m-d H:i:s',strtotime(date("Y-m-d", time()) . " + 365 day"));
+                $invoice['dateto'] = date('Y-m-d H:i:s', strtotime(date("Y-m-d", time()) . " + 365 day"));
                 $invoice['sonder_contract_id'] = $contract['id'];
-                $this->sonderInvoice->save($invoice,false);
+                $this->sonderInvoice->save($invoice, false);
 
                 $invoiceline = array();
                 $invoiceline['sonder_invoice_id'] = $invoice['id'];
@@ -170,7 +167,7 @@ class Invoice extends Base
                 $this->sonderInvoiceLine->save($invoiceline);
             }
         }
-     //   die();
+        //   die();
     }
 
     public function settings()
@@ -188,10 +185,8 @@ class Invoice extends Base
 
     public function addSendInvoicesToBalance()
     {
-        foreach($this->sonderInvoice->getAll() as $invoice)
-        {
-            if($invoice['status'] == 'Send')
-            {
+        foreach ($this->sonderInvoice->getAll() as $invoice) {
+            if ($invoice['status'] == 'Send') {
                 //TODO: Post invoice pdf to 'purchasing'
 
             }
@@ -401,11 +396,9 @@ class Invoice extends Base
                                 ' . $invoice['adres'] . '<br /> 
                                 ' . $invoice['postcode'] . ' ' . $invoice['city'] . '<br /> ';
 
-         if(strlen($invoice['department']) > 0)
-         {
-             $pdf .= 'TAV '.$invoice['department'].'<br />';
-         }
-
+        if (isset($invoice['department']) && strlen($invoice['department']) > 0) {
+            $pdf .= 'TAV ' . $invoice['department'] . '<br />';
+        }
 
         $pdf .= '
                             </td>
@@ -457,7 +450,7 @@ class Invoice extends Base
                             <th align="right">Bedrag</th>
                             <th align="right">Totaal</th>  
                         </tr>';
-        foreach ($lines as $line) {
+        foreach ($lines as $index => $line) {
             $product = $this->sonderProduct->getById($line['sonder_product_id']);
             $linetotal = (floatval($product['price']) * floatval($line['quantity']));
             $pdf .= '<tr>
@@ -467,6 +460,13 @@ class Invoice extends Base
                             <td align="right">EUR ' . number_format((float)$linetotal, 2, ',', '') . '</td>
                         </tr><tr><td colspan="4"><hr /></td></tr>';
             $invoicetotal += $linetotal;
+
+            if($index > 6)
+            {
+                $pdf .= '<tr>
+        <td colspan="4">zie volgende pagina (1 van 2)</td>
+</tr></table><table>';
+            }
         }
 
         //total
