@@ -165,7 +165,7 @@ class Invoice extends Base
                 $invoiceline['discount'] = 0;
                 $invoiceline['quantity'] = (double)$contract['uren'];
                 $invoiceline['sonder_product_id'] = $contract['sonder_product_id'];
-                $invoiceline['sonder_contract_id'] = $contract['sonder_contract_id'];
+                $invoiceline['sonder_contract_id'] = $contract['id'];
 
 
                 print_r($invoiceline);
