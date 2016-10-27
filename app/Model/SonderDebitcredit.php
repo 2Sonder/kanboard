@@ -64,6 +64,26 @@ class SonderDebitcredit extends SonderBase {
         return $q;
     }
 
+    public function getByUserAndMonth($user_id,$month)
+    {
+//        $this->db->getStatementHandler()->withLogging();
+
+
+        $start = date('Y-m-1 H:i:s',strtotime($month));
+        $end = date("Y-m-t H:i:s",strtotime($month));
+
+        
+        $periode = $this->db->table(self::TABLE)
+            ->eq('user_id',$user_id)
+            ->lte('entryTimestamp', $end)
+            ->gte('entryTimestamp', $start)
+            ->findAll();
+
+  //             print_r($this->db->getLogMessages());
+
+        return $periode;
+    }
+
 
     public function getAllWithdrawalsByMonthAndUser($datetime,$userid)
     {

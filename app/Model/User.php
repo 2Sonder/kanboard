@@ -367,6 +367,13 @@ class User extends Base
         });
     }
 
+    public function getAllAdmins()
+    {
+        $q = $this->db->table(self::TABLE)->eq('role','app-admin')->findAll();
+        return $q;
+    }
+
+
     /**
      * Enable public access for a user
      *

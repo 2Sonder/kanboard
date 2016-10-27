@@ -25,3 +25,15 @@ $('.DeleteInvoiceLine').click(function () {
     $('#invoiceLine_'+$(this).attr('id')).remove();
     $('#linecount').val($('#linecount').val()-1);
 });
+
+//DC invoice switch
+$('#form-dc').change(function () {
+    value = $(this).val();
+    $('.C').show();
+    $('.D').show();
+    if(value == 'D'){
+        $('.C').hide();
+    }else if(value == 'C'){
+        $('.D').hide();
+    }
+});

@@ -70,14 +70,7 @@
                     <div class="dropdown dropdown-icon">
                         <a href="#" class="dropdown-menu dropdown-menu-link-icon"><i style="position:relative;top:7px;" class="fa fa-plus fa-2x fa-fw"></i></a>
                         <ul>
-                            <?php if ($has_project_creation_access): ?>
-                                <li><i class="fa fa-plus fa-fw"></i><?= $this->url->link(t('New project'), 'ProjectCreation', 'create', array(), false, 'popover') ?></li>
-                            <?php endif ?>
-                            <?php if ($is_private_project_enabled): ?>
-                                <li>
-                                    <i class="fa fa-lock fa-fw"></i><?= $this->url->link(t('New private project'), 'ProjectCreation', 'createPrivate', array(), false, 'popover') ?>
-                                </li>
-                            <?php endif ?>
+                            <?= $this->render('app/creationmenu'); ?>
                         </ul>
                     </div>
                 <?php endif ?>

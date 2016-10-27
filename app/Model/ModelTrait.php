@@ -90,7 +90,7 @@ trait ModelTrait
 
     public function save($values,$update = true)
     {
-    //    print_r($values);
+   //     print_r($values);
 
         $this->db->getStatementHandler()->withLogging();
 
@@ -100,7 +100,9 @@ trait ModelTrait
             $q = $this->db->table(self::TABLE)->save($values);
         }
 
-    //    print_r($this->db->getLogMessages());
+  //      print_r($this->db->getLogMessages());
+
+//        die();
 
         return $q;
     }
@@ -132,6 +134,16 @@ trait ModelTrait
     public function getAllIds()
     {
         return $this->db->table(self::TABLE)->asc('name')->findAllByColumn('id');
+    }
+
+    public function getSelectList($key,$value)
+    {
+        $list = array();
+        foreach($this->db->table(self::TABLE)->findAll() as $row)
+        {
+            $list[$row[$key]] = $row[$value];
+        }
+        return $list;
     }
 
     public function getById($id)

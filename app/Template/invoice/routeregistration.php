@@ -28,6 +28,7 @@
     <table class="table-fixed table-small">
         <tr>
             <th class="column-3"></th>
+            <th class="column-3"></th>
             <th class="column-10"></th>
             <th class="column-10"></th>
             <th class="column-10"></th>
@@ -42,6 +43,7 @@
             <th class="column-3"></th>
         </tr>
         <tr>
+            <th class="column-3"></th>
             <th class="column-3">#</th>
             <th class="column-10">User</th>
             <th class="column-10">Date</th>
@@ -55,41 +57,46 @@
             <th class="column-10">Kilometers</th>
             <th class="column-10"></th>
             <th class="column-3"></th>
-
         </tr>
-
         <?php foreach ($routes as $index => $route) { ?>
             <tr>
+                <td><a href="/?controller=invoice&action=editroute&id=<?php echo $route['id']; ?>">edit</a></td>
                 <td><?php echo $route['id']; ?></td>
-                <td><?php echo $route['user_id']; ?></td>
+                <td><?php echo $route['username']; ?></td>
+                <td><?php echo date('Y-m-d',strtotime($route['date'])); ?></td>
+                <td><?php echo $route['clientname']; ?></td>
 
-                <td><?php echo $route['date']; ?></td>
-                <td><?php echo $route['sonder_client_id']; ?></td>
                 <td><?php echo $route['postcode']; ?></td>
                 <td><?php echo $route['adres']; ?></td>
-
                 <td><?php echo $route['plaats']; ?></td>
+
                 <td><?php echo $route['postcode2']; ?></td>
                 <td><?php echo $route['adres2']; ?></td>
                 <td><?php echo $route['plaats2']; ?></td>
+
                 <td><?php echo $route['km']; ?></td>
                 <td></td>
             </tr>
         <?php } ?>
         <tr>
             <td></td>
+            <td></td>
+
             <td><?= $this->form->select('user_id', $users , array(), array(), array('required'), 'form-input-large'); ?></td>
             <td><?= $this->helper->form->text('date', array(), array(), array(), 'form-date') ?></td>
             <td><?= $this->form->select('sonder_client_id', $clients , array(), array(), array('required'), 'form-input-large'); ?></td>
-            <td><input type="text" value="" name="adres" /></td>
             <td><input type="text" value="" name="postcode" /></td>
+            <td><input type="text" value="" name="adres" /></td>
+
             <td><input type="text" value="" name="plaats" /></td>
-            <td><input type="text" value="" name="adres2" /></td>
+
             <td><input type="text" value="" name="postcode2" /></td>
+            <td><input type="text" value="" name="adres2" /></td>
+
             <td><input type="text" value="" name="plaats2" /></td>
             <td><input type="text" value="" name="km" /></td>
             <td>
-                <input type="submit" class="btn btn-info" value="Add category" />
+                <input type="submit" class="btn btn-info" value="Add route" />
             </td>
         </tr>
     </table>

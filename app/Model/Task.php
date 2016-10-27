@@ -191,6 +191,24 @@ class Task extends Base
         return $this->db->table(self::TABLE)->eq('id',$id)->findOne();
     }
 
+    public function getByUserAndMonth($user_id,$month)
+    {
+      //  $this->db->getStatementHandler()->withLogging();
+
+        $start = date('Y-m-1',strtotime($month));
+        $end = date("Y-m-t",strtotime($month));
+
+        $periode = $this->db->table(self::TABLE)
+            ->eq('owner_id',$user_id)
+            ->lte('date_due', strtotime($end))
+            ->gte('date_due', strtotime($start))
+            ->findAll();
+
+ //       print_r($this->db->getLogMessages());
+
+        return $periode;
+    }
+
     public function getPeriodByClient($start, $end, $client_id)
     {
         $periode = $this->db->table(self::TABLE)

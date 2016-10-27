@@ -1,4 +1,4 @@
-<form action="/?controller=invoice&action=saveproduct" method="POST"/>
+<form action="/?controller=invoice&action=savepurchasing" method="POST"/>
     <?= $this->form->csrf(); ?>
     <?
     /*
@@ -33,7 +33,7 @@
             <th class="column-10">Ledgerid</th>
             <th class="column-5">Extax</th>
             <th class="column-5">Inctax</th>
-            <th class="column-5">User</th>
+            <th class="column-10">User</th>
             <th class="column-10"></th>
         </tr>
         <tr class="">
@@ -42,40 +42,20 @@
             <td><input type="text" value="<?php echo $debitcredit['description']; ?>" name="description"></td>
             <td><?php echo date('d-m-Y', strtotime($debitcredit['entryTimestamp'])); ?></td>
             <td align="right">&euro; <?php echo $debitcredit['price']; ?></td>
-
             <td><?php echo $debitcredit['accountName']; ?></td>
             <td><?php echo $debitcredit['account']; ?></td>
-
-
             <td>
-                <select name="user_id">
-                    <option value=""></option>
-                    <?php foreach ($ledgers as $ledger){ ?>
-                        <option <?php
-                        if ($debitcredit['ledger_id'] == $ledger['id']) {
-                            echo 'selected';
-                        }
-                        ?> value="<?= $ledger['id']; ?>"><?= $ledger['name']; ?></option>
-                    <?php } ?>
-                </select>
+                <?= $this->form->select('ledgerid', $ledgers , $debitcredit, $errors, array('required'), 'form-input-large') ?>
             </td>
             <td align="right">&euro; <?php echo $debitcredit['extax']; ?></td>
             <td align="right">&euro; <?php echo $debitcredit['inctax']; ?></td>
             <td>
-                <select name="user_id">
-                    <option value=""></option>
-                    <?php foreach ($users as $user){ ?>
-                        <option <?php
-                        if ($debitcredit['user_id'] == $user['id']) {
-                            echo 'selected';
-                        }
-                        ?> value="<?= $user['id']; ?>"><?= $user['name']; ?></option>
-                    <?php } ?>
-                </select>
+                <?= $this->form->select('user_id', $users , $debitcredit, $errors, array('required'), 'form-input-large') ?>
             </td>
             <td>
-                <input type="hidden" name="sonder_entity_name" value="sonder_debitcredit"/>
-                <input type="hidden" name="sonder_entity_id" value="<?php echo $debitcredit['id']; ?>"/>
+                <input type="hidden" name="id" value="<?php echo $debitcredit['id']; ?>"/>
+        <!--        <input type="hidden" name="sonder_entity_name" value="sonder_debitcredit"/>
+                <input type="hidden" name="sonder_entity_id" value="<?php echo $debitcredit['id']; ?>"/> -->
                 <input type="submit" class="btn btn-info" value="Save transaction"/>
             </td>
 

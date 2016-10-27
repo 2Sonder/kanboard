@@ -1,34 +1,39 @@
+<ul>
+    <li>Overview excluding taxes.</li>
+</ul>
 <table>
     <tr>
-        <th>Month</th>
-        <?php foreach($users as $user){ ?>
-        <th><?php echo $user['name']; ?></th>
-        <?php } ?>
+        <? foreach ($headers as $header) {
+            ?>
+            <th><?php echo $header; ?></th><?
+        } ?>
     </tr>
-    <?php foreach($months as $month){ ?>
-    <tr>
-        <td rowspan="4"><?php echo $month['month']; ?></td>
-        <?php foreach($users as $user){ ?>
-            <th><?php if(isset($month[$user['id']])){ echo $month[$user['id']]['billable_hours']; } ?></th>
-        <?php } ?>
-    </tr>
-    <tr>
-        <?php foreach($users as $user){ ?>
-            <th><?php echo $user['id']; ?></th>
-        <?php } ?>
-    </tr>
-    <tr>
-        <?php foreach($users as $user){ ?>
-            <th><?php echo $user['id']; ?></th>
-        <?php } ?>
-    </tr>
-    <tr>
-        <?php foreach($users as $user){ ?>
-            <th><?php echo $user['id']; ?></th>
-        <?php } ?>
-    </tr>
-    <?php } ?>
-    <tr>
-        <td></td>
-    </tr>
+    <? foreach ($months as $month) { ?>
+        <tr>
+            <td><?php echo $month['month']; ?></td>
+            <td><?php if($month['sharedtotal'] > 0){ echo $month['sharedtotal']; } ?></td>
+            <? foreach ($month['users'] as $user) {
+                ?>
+                <td>
+                    <?php if (isset($user['investedhours']) && $user['investedhours'] > 0) { ?>
+                        invested hours: <?php echo $user['investedhours']; ?>
+                    <?php }
+                    if (isset($user['billablehours']) && count($user['billablehours']) > 0) { ?>
+                        billable hours:
+                        <?php  foreach ($user['billablehours'] as $rate) {
+                            ?><?php echo $rate['value']; ?> &nbsp; <?php echo $rate['key']; ?><br/><?
+                        } ?>
+                    <?php } ?>
+
+                    <?php if(isset($user['debit']) && $user['debit'] > 0){ ?>
+                        <div>
+                            cost:<?php echo $user['debit']; ?>
+                        </div>
+                    <?php } ?>
+                </td>
+                <?
+            } ?>
+        </tr>
+        <tr><td colspan="<?php echo count($headers); ?>"><hr/></td></tr>
+    <? } ?>
 </table>

@@ -6,6 +6,7 @@
             <th class="column-6">Bewerken</th>
             <?php } ?>
             <th class="column-3">#</th>
+            <th class="column-3"></th>
             <th class="column-10">Server</th>
             <th class="column-10">Ipv4</th>
             <th class="column-10">Client</th>

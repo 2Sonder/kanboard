@@ -8,7 +8,9 @@
     </form>
     <br />
 </div>
-
+<div>
+    <?= $this->form->select('dc', $dc , array(), array(), array('required'), 'form-input-large') ?>
+</div>
 <h2>Open statement</h2>
 <table class="table-fixed table-small">
     <tr>
@@ -27,7 +29,7 @@
         <th class="column-5">Inctax</th>
     </tr>
     <?php foreach ($openstatements as $index => $dc) { ?>
-        <tr class="<?php echo $dc['debitcredit']; ?> ">
+        <tr class="<?php echo $dc['debitcredit']; ?> <?php echo $dc['debitcredit']; ?>">
             <td><a href="/?controller=invoice&action=editpurchasing&id=<?php echo $dc['id']; ?>">Edit</a></td>
             <td><?php echo $dc['id']; ?></td>
             <td><?php echo $dc['debitcredit']; ?></td>
@@ -62,7 +64,7 @@
             <th class="column-5">Inctax</th>
         </tr>
         <?php foreach ($debitcredit as $index => $dc) { ?>
-            <tr class="<?php echo $dc['debitcredit']; ?> ">
+            <tr class="<?php echo $dc['debitcredit']; ?> <?php echo $dc['debitcredit']; ?>">
                 <td><a href="/?controller=invoice&action=editpurchasing&id=<?php echo $dc['id']; ?>">Edit</a></td>
                 <td><?php echo $dc['id']; ?></td>
                 <td><?php echo $dc['debitcredit']; ?></td>
