@@ -18,5 +18,8 @@
         <li>
             <?= $this->url->link(t('Kilometer registration'), 'invoice', 'routeregistration', array()) ?>
         </li>
+        <li>
+            <?= $this->url->link(t('Quotes'), 'quotation', 'index', array()) ?>
+        </li>
     </ul>
 </div>

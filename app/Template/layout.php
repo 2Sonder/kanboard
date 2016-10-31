@@ -24,11 +24,13 @@ if("$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" != "pm2.2sonder.com/?controller=au
 
         <?= $this->hook->asset('css', 'template:layout:css') ?>
         <?= $this->hook->asset('js', 'template:layout:js') ?>
+
         <link rel="icon" type="image/png" href="<?= $this->url->dir() ?>assets/img/favicon.png">
         <link rel="apple-touch-icon" href="<?= $this->url->dir() ?>assets/img/touch-icon-iphone.png">
         <link rel="apple-touch-icon" sizes="72x72" href="<?= $this->url->dir() ?>assets/img/touch-icon-ipad.png">
         <link rel="apple-touch-icon" sizes="114x114" href="<?= $this->url->dir() ?>assets/img/touch-icon-iphone-retina.png">
         <link rel="apple-touch-icon" sizes="144x144" href="<?= $this->url->dir() ?>assets/img/touch-icon-ipad-retina.png">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.6/jqc-1.12.3/dt-1.10.12/r-2.1.0/datatables.min.css"/>
         <title>
             Sonder -
             <?php if (isset($page_title)): ?>
@@ -63,7 +65,13 @@ if("$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" != "pm2.2sonder.com/?controller=au
         </section>
         <?= $this->hook->render('template:layout:bottom') ?>
      <?php endif ?>
+
+
         <script src="/assets/js/footer.js" type="text/javascript"></script>
+
+
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.6/jqc-1.12.3/dt-1.10.12/r-2.1.0/datatables.min.js"></script>
+
     </body>
 </html>
 <?php }else{ ?>

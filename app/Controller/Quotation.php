@@ -22,7 +22,7 @@ class Quotation extends Base
     public function index()
     {
 
-        $this->showQuote();
+    //    $this->showQuote();
 
         $this->response->html($this->helper->layout->app('invoice/layout', array(
             'data' => array(
